@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>목포시 통합검색-목포소식</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="stylesheet" type="text/css" href="/style/common/common.css" />
+<link rel="stylesheet" type="text/css" href="/total_search/style/total_search.css" />
+
+
+</head>
+<body>
+
+<dl id="skiptoContent">
+  <dt><strong class="hidden">바로가기 메뉴</strong></dt>
+  <dd><a href="#Nav" class="accessibility01">주요메뉴 바로가기</a></dd>
+  <dd><a href="#container" class="accessibility02">본문내용 바로가기</a></dd>
+</dl>
+
+<!--wrap s-->
+<div id="wrap" class="group">
+	<div id="Nav">
+    	<ul class="nav_list">
+        	<li class="nav_total"><a href="/total_search/total_search.html"><span>통합검색</span></a></li>
+            <li class="nav_menu"><a href="/total_search/menu_search.html"><span>메뉴검색</span></a></li>
+            <li class="nav_news"><a href="/total_search/news_search.html" class="on"><span>목포소식</span></a></li>
+            <li class="nav_staff"><a href="/total_search/staff_table.html"><span>직원/업무</span></a></li>
+            <li class="nav_area"><a href="/total_search/area_search.html"><span>분야별정보</span></a></li>
+            <li class="nav_media"><a href="/total_search/media.html"><span>사진/동영상</span></a></li>
+            <li class="nav_information"><a href="/total_search/information.html"><span>정보검색</span></a></li>
+            <li class="nav_affairs_manual"><a href="/total_search/affairs_manual.html"><span>민원사무편람</span></a></li>
+        </ul>
+        <div class="term">
+        	<h2>기간</h2>
+            <div class="range">
+                <a id="range1" class="list1 on" title="전체" href="#none">전체</a>
+                <a id="range2" class="list2" title="1주" href="#none">1주</a>
+                <a id="range3" class="list3" title="1개월" href="#none">1개월</a>
+                <a id="range4" class="list4" title="1년" href="#none">1년</a>
+            </div>
+            <div class="date_search">
+                <p>
+                    <label class="blind" for="start_day">시작일</label>
+                    <input id="start_day" class="hasDatepicker" type="text" readonly value="시작일">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                </p>
+                <p>
+                    <label class="blind" for="end_day">종료일</label>
+                    <input id="end_day" class="hasDatepicker" type="text" readonly value="종료일">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                </p>
+                <input class="date_apply" type="button" value="날짜적용">
+            </div>
+        </div>
+        <div class="leftArea">
+        	<h2>검색영역</h2>
+            <div>
+                <a class="list1 on" href="#none"><span>전체</span></a>
+                <a class="list2" href="#none"><span>제목</span></a>
+                <a class="list3" href="#none"><span>내용</span></a>
+                <a class="list4" href="#none"><span>작성자</span></a>
+            </div>
+        </div>
+    </div>
+    <!--container s-->
+	<div id="container" class="group">
+    	<div id="top">
+        	<div class="inner">
+                <p class="logo"><span>건강의 섬 목포</span></p>
+                <div class="top_search">
+                    <fieldset>
+                        <legend>통합검색</legend>
+                        <input id="query" type="text" onkeypress="javascript:pressCheck((event),this);" value="무엇이든 찾아보세요" name="query" autocomplete="off">
+                        <label for="query"><a href="#none"><img height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
+                        <a class="button_detail" href="#none"><span>상세검색</span></a>
+                        <p>
+                            <input id="rechk" type="checkbox" title="결과 내 재검색 하기" name="rechk">
+                            <label for="rechk">결과 내 재검색</label>
+                        </p>
+                        <!--상세검색-->
+                        <div class="detail_search" style="display:none;">
+                            <div class="detail_top">
+                                <span class="dtit">상세검색</span>
+                                <span class="dm">여러개의 단어를 입력할 때는 공백으로 구분해서 입력하세요.</span>
+                                <span class="dclose"><a href="#none">닫기</a></span>
+                            </div>
+                            <fieldset class="detail_search_field">
+                                <legend>상세검색</legend>
+                                <label for="correct">정확히 일치하는 단어/문장("")</label>
+                                <input id="correct" name="correct" type="text" value=''>
+                                <label for="surely">반드시 포함하는 단어(공백)</label>
+                                <input id="surely" name="surely" type="text" value=''>
+                                <label for="except">제외하는 단어(!)</label>
+                                <input id="except" name="except" type="text" value=''>
+                            </fieldset>
+                            <div class="detail_bottom">
+                                <div class="btn">
+                                    <input class="search" value="검색" onclick="doSearch();" type="submit">
+                                    <input class="cancel" value="초기화" type="reset">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+        	<div class="title">
+                <p><span class="blue fw5">목포</span>에 대한 전체 <span class="blue">233</span>건의 결과를 찾았습니다.</p>
+                <div class="align">
+                    <a class="list1" href="#none"><span>정확도순</span></a>
+                    <a class="list2 on" href="#none"><span>최신순</span></a>
+                </div>
+            </div>
+        	<!--result s-->
+            <div class="result">
+                <div class="news_search">
+                	<h3>목포소식 <span>[총 2건]</span></h3>
+                    <ul>
+                    	<li>
+                        	<h4>
+                                <a href="#none">
+                                    <span class="menuName">[보도자료]</span>
+                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                </a>
+                                <span class="date">| 2016.02.02</span>
+                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                            </h4>
+                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                        </li>
+                        <li>
+                        	<h4>
+                                <a href="#none">
+                                    <span class="menuName">[보도자료]</span>
+                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                </a>
+                                <span class="date">| 2016.02.02</span>
+                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                            </h4>
+                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                        </li>
+                        <li>
+                        	<h4>
+                                <a href="#none">
+                                    <span class="menuName">[보도자료]</span>
+                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                </a>
+                                <span class="date">| 2016.02.02</span>
+                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                            </h4>
+                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                        </li>
+                        <li>
+                        	<h4>
+                                <a href="#none">
+                                    <span class="menuName">[보도자료]</span>
+                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                </a>
+                                <span class="date">| 2016.02.02</span>
+                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                            </h4>
+                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                        </li>
+                        <li>
+                        	<h4>
+                                <a href="#none">
+                                    <span class="menuName">[보도자료]</span>
+                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                </a>
+                                <span class="date">| 2016.02.02</span>
+                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                            </h4>
+                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                        </li>
+                    </ul>
+                    <div class="paging">
+                    	<div class="num">
+                        	<a href="#none" class="more_prev"><span>이전 10페이지</span></a>
+                            <a href="#none" class="prev"><span>이전 페이지</span></a>
+                            <a href="#none" class="on">1</a>
+                            <a href="#none">2</a>
+                            <a href="#none">3</a>
+                            <a href="#none">4</a>
+                            <a href="#none" class="next"><span>다음 페이지</span></a>
+                            <a href="#none" class="more_next"><span>다음 10페이지</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<!--result e-->
+			<!--aside s-->
+            <div id="aside">
+            	<div class="popular">
+                    <h3>인기검색어</h3>
+                    <ul class="tab">
+                        <li><a href="#none">일간</a></li>
+                        <li><a class="on" href="#none">주간</a></li>
+                    </ul>
+                    <ol class="list">
+                        <li>
+                            <a href="#none">
+                                <span class="num top">1</span>
+                                <span class="tit">조직도</span>
+                                <span class="rank"><em class="new"></em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num top">2</span>
+                                <span class="tit">목포</span>
+                                <span class="rank"><em class="up">2</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num top">3</span>
+                                <span class="tit">복지</span>
+                                <span class="rank"><em class="dn">2</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num top">4</span>
+                                <span class="tit">민원출장소안내사무소개</span>
+                                <span class="rank"><em class="dn">2</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num top">5</span>
+                                <span class="tit">청산도축제</span>
+                                <span class="rank"><em class="dn">3</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num">6</span>
+                                <span class="tit">장애인</span>
+                                <span class="rank"><em class="up">5</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num">7</span>
+                                <span class="tit">청소년</span>
+                                <span class="rank"><em class="dn">2</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num">8</span>
+                                <span class="tit">드림스타트</span>
+                                <span class="rank"><em class="up">1</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num">9</span>
+                                <span class="tit">다문화가족</span>
+                                <span class="rank"><em>-</em></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="num">10</span>
+                                <span class="tit">재난안전</span>
+                                <span class="rank"><em class="up">5</em></span>
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="mykeyword">
+                	<h3>내가 찾은 검색어</h3>
+                    <ul>
+                    	<li>
+                            <a href="#none">관광명소 가볼만한곳</a>
+                            <a href="#none" class="del"><span>삭제</span></a>
+                        </li>
+                        <li>
+                        	<a href="#none">목포소개</a>
+                            <a href="#none" class="del"><span>삭제</span></a>
+                        </li>
+                        <li>
+                        	<a href="#none">목포시 복지</a>
+                            <a href="#none" class="del"><span>삭제</span></a>
+                        </li>
+                        <li>
+                        	<a href="#none">목포시복지제도가 궁금궁금궁금</a>
+                            <a href="#none" class="del"><span>삭제</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        	<!--aside e-->
+        </div>
+    </div>
+	<!--container e-->
+</div>
+<!--wrap e-->
+<div id="footer">
+	<ul class="footer_link">
+    	<li><a href="#none">개인정보처리방침</a></li>
+        <li><a href="#none">이메일주소무단수집거부</a></li>
+        <li><a href="#none">RSS이용안내</a></li>
+        <li><a href="#none">뷰어프로그램다운로드</a></li>
+    </ul>
+    <p class="add">58613) 전라남도 목포시 양을로 203 (용당동) 목포시청 대표전화 061-272-2171 / 대표팩스 061-270-3598</p>
+    <p class="copy">
+        본 사이트는 이메일 주소가 무단수집 되는것을 거부하며, 위반시 정보통신망법에 의해 처벌됨을 유념하십시오.
+        <span>COPYRIGHT © MOKPO-CITY. ALL RIGHTS RESERVED.</span>
+    </p>
+</div>
+</body>
+</html>
