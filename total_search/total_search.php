@@ -1,5 +1,188 @@
 <?php
+header("pragma: no-cache");
+require_once "./common/queryapi530.html";
+require_once "./common/WNUtils.html";
+require_once "./common/WNSearch.html";
 
+$collectionMappingDefine = array(
+    'ALL' => array(
+        array(
+            'collectionName' => 'board',
+            'viewCount' => 3,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDTITLE,URL,ALIAS'
+        ),
+        array(
+            'collectionName' => 'infosearch',
+            'viewCount' => 3,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,PATHSTRING,PATHURL,ALIAS'
+        ),
+        array(
+            'collectionName' => 'member',
+            'viewCount' => 5,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,DEPTTEL,DEPTPOS,ID,POSITION,ALIAS'
+        ),
+        array(
+            'collectionName' => 'menu',
+            'viewCount' => 5,
+            'defaultSearchField' => 'TITLE,CONTENT',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,URL,ALIAS'
+        ),
+        array(
+            'collectionName' => 'minwon',
+            'viewCount' => 3,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER,ORIGINAL_NAME',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,ALIAS'
+        ),
+        array(
+            'collectionName' => 'multi',
+            'viewCount' => 6,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,IDX,ALIAS'
+        ),
+        array(
+            'collectionName' => 'webpage',
+            'viewCount' => 3,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,PATHSTRING,PATHURL,ALIAS'
+        )
+    ),
+    'board' => array(
+        array(
+            'collectionName' => 'board',
+            'viewCount' => 10,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDTITLE,URL,ALIAS'
+        )
+    ),
+    'infosearch' => array(
+        array(
+            'collectionName' => 'infosearch',
+            'viewCount' => 10,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,PATHSTRING,PATHURL,ALIAS'
+        )
+    ),
+    'member' => array(
+        array(
+            'collectionName' => 'menu',
+            'viewCount' => 10,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,DEPTTEL,DEPTPOS,ID,POSITION,ALIAS'
+        )
+    ),
+    'menu' => array(
+        array(
+            'collectionName' => 'menu',
+            'viewCount' => 15,
+            'defaultSearchField' => 'TITLE,CONTENT',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,URL,ALIAS'
+        )
+    ),
+    'minwon' => array(
+        array(
+            'collectionName' => 'minwon',
+            'viewCount' => 10,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER,ORIGINAL_NAME',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,ALIAS'
+        )
+    ),
+    'multi' => array(
+        array(
+            'collectionName' => 'multi',
+            'viewCount' => 12,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,IDX,ALIAS'
+        )
+    ),
+    'webpage' => array(
+        array(
+            'collectionName' => 'webpage',
+            'viewCount' => 10,
+            'defaultSearchField' => 'TITLE,CONTENT,WRITER',
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,PATHSTRING,PATHURL,ALIAS'
+        )
+    )
+);
+
+$isDebug = false;
+$search = new Search();
+$wnUtils = new WNUtils();
+
+$collection  = $wnUtils->getCheckReq($_GET, "collection", "ALL");				    // 검색 대상 (전체 ALL)
+$query = $wnUtils->getCheckReq($_GET, "query", "");							        // 검색어
+$startCount	= $wnUtils->getCheckReq($_GET, "startCount", 0);						// 검색 요청할 시작 페이지인덱스
+$sortField	= $wnUtils->getCheckReq($_GET, "sortField", "RANK");					// 검색 정렬 대상 필드
+$popKeywordType	= $wnUtils->getCheckReq($_GET, "popKeywordType", "D");				// 인기검색어 선택 필드
+
+$startDate = $wnUtils->getCheckReq($_GET, "startDate", "1980-01-01");				// 날짜 선택 필드
+$startDate = str_replace("-", "/", $startDate);
+$endDate = $wnUtils->getCheckReq($_GET, "endDate", "2030-12-31");				    // 날짜 선택 필드
+$endDate = str_replace("-", "/", $endDate);
+
+$isDetailSearch  = $wnUtils->getCheckReq($_GET, "isDetailSearch", 0);				// 상세검색 안할경우 0, 할경우 1
+$searchField = $wnUtils->getCheckReq($_POST, "searchField", "ALL");					// 검색필드 설정
+
+$ret = $search->w3SetCodePage(CHARSET);
+$ret = $search->w3SetQueryLog(USE_QUERY_LOG_ON);
+$ret = $search->w3SetCommonQuery($query, COMMON_OR_WHEN_NORESULT_OFF);
+
+$currentCollectionMapping = $collectionMappingDefine[$collection];
+
+foreach ($currentCollectionMapping as $value) {
+
+    $collectionName = $value['collectionName'];
+    $viewCount = $value['viewCount'];
+    $sortCondition = $wnUtils->getSortCondition($sortField);
+    $searchFieldCondition = $value['defaultSearchField'];
+    $documentField = $value['documentField'];
+
+    //echo(printf('SETTING SEARCH CONDITION => collectionName:%s, viewCount:%s, sortField:%s <br/>', $collectionName, $viewCount, $sortCondition));
+
+    $ret = $search->w3AddCollection($collectionName);
+    $ret = $search->w3SetDateRange($collectionName, $startDate, $endDate);
+    $ret = $search->w3SetQueryAnalyzer($collectionName, USE_LA_ON, IGNORE_CASE_ON, USE_ORIGINAL_ON, USE_SYNONYM_ON);
+    $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
+    $ret = $search->w3SetPageInfo($collectionName, $startCount, $viewCount);
+    $ret = $search->w3SetSortField($collectionName, $sortCondition);
+    $ret = $search->w3SetDocumentField($collectionName, $documentField);
+
+}
+
+$ret = $search->w3SetTraceLog(3);
+$ret = $search->w3ConnectServer(SEARCH_IP, SEARCH_PORT, SEARCH_TIMEOUT);
+$ret = $search->w3ReceiveSearchQueryResult(CONNECTION_CLOSE);
+
+$totalSearchCount = 0;
+$resultTotalSetDocument = array();
+foreach ($currentCollectionMapping as $value) {
+
+    $collectionName = $value['collectionName'];
+    $collectionDocumentFieldArray = explode(",", $value['documentField']);
+
+    $collectionTotalCount = $search->w3GetResultTotalCount($collectionName);
+    $collectionResultCount = $search->w3GetResultCount($collectionName);
+
+    $resultTotalSetDocument[$collectionName . 'TotalCount'] = $collectionTotalCount;
+    $resultTotalSetDocument[$collectionName . 'ResultCount'] = $collectionResultCount;
+
+    for( $i = 0 ; $i < $collectionResultCount ; $i++ ) {
+        $resultCollectionSetDocument = array();
+        foreach($collectionDocumentFieldArray as $collectionDocumentField) {
+
+            $columnValue = $search->w3GetField($collectionName, $collectionDocumentField, $i);
+            $resultCollectionSetDocument[$collectionDocumentField] = $columnValue;
+
+        }
+    }
+    $resultTotalSetDocument[$collectionName] = $resultCollectionSetDocument;
+
+    $totalSearchCount += $collectionTotalCount;
+    #echo(printf('SEARCH RESULT => collectionName:%s, totalCount:%s, resultCount:%s <br/>', $collectionName, $collectionTotalCount, $collectionResultCount));
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -10,8 +193,9 @@
 <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-<link rel="stylesheet" type="text/css" href="http://mp.mx.co.kr/style/common/common.css" />
+<link rel="stylesheet" type="text/css" href="http://mp.mx.co.kr/style/common/common.css" /> <!-- 반영할때 확인 해야함 -->
 <link rel="stylesheet" type="text/css" href="/total_search/style/total_search.css" />
+<script src="/total_search/js/search.js"></script>
 </head>
 <body>
 <dl id="skiptoContent">
@@ -23,14 +207,14 @@
 <div id="wrap" class="group">
 	<div id="Nav">
     	<ul class="nav_list">
-        	<li class="nav_total"><a href="/total_search/total_search.html" class="on"><span>통합검색</span></a></li>
-            <li class="nav_menu"><a href="/total_search/menu_search.html"><span>메뉴검색</span></a></li>
-            <li class="nav_news"><a href="/total_search/news_search.html"><span>목포소식</span></a></li>
-            <li class="nav_staff"><a href="/total_search/staff_table.html"><span>직원/업무</span></a></li>
-            <li class="nav_area"><a href="/total_search/area_search.html"><span>분야별정보</span></a></li>
-            <li class="nav_media"><a href="/total_search/media.html"><span>사진/동영상</span></a></li>
-            <li class="nav_information"><a href="/total_search/information.html"><span>정보검색</span></a></li>
-            <li class="nav_affairs_manual"><a href="/total_search/affairs_manual.html"><span>민원사무편람</span></a></li>
+        	<li class="nav_total"><a href="ALL" <?php if($collection == 'ALL') { ?>class="on"<?php } ?>><span>통합검색</span></a></li>
+            <li class="nav_menu"><a href="menu" <?php if($collection == 'menu') { ?>class="on"<?php } ?>><span>메뉴검색</span></a></li>
+            <li class="nav_news"><a href="board" <?php if($collection == 'board') { ?>class="on"<?php } ?>"><span>목포소식</span></a></li>
+            <li class="nav_staff"><a href="member" <?php if($collection == 'member') { ?>class="on"<?php } ?>><span>직원/업무</span></a></li>
+            <li class="nav_area"><a href="webpage" <?php if($collection == 'webpage') { ?>class="on"<?php } ?>><span>분야별정보</span></a></li>
+            <li class="nav_media"><a href="multi" <?php if($collection == 'multi') { ?>class="on"<?php } ?>><span>사진/동영상</span></a></li>
+            <li class="nav_information"><a href="infosearch" <?php if($collection == 'infosearch') { ?>class="on"<?php } ?>><span>정보검색</span></a></li>
+            <li class="nav_affairs_manual"><a href="minwon" <?php if($collection == 'minwon') { ?>class="on"<?php } ?>><span>민원사무편람</span></a></li>
         </ul>
         <div class="term">
         	<h2>기간</h2>
@@ -44,12 +228,12 @@
                 <p>
                     <label class="blind" for="start_day">시작일</label>
                     <input id="start_day" class="hasDatepicker" type="text" readonly value="시작일">
-                    <img class="ui-datepicker-trigger" src="<?= $staticPath ?>/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
                 </p>
                 <p>
                     <label class="blind" for="end_day">종료일</label>
                     <input id="end_day" class="hasDatepicker" type="text" readonly value="종료일">
-                    <img class="ui-datepicker-trigger" src="<?= $staticPath ?>/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
                 </p>
                 <input class="date_apply" type="button" value="날짜적용">
             </div>
@@ -73,7 +257,7 @@
                     <fieldset>
                         <legend>통합검색</legend>
                         <input id="query" type="text" onkeypress="javascript:pressCheck((event),this);" value="무엇이든 찾아보세요" name="query" autocomplete="off">
-                        <label for="query"><a href="#none"><img height="40" width="43" alt="검색" src="<?= $staticPath ?>/total_search/images/search_icon.png"></a></label>
+                        <label for="query"><a href="#none"><img height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" href="#none"><span>상세검색</span></a>
                         <p>
                             <input id="rechk" type="checkbox" title="결과 내 재검색 하기" name="rechk">
@@ -108,7 +292,7 @@
         </div>
         <div id="content">
         	<div class="title total_sch">
-                <p><span class="blue fw5">목포</span>에 대한 전체 <span class="blue">233</span>건의 결과를 찾았습니다.</p>
+                <p><span class="blue fw5">"<?=$query?>"</span>에 대한 전체 <span class="blue"><?=$totalSearchCount?></span>건의 결과를 찾았습니다.</p>
                 <div class="align">
                     <a class="list1" href="#none"><span>정확도순</span></a>
                     <a class="list2 on" href="#none"><span>최신순</span></a>
@@ -116,8 +300,9 @@
             </div>
         	<!--result s-->
             <div class="result total_sch">
+                <?php if($collection == 'ALL' || $collection == 'menu') { ?>
                 <div class="menu_search">
-                    <h3>메뉴검색<span> [총 51건]</span></h3>
+                    <h3>메뉴검색<span> [총 <?= $resultTotalSetDocument['menuTotalCount'] ?>건]</span></h3>
                     <ul>
                     	<li><a href="#none">관광 > 관광명소 > <span class="blue">목포</span>절경 > <span class="blue">목포</span>타워</a></li>
                         <li><a href="#none">보건소 > <span class="blue">목포</span>복지 > <span class="blue">목포</span>에서 제공하는 혜택</a></li>
@@ -127,8 +312,10 @@
                     </ul>
                     <span class="more"><a href="#none">+ 메뉴 더보기</a></span>
                 </div>
+                <?php } ?>
+                <?php if($collection == 'ALL' || $collection == 'board') { ?>
                 <div class="news_search">
-                	<h3>목포소식 <span>[총 2건]</span></h3>
+                	<h3>목포소식 <span>[총 <?= $resultTotalSetDocument['boardTotalCount'] ?>건]</span></h3>
                     <ul>
                     	<li>
                         	<h4>
@@ -155,8 +342,10 @@
                     </ul>
                     <span class="more"><a href="#none">+ 목포소식 더보기</a></span>
                 </div>
+                <?php } ?>
+                <?php if($collection == 'ALL' || $collection == 'member') { ?>
                 <div class="staff_table">
-                    <h3>직원검색 <span>[총 14건]</span></h3>
+                    <h3>직원검색 <span>[총 <?= $resultTotalSetDocument['memberTotalCount'] ?>건]</span></h3>
                     <table>
                         <caption>직원업무안내표로 이름,부서,직책,업무,연락처 항목으로 구성</caption>
                         <thead>
@@ -201,8 +390,10 @@
                       </table>
                     <span class="more"><a href="#none">+ 직원/업무 더보기</a></span>
                 </div>
+                <?php } ?>
+                <?php if($collection == 'ALL' || $collection == 'webpage') { ?>
                 <div class="area_search">
-                	<h3>분야별정보 <span>[총 153건]</span></h3>
+                	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
                         <li>
                             <h4>
@@ -229,13 +420,15 @@
                    	</ul>
                     <span class="more"><a href="#none">+ 분야별정보 더보기</a></span>
                 </div>
+                <?php } ?>
+                <?php if($collection == 'ALL' || $collection == 'multi') { ?>
                 <div class="media">
-                	<h3>사진/동영상 <span>[총 12건]</span></h3>
+                	<h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount']?>건]</span></h3>
                     <ul>
                     	<li>
                             <a href="#none" target="_blank">
                                 <span class="img">
-                                    <img src="<?= $staticPath ?>/total_search/images/pho1.jpg" alt="도시교통분과위원회 회의 영상" />
+                                    <img src="/total_search/images/pho1.jpg" alt="도시교통분과위원회 회의 영상" />
                                     <span class="play"></span>
                                 </span>
                                 <span class="menuName">[동영상으로보는목포]</span>
@@ -245,7 +438,7 @@
                         </li>
                         <li>
                             <a href="#none" target="_blank">
-                                <span class="img"><img src="<?= $staticPath ?>/total_search/images/pho2.jpg" alt="목포청해진 유적지" /></span>
+                                <span class="img"><img src="/total_search/images/pho2.jpg" alt="목포청해진 유적지" /></span>
                                 <span class="menuName">[포토갤러리]</span>
                                 <span class="green"><span class="blue">목포</span>청해진 유적지</span>
                                 <span class="date">2015.11.07</span>
@@ -253,7 +446,7 @@
                         </li>
                         <li>
                         	<a href="#none" target="_blank">
-                                <span class="img"><img src="<?= $staticPath ?>/total_search/images/pho3.jpg" alt="목포 청산도 전경" /></span>
+                                <span class="img"><img src="/total_search/images/pho3.jpg" alt="목포 청산도 전경" /></span>
                                 <span class="menuName">[사진게시판]</span>
                                 <span class="green"><span class="blue">목포</span> 청산도 전경</span>
                                 <span class="date">2015.11.07</span>
@@ -261,7 +454,7 @@
                         </li>
                         <li>
                         	<a href="#none" target="_blank">
-                                <span class="img"><img src="<?= $staticPath ?>/total_search/images/pho4.jpg" alt="청정바다수도목포 선포식" /></span>
+                                <span class="img"><img src="/total_search/images/pho4.jpg" alt="청정바다수도목포 선포식" /></span>
                                 <span class="menuName">[보도자료]</span>
                                 <span class="green">청정바다수도<span class="blue">목포</span> 선포식</span>
                                 <span class="date">2015.11.07</span>
@@ -269,7 +462,7 @@
                         </li>
                         <li>
                         	<a href="#none" target="_blank">
-                                <span class="img"><img src="<?= $staticPath ?>/total_search/images/pho5.jpg" alt="목포 윤선도 원림 곡수당" /></span>
+                                <span class="img"><img src="/total_search/images/pho5.jpg" alt="목포 윤선도 원림 곡수당" /></span>
                                 <span class="menuName">[사진게시판]</span>
                                 <span class="green"><span class="blue">목포</span> 윤선도 원림 곡수당</span>
                                 <span class="date">2015.11.07</span>
@@ -277,7 +470,7 @@
                         </li>
                         <li>
                         	<a href="#none" target="_blank">
-                                <span class="img"><img src="<?= $staticPath ?>/total_search/images/pho6.jpg" alt="보길도 세연정" /></span>
+                                <span class="img"><img src="/total_search/images/pho6.jpg" alt="보길도 세연정" /></span>
                                 <span class="menuName">[사진게시판]</span>
                                 <span class="green">보길도 세연정</span>
                                 <span class="date">2015.11.07</span>
@@ -286,8 +479,10 @@
                     </ul>
                     <span class="more"><a href="#none">+ 사진/동영상 더보기</a></span>
                 </div>
+                <?php } ?>
+                <?php if($collection == 'ALL' || $collection == 'infosearch') { ?>
                 <div class="information">
-                	<h3>정보검색 <span>[총 1건]</span></h3>
+                	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
                     	<li>
                             <h4>
@@ -324,6 +519,7 @@
                     </ul>
                     <span class="more"><a href="#none">+ 정보검색 더보기</a></span>
                 </div>
+                <?php } ?>
             </div>
 			<!--result e-->
 			<!--aside s-->
