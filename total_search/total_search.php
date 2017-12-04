@@ -3,6 +3,7 @@ header("pragma: no-cache");
 require_once "./common/queryapi530.html";
 require_once "./common/WNUtils.html";
 require_once "./common/WNSearch.html";
+date_default_timezone_set('Asia/Seoul');
 
 $collectionMappingDefine = array(
     'ALL' => array(
@@ -168,6 +169,7 @@ foreach ($currentCollectionMapping as $value) {
     $resultTotalSetDocument[$collectionName . 'TotalCount'] = $collectionTotalCount;
     $resultTotalSetDocument[$collectionName . 'ResultCount'] = $collectionResultCount;
 
+    $resultCollectionSetDocumentArray = array();
     for( $i = 0 ; $i < $collectionResultCount ; $i++ ) {
         $resultCollectionSetDocument = array();
         foreach($collectionDocumentFieldArray as $collectionDocumentField) {
@@ -176,8 +178,9 @@ foreach ($currentCollectionMapping as $value) {
             $resultCollectionSetDocument[$collectionDocumentField] = $columnValue;
 
         }
+        array_push($resultCollectionSetDocumentArray, $resultCollectionSetDocument);
     }
-    $resultTotalSetDocument[$collectionName] = $resultCollectionSetDocument;
+    $resultTotalSetDocument[$collectionName] = $resultCollectionSetDocumentArray;
 
     $totalSearchCount += $collectionTotalCount;
     #echo(printf('SEARCH RESULT => collectionName:%s, totalCount:%s, resultCount:%s <br/>', $collectionName, $collectionTotalCount, $collectionResultCount));
@@ -300,50 +303,45 @@ foreach ($currentCollectionMapping as $value) {
             </div>
         	<!--result s-->
             <div class="result total_sch">
-                <?php if($collection == 'ALL' || $collection == 'menu') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'menu') && $resultTotalSetDocument['menuTotalCount'] > 0) { ?>
                 <div class="menu_search">
                     <h3>메뉴검색<span> [총 <?= $resultTotalSetDocument['menuTotalCount'] ?>건]</span></h3>
                     <ul>
-                    	<li><a href="#none">관광 > 관광명소 > <span class="blue">목포</span>절경 > <span class="blue">목포</span>타워</a></li>
-                        <li><a href="#none">보건소 > <span class="blue">목포</span>복지 > <span class="blue">목포</span>에서 제공하는 혜택</a></li>
-                        <li><a href="#none">군청 > <span class="blue">목포</span>소개  > 군청안내 > 행정조직도</a></li>
-                        <li><a href="#none">관광 > 관광명소 > <span class="blue">목포</span>절경 > <span class="blue">목포</span>타워</a></li>
-                        <li><a href="#none">보건소 > <span class="blue">목포</span>복지 > 목포에서 제공하는 혜택</a></li>
+                        <?php
+                        foreach ($resultTotalSetDocument['menu'] as $item) {
+                        ?>
+                    	<li><a href="<?= $item['URL']?>"><?= $item['TITLE'] ?></a></li>
+                        <?php } ?>
                     </ul>
-                    <span class="more"><a href="#none">+ 메뉴 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 메뉴 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if($collection == 'ALL' || $collection == 'board') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'board') && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
                 <div class="news_search">
-                	<h3>목포소식 <span>[총 <?= $resultTotalSetDocument['boardTotalCount'] ?>건]</span></h3>
+                    <h3>목포소식 <span>[총 <?= $resultTotalSetDocument['boardTotalCount'] ?>건]</span></h3>
                     <ul>
-                    	<li>
-                        	<h4>
-                                <a href="#none">
-                                    <span class="menuName">[보도자료]</span>
-                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
-                                </a>
-                                <span class="date">| 2017.02.02</span>
-                                <a href="#none" target="_blank" class="new_page">새창열기</a>
-                            </h4>
-                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
-                        </li>
+                        <?php
+                        foreach ($resultTotalSetDocument['board'] as $item) {
+                        ?>
                         <li>
-                        	<h4>
-                                <a href="#none">
-                                    <span class="menuName">[보도자료]</span>
-                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                            <h4>
+                                <a href="<?= $item['URL']?>">
+                                    <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
+                                    <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
                                 </a>
-                                <span class="date">| 2017.02.02</span>
-                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                <a href="<?= $item['URL'] ?>" target="_blank" class="new_page">새창열기</a>
                             </h4>
-                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                            <p><?= $item['CONTENT'] ?></p>
                         </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
-                    <span class="more"><a href="#none">+ 목포소식 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 목포소식 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if($collection == 'ALL' || $collection == 'member') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'member') && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
                 <div class="staff_table">
                     <h3>직원검색 <span>[총 <?= $resultTotalSetDocument['memberTotalCount'] ?>건]</span></h3>
                     <table>
@@ -358,167 +356,131 @@ foreach ($currentCollectionMapping as $value) {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>김희수</td>
-                            <td>기획실</td>
-                            <td>담당</td>
-                            <td><span class="blue">목포</span>시 각종 시책의 종합기획 조정통제</td>
-                            <td>061-550-5030</td>
-                          </tr>
-                          <tr>
-                            <td>이동일</td>
-                            <td>기획실</td>
-                            <td>직원</td>
-                            <td>시정 현황 및 계획작성</td>
-                            <td>061-550-5031</td>
-                          </tr>
-                          <tr>
-                            <td>이승옥</td>
-                            <td>기획실</td>
-                            <td>직원</td>
-                            <td>시장지시사항 관리, 시민제안 제도 운영</td>
-                            <td>061-550-5032</td>
-                          </tr>
-                          <tr>
-                            <td>김두길</td>
-                            <td>기획실</td>
-                            <td>직원</td>
-                            <td>기획자료정리</td>
-                            <td>061-550-5033</td>
-                          </tr>
+                            <?php
+                            foreach ($resultTotalSetDocument['board'] as $item) {
+                            ?>
+                            <tr>
+                                <td><?php $item['TITLE'] ?></td>
+                                <td><?php $item['POSTION'] ?></td>
+                                <td><?php $item['DEPTPOS'] ?></td>
+                                <td><?php $item['CONTENT'] ?></td>
+                                <td><?php $item['DEPTTEL'] ?></td>
+                            </tr>
+                            <?php
+                            }
+                            ?>
                         </tbody>
                       </table>
-                    <span class="more"><a href="#none">+ 직원/업무 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 직원/업무 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if($collection == 'ALL' || $collection == 'webpage') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'webpage') && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
                 <div class="area_search">
                 	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
+                        <?php
+                        foreach ($resultTotalSetDocument['webpage'] as $item) {
+                        ?>
                         <li>
                             <h4>
-                                <a href="#none">
-                                    <span class="menuName">[보도자료]</span>
-                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
+                                <a href="<?= $item['URL']?>">
+                                    <span class="menuName">[<?= str_replace("|", " > ", $item['PATHSTRING']) ?>]</span>
+                                    <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
                                 </a>
-                                <span class="date">| 2017.02.02</span>
-                                <a href="#none" target="_blank" class="new_page">새창열기</a>
+                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                <a href="<?= $item['URL']?>" target="_blank" class="new_page">새창열기</a>
                             </h4>
-                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
+                            <p><?= $item['CONTENT'] ?></p>
                         </li>
-                        <li>
-                            <h4>
-                                <a href="#none">
-                                    <span class="menuName">[보도자료]</span>
-                                    <span class="tit"><span class="blue">목포</span> <span class="green">자연그대로 한우 브랜드 개발 선호도 조사</span></span>
-                                </a>
-                                <span class="date">| 2017.02.02</span>
-                                <a href="#none" target="_blank" class="new_page">새창열기</a>
-                            </h4>
-                            <p>목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는 한우브랜드 개발에 대해  후보안을 붙임과 같이 제안하오니, 선호도 조사에 참여하여 주시면 감사하겠습니다.호도 조사에 참여하여 주시면 감사하겠습니다.목포자연그대로 농축산업 조기정착을 위해 추진하고 있는...</p>
-                        </li>
+                        <?php
+                        }
+                        ?>
                    	</ul>
-                    <span class="more"><a href="#none">+ 분야별정보 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 분야별정보 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if($collection == 'ALL' || $collection == 'multi') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'multi') && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
                 <div class="media">
                 	<h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount']?>건]</span></h3>
                     <ul>
+                        <?php
+                        foreach ($resultTotalSetDocument['multi'] as $item) {
+                        ?>
                     	<li>
-                            <a href="#none" target="_blank">
+                            <a href="<?= $item['URL']?>" target="_blank">
                                 <span class="img">
-                                    <img src="/total_search/images/pho1.jpg" alt="도시교통분과위원회 회의 영상" />
+                                    <img src="/total_search/images/pho1.jpg" alt="<?= $item['TITLE'] ?>" onerror="this.src='/total_search/images/pho1.jpg'"/>
                                     <span class="play"></span>
                                 </span>
-                                <span class="menuName">[동영상으로보는목포]</span>
-                                <span class="green">도시교통분과위원회 회의 영상</span>
-                                <span class="date">2015.11.07</span>
+                                <span class="menuName">[준비중]</span>
+                                <span class="green"><?= $item['CONTENT'] ?></span>
+                                <span class="date"><?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#none" target="_blank">
-                                <span class="img"><img src="/total_search/images/pho2.jpg" alt="목포청해진 유적지" /></span>
-                                <span class="menuName">[포토갤러리]</span>
-                                <span class="green"><span class="blue">목포</span>청해진 유적지</span>
-                                <span class="date">2015.11.07</span>
-                            </a>
-                        </li>
-                        <li>
-                        	<a href="#none" target="_blank">
-                                <span class="img"><img src="/total_search/images/pho3.jpg" alt="목포 청산도 전경" /></span>
-                                <span class="menuName">[사진게시판]</span>
-                                <span class="green"><span class="blue">목포</span> 청산도 전경</span>
-                                <span class="date">2015.11.07</span>
-                            </a>
-                        </li>
-                        <li>
-                        	<a href="#none" target="_blank">
-                                <span class="img"><img src="/total_search/images/pho4.jpg" alt="청정바다수도목포 선포식" /></span>
-                                <span class="menuName">[보도자료]</span>
-                                <span class="green">청정바다수도<span class="blue">목포</span> 선포식</span>
-                                <span class="date">2015.11.07</span>
-                            </a>
-                        </li>
-                        <li>
-                        	<a href="#none" target="_blank">
-                                <span class="img"><img src="/total_search/images/pho5.jpg" alt="목포 윤선도 원림 곡수당" /></span>
-                                <span class="menuName">[사진게시판]</span>
-                                <span class="green"><span class="blue">목포</span> 윤선도 원림 곡수당</span>
-                                <span class="date">2015.11.07</span>
-                            </a>
-                        </li>
-                        <li>
-                        	<a href="#none" target="_blank">
-                                <span class="img"><img src="/total_search/images/pho6.jpg" alt="보길도 세연정" /></span>
-                                <span class="menuName">[사진게시판]</span>
-                                <span class="green">보길도 세연정</span>
-                                <span class="date">2015.11.07</span>
-                            </a>
-                        </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
-                    <span class="more"><a href="#none">+ 사진/동영상 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 사진/동영상 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if($collection == 'ALL' || $collection == 'infosearch') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'infosearch') && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
                 <div class="information">
                 	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
+                        <?php
+                        foreach ($resultTotalSetDocument['infosearch'] as $item) {
+                        ?>
                     	<li>
                             <h4>
-                                <a href="#none">
+                                <a href="<?= $item['URL']?>">
                                     <span class="tit">
-                                        <span class="green">2017년도 상반기 <span class="blue">목포</span>시 규제개혁위원회 회의 결과 (각종위원회개최내용및결과)</span>
+                                        <span class="green"><?= $item['TITLE'] ?></span>
                                     </span>
                                 </a>
-                                <span class="date">| 2017.02.02</span>
+                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                                 <a class="new_page" href="#none" target="_blank">새창열기</a>
                             </h4>
-                            <p class="location"><a href="#none">목포시청 > 정부3.0정보공개 > 행정정보사전공표목록 > 수시적행정정보공표대상 > 각종위원회개최내용및결과</a></p>
+                            <p class="location"><a href="#none"><?= str_replace("|", " > ", $item['PATHSTRING']) ?></a></p>
                             <ul class="file_box">
                                 <li class="hwp"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 1부.hwp</a></li>
                             </ul>
                         </li>
-                        <li>
-                        	<h4>
-                                <a href="#none">
-                                    <span class="tit">
-                                        <span class="green">2017년도 상반기 <span class="blue">목포</span>시 규제개혁위원회 회의 결과 (각종위원회개최내용및결과)</span>
-                                    </span>
-                                </a>
-                                <span class="date">| 2017.02.02</span>
-                                <a class="new_page" href="#none" target="_blank">새창열기</a>
-                            </h4>
-                            <p class="location"><a href="#none">목포시청 > 정부3.0정보공개 > 행정정보사전공표목록 > 수시적행정정보공표대상 > 각종위원회개최내용및결과</a></p>
-                            <ul class="file_box">
-                                <li class="hwp"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 1부.hwp</a></li>
-                                <li class="xls"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 2부_1.xls</a></li>
-                                <li class="pdf"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 3부_1.pdf</a></li>
-                            </ul>
-                        </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
-                    <span class="more"><a href="#none">+ 정보검색 더보기</a></span>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 정보검색 더보기</a></span><?php } ?>
                 </div>
+                <?php } ?>
+                <?php if(($collection == 'ALL' || $collection == 'minwon') && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
+                    <div class="information">
+                        <h3>민원사무편람 <span>[총 <?= $resultTotalSetDocument['minwonTotalCount']?>건]</span></h3>
+                        <ul>
+                            <?php
+                            foreach ($resultTotalSetDocument['minwon'] as $item) {
+                                ?>
+                                <li>
+                                    <h4>
+                                        <a href="<?= $item['URL']?>">
+                                            <span class="tit">
+                                                <span class="green"><?= $item['TITLE'] ?></span>
+                                            </span>
+                                        </a>
+                                        <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                        <a class="new_page" href="#none" target="_blank">새창열기</a>
+                                    </h4>
+                                    <p class="location"><a href="<?= $item['URL']?>"><?= $item['CONTENT'] ?></a></p>
+                                    <ul class="file_box">
+                                        <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
+                                    </ul>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                        <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 정보검색 더보기</a></span><?php } ?>
+                    </div>
                 <?php } ?>
             </div>
 			<!--result e-->
