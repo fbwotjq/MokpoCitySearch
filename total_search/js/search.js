@@ -38,7 +38,23 @@ function printMyKeyword() {
     } else {
         $('#myKeywordAreaDiv').hide();
     }
+    delMyKeywordEventBinding();
+}
 
+function delMyKeywordEventBinding() {
+    $('.del').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var keyword = $(this).attr('href');
+        var myKeyword = $.cookie('my_keyword');
+        var array = myKeyword.split(",");
+        for (var i = 0; i < array.length ; i++) {
+            if(keyword === array[i]) {
+
+            }
+        }
+        printMyKeyword();
+    });
 }
 
 $(document).ready(function() {
@@ -130,19 +146,5 @@ $(document).ready(function() {
     });
 
     printMyKeyword();
-
-    $('.del').click(function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        var keyword = $(this).attr('href');
-        var myKeyword = $.cookie('my_keyword');
-        var array = myKeyword.split(",");
-        for (var i = 0; i < array.length ; i++) {
-            if(keyword === array[i]) {
-
-            }
-        }
-        printMyKeyword();
-    });
 
 });
