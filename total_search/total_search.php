@@ -198,6 +198,8 @@ foreach ($currentCollectionMapping as $value) {
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <link rel="stylesheet" type="text/css" href="http://mp.mx.co.kr/style/common/common.css" /> <!-- 반영할때 확인 해야함 -->
 <link rel="stylesheet" type="text/css" href="/total_search/style/total_search.css" />
+<script src="/total_search/js/jquery-1.9.1.js"></script>
+<script src="/total_search/js/jquery.cookie.js"></script>
 <script src="/total_search/js/search.js"></script>
 </head>
 <body>
@@ -256,11 +258,14 @@ foreach ($currentCollectionMapping as $value) {
     	<div id="top">
         	<div class="inner">
                 <p class="logo"><span>건강의 섬 목포</span></p>
+                <form id="searchForm" action="/total_search/total_search.php" method="get">
                 <div class="top_search">
                     <fieldset>
                         <legend>통합검색</legend>
-                        <input id="query" type="text" onkeypress="javascript:pressCheck((event),this);" value="무엇이든 찾아보세요" name="query" autocomplete="off">
-                        <label for="query"><a href="#none"><img height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
+                        <input id="query" type="text" name="query" value="<?= $query == '' ? '무엇이든 찾아보세요' : $query ?>" name="query" autocomplete="off">
+                        <input id="collection" name="collection" type="hidden" value="<?= $collection ?>">
+                        <input id="sortField" name="sortField" type="hidden" value="<?= $sortField ?>">
+                        <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" href="#none"><span>상세검색</span></a>
                         <p>
                             <input id="rechk" type="checkbox" title="결과 내 재검색 하기" name="rechk">
@@ -291,18 +296,19 @@ foreach ($currentCollectionMapping as $value) {
                         </div>
                     </fieldset>
                 </div>
+                </form>
             </div>
         </div>
         <div id="content">
-        	<div class="title total_sch">
-                <p><span class="blue fw5">"<?=$query?>"</span>에 대한 전체 <span class="blue"><?=$totalSearchCount?></span>건의 결과를 찾았습니다.</p>
-                <div class="align">
-                    <a class="list1" href="#none"><span>정확도순</span></a>
-                    <a class="list2 on" href="#none"><span>최신순</span></a>
+        	<div class="title<?php if($collection == 'ALL') {?> total_sch<?php } ?>">
+                <p><span class="blue fw5">'<?=$query?>'</span>에 대한 전체 <span class="blue"><?=$totalSearchCount?></span>건의 결과를 찾았습니다.</p>
+                <div id="sortRadioDiv" class="align">
+                    <a class="list1<?php if($sortField == 'RANK'){?> on<?php } ?>" href="RANK"><span>정확도순</span></a>
+                    <a class="list2<?php if($sortField == 'DATE'){?> on<?php } ?>" href="DATE"><span>최신순</span></a>
                 </div>
             </div>
         	<!--result s-->
-            <div class="result total_sch">
+            <div class="result<?php if($collection == 'ALL') {?> total_sch<?php } ?>">
                 <?php if(($collection == 'ALL' || $collection == 'menu') && $resultTotalSetDocument['menuTotalCount'] > 0) { ?>
                 <div class="menu_search">
                     <h3>메뉴검색<span> [총 <?= $resultTotalSetDocument['menuTotalCount'] ?>건]</span></h3>
@@ -313,10 +319,10 @@ foreach ($currentCollectionMapping as $value) {
                     	<li><a href="<?= $item['URL']?>"><?= $item['TITLE'] ?></a></li>
                         <?php } ?>
                     </ul>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 메뉴 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="menu">+ 메뉴 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'board') && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'board') && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
                 <div class="news_search">
                     <h3>목포소식 <span>[총 <?= $resultTotalSetDocument['boardTotalCount'] ?>건]</span></h3>
                     <ul>
@@ -338,10 +344,10 @@ foreach ($currentCollectionMapping as $value) {
                         }
                         ?>
                     </ul>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 목포소식 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="board">+ 목포소식 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'member') && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'member') && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
                 <div class="staff_table">
                     <h3>직원검색 <span>[총 <?= $resultTotalSetDocument['memberTotalCount'] ?>건]</span></h3>
                     <table>
@@ -357,7 +363,7 @@ foreach ($currentCollectionMapping as $value) {
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($resultTotalSetDocument['board'] as $item) {
+                            foreach ($resultTotalSetDocument['member'] as $item) {
                             ?>
                             <tr>
                                 <td><?php $item['TITLE'] ?></td>
@@ -371,10 +377,10 @@ foreach ($currentCollectionMapping as $value) {
                             ?>
                         </tbody>
                       </table>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 직원/업무 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="member">+ 직원/업무 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'webpage') && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'webpage') && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
                 <div class="area_search">
                 	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
@@ -396,10 +402,10 @@ foreach ($currentCollectionMapping as $value) {
                         }
                         ?>
                    	</ul>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 분야별정보 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="webpage">+ 분야별정보 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'multi') && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'multi') && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
                 <div class="media">
                 	<h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount']?>건]</span></h3>
                     <ul>
@@ -421,10 +427,10 @@ foreach ($currentCollectionMapping as $value) {
                         }
                         ?>
                     </ul>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 사진/동영상 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="multi">+ 사진/동영상 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'infosearch') && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'infosearch') && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
                 <div class="information">
                 	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
@@ -450,37 +456,51 @@ foreach ($currentCollectionMapping as $value) {
                         }
                         ?>
                     </ul>
-                    <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 정보검색 더보기</a></span><?php } ?>
+                    <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="infosearch">+ 정보검색 더보기</a></span><?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'minwon') && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' || $collection == 'minwon') && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
                     <div class="information">
                         <h3>민원사무편람 <span>[총 <?= $resultTotalSetDocument['minwonTotalCount']?>건]</span></h3>
                         <ul>
                             <?php
                             foreach ($resultTotalSetDocument['minwon'] as $item) {
-                                ?>
-                                <li>
-                                    <h4>
-                                        <a href="<?= $item['URL']?>">
-                                            <span class="tit">
-                                                <span class="green"><?= $item['TITLE'] ?></span>
-                                            </span>
-                                        </a>
-                                        <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                        <a class="new_page" href="#none" target="_blank">새창열기</a>
-                                    </h4>
-                                    <p class="location"><a href="<?= $item['URL']?>"><?= $item['CONTENT'] ?></a></p>
-                                    <ul class="file_box">
-                                        <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
-                                    </ul>
-                                </li>
-                                <?php
+                            ?>
+                            <li>
+                                <h4>
+                                    <a href="<?= $item['URL']?>">
+                                        <span class="tit">
+                                            <span class="green"><?= $item['TITLE'] ?></span>
+                                        </span>
+                                    </a>
+                                    <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                    <a class="new_page" href="#none" target="_blank">새창열기</a>
+                                </h4>
+                                <p class="location"><a href="<?= $item['URL']?>"><?= $item['CONTENT'] ?></a></p>
+                                <ul class="file_box">
+                                    <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
+                                </ul>
+                            </li>
+                            <?php
                             }
                             ?>
                         </ul>
-                        <?php if($collection == 'ALL') { ?><span class="more"><a href="#none">+ 정보검색 더보기</a></span><?php } ?>
+                        <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="minwon">+ 정보검색 더보기</a></span><?php } ?>
                     </div>
+                <?php } ?>
+                <?php if($collection != 'ALL') { ?>
+                <div class="paging">
+                    <div class="num">
+                        <a href="#none" class="more_prev"><span>이전 10페이지</span></a>
+                        <a href="#none" class="prev"><span>이전 페이지</span></a>
+                        <a href="#none" class="on">1</a>
+                        <a href="#none">2</a>
+                        <a href="#none">3</a>
+                        <a href="#none">4</a>
+                        <a href="#none" class="next"><span>다음 페이지</span></a>
+                        <a href="#none" class="more_next"><span>다음 10페이지</span></a>
+                    </div>
+                </div>
                 <?php } ?>
             </div>
 			<!--result e-->
@@ -566,9 +586,9 @@ foreach ($currentCollectionMapping as $value) {
                     </ol>
                 </div>
                 
-                <div class="mykeyword">
+                <div class="mykeyword" id="myKeywordAreaDiv">
                 	<h3>내가 찾은 검색어</h3>
-                    <ul>
+                    <ul id="myKeywordArea">
                     	<li>
                             <a href="#none">관광명소 가볼만한곳</a>
                             <a href="#none" class="del"><span>삭제</span></a>
