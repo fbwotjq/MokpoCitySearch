@@ -33,15 +33,53 @@ function printMyKeyword() {
         $('#myKeywordArea').empty();
         var array = myKeyword.split(",");
         for (var i = 0; i < array.length ; i++) {
-            $('#myKeywordArea').append("<li><a href='" + array[i] + "'>" + array[i] + "</a><a href='" + array[i] + "' class='del'><span>삭제</span></a></li>");
+            $('#myKeywordArea').append("<li><a href='" + array[i] + "'>" + array[i] + "</a><a href='" + array[i] + "' class='del'><span class='delText' id='" + array[i] + "'>삭제</span></a></li>");
         }
     } else {
         $('#myKeywordAreaDiv').hide();
     }
     delMyKeywordEventBinding();
+
+    $('#myKeywordArea > li > a').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var query = $(this).attr('href');
+        if(query === '무엇이든 찾아보세요') {
+            $('#query').val('');
+        } else {
+            $('#query').val(query);
+        }
+
+        $('#searchForm').submit();
+
+    });
+
 }
 
 function delMyKeywordEventBinding() {
+
+    $('.delText').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var keyword = $(this).attr('id');
+        var myKeyword = $.cookie('my_keyword');
+        var array = myKeyword.split(",");
+        for (var i = 0; i < array.length ; i++) {
+            if(keyword === array[i]) {
+                array.splice(i, 1);
+                break;
+            }
+        }
+        if(array.length > 0) {
+            $.cookie('my_keyword', array.toString());
+        } else {
+            $.cookie('my_keyword', '');
+        }
+        printMyKeyword();
+    });
+
     $('.del').click(function (event) {
         event.preventDefault();
         event.stopPropagation();
