@@ -169,6 +169,31 @@ $(document).ready(function() {
         $('#searchForm').submit();
     });
 
+    $('#popkeywordArea > ul > li > a').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if(query === '무엇이든 찾아보세요') {
+            $('#query').val('');
+        }
+
+        var popKeywordType = $(this).attr('href');
+        $('#popKeywordType').val(popKeywordType);
+        $('#searchForm').submit();
+
+    });
+
+    $('#popkeywordArea > ol > li > a').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var query = $(this).attr('href');
+        $('#query').val(query);
+        $('#searchForm').submit();
+
+    }); 
+
     $("input[name=query]").keydown(function (event) {
 
         var query = $('#query').val();
@@ -184,5 +209,127 @@ $(document).ready(function() {
     });
 
     printMyKeyword();
+
+    $('#range1').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('#range1').attr('class', 'list1 on');
+        $('#range2').attr('class', 'list2');
+        $('#range3').attr('class', 'list3');
+        $('#range4').attr('class', 'list4');
+        var ranges = $(this).attr('href');
+        $("#start_day").val(ranges);
+        $("#end_day").val(ranges);
+    });
+
+    $('#range2').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('#range1').attr('class', 'list1');
+        $('#range2').attr('class', 'list2 on');
+        $('#range3').attr('class', 'list3');
+        $('#range4').attr('class', 'list4');
+        var ranges = $(this).attr('href');
+        $("#start_day").val(ranges);
+        $("#end_day").val(ranges);
+    });
+
+    $('#range3').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('#range1').attr('class', 'list1');
+        $('#range2').attr('class', 'list2');
+        $('#range3').attr('class', 'list3 on');
+        $('#range4').attr('class', 'list4');
+        var ranges = $(this).attr('href');
+        $("#start_day").val(ranges);
+        $("#end_day").val(ranges);
+    });
+
+    $('#range4').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('#range1').attr('class', 'list1');
+        $('#range2').attr('class', 'list2');
+        $('#range3').attr('class', 'list3');
+        $('#range4').attr('class', 'list4 on');
+        var ranges = $(this).attr('href');
+        $("#start_day").val(ranges);
+        $("#end_day").val(ranges);
+    });
+
+    $('#search_field_all').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var searchField = $(this).attr('href');
+        $('#searchField').val(searchField );
+        $('#search_field_all').attr('class', 'list1 on');
+        $('#search_field_title').attr('class', 'list2');
+        $('#search_field_content').attr('class', 'list3');
+        $('#search_field_writer').attr('class', 'list4');
+        $('#searchForm').submit();
+
+    });
+
+    $('#search_field_title').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var searchField = $(this).attr('href');
+        $('#searchField').val(searchField );
+        $('#search_field_all').attr('class', 'list1');
+        $('#search_field_title').attr('class', 'list2 on');
+        $('#search_field_content').attr('class', 'list3');
+        $('#search_field_writer').attr('class', 'list4');
+        $('#searchForm').submit();
+
+    });
+
+    $('#search_field_content').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var searchField = $(this).attr('href');
+        $('#searchField').val(searchField );
+        $('#search_field_all').attr('class', 'list1');
+        $('#search_field_title').attr('class', 'list2');
+        $('#search_field_content').attr('class', 'list3 on');
+        $('#search_field_writer').attr('class', 'list4');
+        $('#searchForm').submit();
+
+    });
+
+    $('#search_field_writer').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var searchField = $(this).attr('href');
+        $('#searchField').val(searchField );
+        $('#search_field_all').attr('class', 'list1');
+        $('#search_field_title').attr('class', 'list2');
+        $('#search_field_content').attr('class', 'list3');
+        $('#search_field_writer').attr('class', 'list4 on');
+        $('#searchForm').submit();
+
+    });
+
+    $("#start_day").datepicker({
+        nextText: '다음 달',
+        prevText: '이전 달'
+    });
+
+    $("#end_day").datepicker({
+        nextText: '다음 달',
+        prevText: '이전 달'
+    });
 
 });

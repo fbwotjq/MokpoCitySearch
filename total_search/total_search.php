@@ -124,7 +124,7 @@ $endDate = $wnUtils->getCheckReq($_GET, "endDate", "2030-12-31");				    // 날�
 $endDate = str_replace("-", "/", $endDate);
 
 $isDetailSearch  = $wnUtils->getCheckReq($_GET, "isDetailSearch", 0);				// 상세검색 안할경우 0, 할경우 1
-$searchField = $wnUtils->getCheckReq($_POST, "searchField", "ALL");					// 검색필드 설정
+$searchField = $wnUtils->getCheckReq($_GET, "searchField", "ALL");					// 검색필드 설정
 
 $ret = $search->w3SetCodePage(CHARSET);
 $ret = $search->w3SetQueryLog(USE_QUERY_LOG_ON);
@@ -137,12 +137,13 @@ foreach ($currentCollectionMapping as $value) {
     $collectionName = $value['collectionName'];
     $viewCount = $value['viewCount'];
     $sortCondition = $wnUtils->getSortCondition($sortField);
-    $searchFieldCondition = $value['defaultSearchField'];
+    $searchFieldCondition = $searchField == 'ALL' ? $value['defaultSearchField'] : $searchField;
     $documentField = $value['documentField'];
 
     //echo(printf('SETTING SEARCH CONDITION => collectionName:%s, viewCount:%s, sortField:%s <br/>', $collectionName, $viewCount, $sortCondition));
 
     $ret = $search->w3AddCollection($collectionName);
+    $ret = $search->w3SetSearchField($collectionName, $searchFieldCondition);
     $ret = $search->w3SetDateRange($collectionName, $startDate, $endDate);
     $ret = $search->w3SetQueryAnalyzer($collectionName, USE_LA_ON, IGNORE_CASE_ON, USE_ORIGINAL_ON, USE_SYNONYM_ON);
     $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
@@ -186,6 +187,17 @@ foreach ($currentCollectionMapping as $value) {
     #echo(printf('SEARCH RESULT => collectionName:%s, totalCount:%s, resultCount:%s <br/>', $collectionName, $collectionTotalCount, $collectionResultCount));
 
 }
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "dev.truetech.info:7800/manager/WNRun.do?target=popword&collection=_ALL_&range=" . $popKeywordType);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+$output = curl_exec($ch);
+curl_close($ch);
+$xml = simplexml_load_string($output);
+echo $xml;
+$popkeywords = $xml->Query;
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -198,7 +210,9 @@ foreach ($currentCollectionMapping as $value) {
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <link rel="stylesheet" type="text/css" href="http://mp.mx.co.kr/style/common/common.css" /> <!-- 반영할때 확인 해야함 -->
 <link rel="stylesheet" type="text/css" href="/total_search/style/total_search.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css" />
 <script src="/total_search/js/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 <script src="/total_search/js/jquery.cookie.js"></script>
 <script src="/total_search/js/search.js"></script>
 </head>
@@ -223,7 +237,7 @@ foreach ($currentCollectionMapping as $value) {
         </ul>
         <div class="term">
         	<h2>기간</h2>
-            <div class="range">
+            <div class="range" id="dataRangeButton">
                 <a id="range1" class="list1 on" title="전체" href="#none">전체</a>
                 <a id="range2" class="list2" title="1주" href="#none">1주</a>
                 <a id="range3" class="list3" title="1개월" href="#none">1개월</a>
@@ -245,11 +259,11 @@ foreach ($currentCollectionMapping as $value) {
         </div>
         <div class="leftArea">
         	<h2>검색영역</h2>
-            <div>
-                <a class="list1 on" href="#none"><span>전체</span></a>
-                <a class="list2" href="#none"><span>제목</span></a>
-                <a class="list3" href="#none"><span>내용</span></a>
-                <a class="list4" href="#none"><span>작성자</span></a>
+            <div id="searchFieldSelectBox">
+                <a id="search_field_all" class="list1<?php if($searchField == 'ALL') { ?> on<?php } ?>" href="ALL"><span>전체</span></a>
+                <a id="search_field_title" class="list2<?php if($searchField == 'TITLE') { ?> on<?php } ?>" href="TITLE"><span>제목</span></a>
+                <a id="search_field_content" class="list3<?php if($searchField == 'CONTENT') { ?> on<?php } ?>" href="CONTENT"><span>내용</span></a>
+                <a id="search_field_writer" class="list4<?php if($searchField == 'WRITER') { ?> on<?php } ?>" href="WRITER"><span>작성자</span></a>
             </div>
         </div>
     </div>
@@ -265,6 +279,8 @@ foreach ($currentCollectionMapping as $value) {
                         <input id="query" type="text" name="query" value="<?= $query == '' ? '무엇이든 찾아보세요' : $query ?>" name="query" autocomplete="off">
                         <input id="collection" name="collection" type="hidden" value="<?= $collection ?>">
                         <input id="sortField" name="sortField" type="hidden" value="<?= $sortField ?>">
+                        <input id="searchField" name="searchField" type="hidden" value="<?= $searchField ?>">
+                        <input id="popKeywordType" name="popKeywordType" type="hidden" value="<?= $popKeywordType ?>">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" href="#none"><span>상세검색</span></a>
                         <p>
@@ -506,86 +522,48 @@ foreach ($currentCollectionMapping as $value) {
 			<!--result e-->
 			<!--aside s-->
             <div id="aside">
-            	<div class="popular">
+            	<div class="popular" id="popkeywordArea">
                     <h3>인기검색어</h3>
                     <ul class="tab">
-                        <li><a href="#none">일간</a></li>
-                        <li><a class="on" href="#none">주간</a></li>
+                        <li><a <?php if($popKeywordType == 'D') { ?> class="on"  <?php } ?> href="D">일간</a></li>
+                        <li><a <?php if($popKeywordType == 'W') { ?> class="on"  <?php } ?> href="W">주간</a></li>
                     </ul>
                     <ol class="list">
+                        <?php
+                        for( $i = 0 ; $i < count($popkeywords) ; $i++ ) {
+                        ?>
                         <li>
-                            <a href="#none">
-                                <span class="num top">1</span>
-                                <span class="tit">조직도</span>
-                                <span class="rank"><em class="new"></em></span>
+                            <a href="<?= $popkeywords[$i] ?>">
+                                <span class="num top"><?= $i + 1 ?></span>
+                                <span class="tit"><?= $popkeywords[$i] ?></span>
+                                <span class="rank">
+                                    <?php
+                                    if($popkeywords[$i]['updown'] == 'C') {
+                                    ?>
+                                        <em> - </em>
+                                    <?php
+                                    } else if ($popkeywords[$i]['updown'] == 'U') {
+                                    ?>
+                                        <em class="up"><?= $popkeywords[$i]['count'] ?></em>
+                                    <?php
+                                    } else if ($popkeywords[$i]['updown'] == 'D') {
+                                    ?>
+                                        <em class="dn"><?= $popkeywords[$i]['count'] ?></em>
+                                    <?php
+                                    } else if ($popkeywords[$i]['updown'] == 'N') {
+                                    ?>
+                                        <em class="new"></em>
+                                    <?php
+                                    }
+                                    ?>
+                                </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num top">2</span>
-                                <span class="tit">목포</span>
-                                <span class="rank"><em class="up">2</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num top">3</span>
-                                <span class="tit">복지</span>
-                                <span class="rank"><em class="dn">2</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num top">4</span>
-                                <span class="tit">민원출장소안내사무소개</span>
-                                <span class="rank"><em class="dn">2</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num top">5</span>
-                                <span class="tit">청산도축제</span>
-                                <span class="rank"><em class="dn">3</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num">6</span>
-                                <span class="tit">장애인</span>
-                                <span class="rank"><em class="up">5</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num">7</span>
-                                <span class="tit">청소년</span>
-                                <span class="rank"><em class="dn">2</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num">8</span>
-                                <span class="tit">드림스타트</span>
-                                <span class="rank"><em class="up">1</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num">9</span>
-                                <span class="tit">다문화가족</span>
-                                <span class="rank"><em>-</em></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="num">10</span>
-                                <span class="tit">재난안전</span>
-                                <span class="rank"><em class="up">5</em></span>
-                            </a>
-                        </li>
+                        <?php
+                        }
+                        ?>
                     </ol>
                 </div>
-                
                 <div class="mykeyword" id="myKeywordAreaDiv">
                 	<h3>내가 찾은 검색어</h3>
                     <ul id="myKeywordArea">
@@ -607,7 +585,6 @@ foreach ($currentCollectionMapping as $value) {
                         </li>
                     </ul>
                 </div>
-
             </div>
         	<!--aside e-->
         </div>
