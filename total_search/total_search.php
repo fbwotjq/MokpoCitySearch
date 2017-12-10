@@ -511,14 +511,15 @@ $popkeywords = $xml->Query;
                 <?php if($collection != 'ALL') { ?>
                 <div class="paging">
                     <div class="num">
-                        <a href="#none" class="more_prev"><span>이전 10페이지</span></a>
+                        <!--<a href="#none" class="more_prev"><span>이전 10페이지</span></a>
                         <a href="#none" class="prev"><span>이전 페이지</span></a>
                         <a href="#none" class="on">1</a>
                         <a href="#none">2</a>
                         <a href="#none">3</a>
                         <a href="#none">4</a>
                         <a href="#none" class="next"><span>다음 페이지</span></a>
-                        <a href="#none" class="more_next"><span>다음 10페이지</span></a>
+                        <a href="#none" class="more_next"><span>다음 10페이지</span></a>-->
+                        <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
                     </div>
                 </div>
                 <?php } ?>

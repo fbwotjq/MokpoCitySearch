@@ -174,6 +174,7 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
 
+        var query = $('#query').val();
         if(query === '무엇이든 찾아보세요') {
             $('#query').val('');
         }
@@ -188,6 +189,7 @@ $(document).ready(function() {
 
         event.preventDefault();
         event.stopPropagation();
+
         var query = $(this).attr('href');
         $('#query').val(query);
         $('#searchForm').submit();

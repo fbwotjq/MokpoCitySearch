@@ -1,0 +1,483 @@
+<?php
+require_once "./common/WNAnchor.html";
+/**
+ *  file: WNUtils.php
+ *  subject: 검색 구현에 필요한 일반 메소드를 구현한다.
+ *  ------------------------------------------------------------------------
+ *  @original author: KoreaWISEnut
+ *  @edit author: KoreaWISEnut
+ *  @update date 2007.03.20
+ *  ------------------------------------------------------------------------
+ */
+class WNUtils {
+	/**
+     * board_id 별 한글명 리턴
+     * @param find
+     * @param arr
+     * @return
+     */
+    function getBoardName($boardId) {
+    	$boardName = "";
+        if($boardId == "www_wando_video"){
+   			$boardName = "동영상으로보는완도";
+        }else if($boardId == "www_ad_video"){
+        	$boardName = "군정홍보동영상";
+        }else if($boardId == "www_wando_gallery"){
+        	$boardName = "완도읍 포토앨범";
+        }else if($boardId == "www_geumil_gallery"){
+        	$boardName = "금일읍 포토앨범";
+        }else if($boardId == "www_nohwa_gallery"){
+        	$boardName = "노화읍 포토앨범";
+        }else if($boardId == "www_gunoe_gallery"){
+        	$boardName = "군외면 포토앨범";
+        }else if($boardId == "www_sinji_gallery"){
+        	$boardName = "신지면 포토앨범";
+        }else if($boardId == "www_gogeum_gallery"){
+        	$boardName = "고금면 포토앨범";
+		}else if($boardId == "www_yaksan_gallery"){
+			$boardName = "약산면 포토앨범";
+		}else if($boardId == "www_cheongsan_gallery"){
+			$boardName = "청산면 포토앨범";
+		}else if($boardId == "www_soan_gallery"){
+			$boardName = "소안면 포토앨범";
+		}else if($boardId == "www_geumdang_gallery"){
+			$boardName = "금당면 포토앨범";
+		}else if($boardId == "www_bogil_gallery"){
+			$boardName = "보길면 포토앨범";
+		}else if($boardId == "www_saengil_gallery"){
+			$boardName = "생일면 포토앨범";
+		}else if($boardId == "ares_farm_gallery"){
+			$boardName = "농가 갤러리";
+		}else if($boardId == "tour_tour_gallery2"){
+			$boardName = "관광갤러리2";
+		}
+		return $boardName;
+    }
+
+
+	/**
+     * 문자 배열 값을 검색하여 키 값을 리턴
+     * @param find
+     * @param arr
+     * @return
+     */
+    function findArrayValue($find, $arr) {
+        $findKey = -1;
+        for ($i = 0; $i < count($arr); $i++) {
+            if (strcmp($find, $arr[$i]) == 0){
+                $findKey = $i;
+                break;
+            }
+        }
+        return $findKey;
+    }
+    
+    /**
+	 * 구분자를 가지고 있는 문자열을 구분자를 기준으로 나누어주는 메소드
+	 * @param splittee 구분자를 가진 문자열
+	 * @param splitChar 구분자
+	 * @return
+	 */
+	function split($splittee, $splitChar)
+	{
+		$temp = explode($splitChar, $splittee);
+		$words = null;
+		$size = 0;
+		for($i = 0; $i < count($temp); $i++) {
+			if(strlen(trim($temp[$i])) > 0) {
+				$size++;
+			}
+		}
+		$j = 0;
+		$words;
+		for($i = 0; $i < count($temp); $i++) 
+		{
+			if(strlen(trim($temp[$i])) > 0) {
+				$words[$j] = $temp[$i];
+				$j++;
+			}
+		}
+		return $words;
+	}
+	
+	/**
+     * request null체크
+     **/
+	function getCheckReq($req, $parameter, $default_value){
+		$req_value = "";
+		if(empty($req[$parameter]) != 1){
+			$req_value = $req[$parameter];
+			
+		}else{
+			$req_value = $default_value;
+		}
+		return $req_value;
+	}
+	
+	/**
+     * request XSS 처리
+     **/
+	function getCheckReqXSS($req, $parameter, $default_value){
+		$req_value = "";
+		if(empty($req[$parameter]) != 1){
+			$req_value = $req[$parameter];
+			$req_value = preg_replace('/</?[a-zA-Z][0-9a-zA-Z가-\uD7A3ㄱ-ㅎ=/\"\'%;:,._()\\-# ]+>/i', '', $req_value);
+		}else{
+			$req_value = $default_value;
+		}
+		return $req_value;
+	}
+
+	/**
+	 * 배열의 내용을 flag를 구분자로 사용하여 하나의 스트링으로 묶어주는 메소드
+	 * @param $name 대상 배열
+	 * @param splitChar 구분자
+	 * @return
+	 */
+	function convertArrayToString($name, $flag) {
+		$str = "";
+		for($i = 0; $i < count($name); $i++) {
+			if($i != count($name)-1) {
+				$str = $str . $name[$i] . $flag;
+			} else {
+				$str = $str . $name[$i];
+			}					
+		}
+		return $str;
+	}
+
+	function getKeywordHl($str){
+		
+		$str = str_replace("<!HS>", "<span class='blue'>",$str);
+		$str = str_replace("<!HE>", "</span>",$str);
+
+		return $str;
+	}
+
+	
+	function getNewPageLinks($startCount, $totalCount, $viewListCount, $bundleCount) {
+		$sbRet = "";
+		$wnanchor = $this->getPageAnchor($startCount, $totalCount, $viewListCount, $bundleCount);
+		
+		if($wnanchor->getFirstPage() != -1) { 
+			$sbRet = $sbRet . "<a class='more_prev' onclick='goPage(".$wnanchor->getFirstPage().")'  ONFOCUS='this.blur();' title='처음 페이지로 가기' ><span>이전 10페이지</span></a>";
+		} else {
+			$sbRet = $sbRet . "<a class='more_prev' href='#' title='처음 페이지로 가기'><span>이전 10페이지</span></a>";
+		}
+		if($wnanchor->getBundleBefore() != -1) { 
+			$sbRet = $sbRet . "<a class='prev' onclick='goPage(".$wnanchor->getBundleBefore().")'  ONFOCUS='this.blur();' title='이전 페이지' ><span>이전 페이지</span></a>";
+		} else {
+			$sbRet = $sbRet . "<a class='prev' title='이전 페이지' href='#'><span>이전 페이지</span></a>";
+		}
+
+		$pageCount = $wnanchor->getPageCount();
+		$pages = $wnanchor->getPages();
+
+		for($i=0; $i<$pageCount AND $i < count($pages); $i++) {
+			if(strcmp($pages[$i][1], "-1") == 0) {
+				$sbRet = $sbRet . "<a class='on' href='#none' onclick='goPage(".$pages[$i][1].")'>". $pages[$i][0] ."</a>";
+			} else {
+				$sbRet = $sbRet . "<a onclick='goPage(".$pages[$i][1].")' title=".$pages[$i][1]." 페이지로 가기' >".$pages[$i][0]."</a>";
+			}
+			if($pageCount > $i+1) {
+				//$sbRet = $sbRet . "    &nbsp;&nbsp;|&nbsp;&nbsp;\n";// 페이지 경계 1 | 2 | 3
+			}
+		}
+		if($wnanchor->getBundleNext() != -1) {										
+			$sbRet = $sbRet . "<a class='next' onclick='goPage(".$wnanchor->getBundleNext().")' ONFOCUS='this.blur();' title='다음 페이지' ><span>다음 페이지</span></a>";
+		} else {
+			$sbRet = $sbRet . "<a class='next' title='다음 페이지' href='#'><span>다음 페이지</span></a>";
+		}
+		if($wnanchor->getLastPage() != -1) { 
+			$sbRet = $sbRet . "<a class='more_next' onclick='goPage(".$wnanchor->getLastPage().")'  ONFOCUS='this.blur();' title='마지막 페이지로 가기' ><span>다음 20페이지</span></a>";
+		} else {
+			$sbRet = $sbRet . "<a class='more_next' title='마지막 페이지로 가기' href='#'><span>다음 10페이지</span></a>";
+		}
+		return $sbRet;
+	}
+
+	function goPage($startCount,$params){
+
+		if(array_key_exists("startCount", $params)) {
+			$params["startCount"] = $startCount;
+		}
+		
+		return "search?".http_build_query($params, '', '&amp;');
+	}
+
+	function getPageAnchor($startNum, $totalcount, $resultCnt, $anchorSacle) {
+		$anchor = new WNAnchor();
+
+		if($totalcount == 0) {   //등록된 정보가 없으면 페이지 Anchor를 생성 하지 않는다.
+			return $anchor;
+		}
+		
+		$curBunbleNum = (int)($startNum / ($resultCnt * $anchorSacle));		
+		$totalPageCnt = (int)($totalcount / $resultCnt);
+		if($totalcount % $resultCnt > 0) {
+			$totalPageCnt++;
+		}
+		
+		$anchor->setTotalPgCount($totalPageCnt);      // 전체 페이지 세팅
+
+		if ( $startNum > 0){        // 이전 페이지
+			$beforePg = $startNum - $resultCnt;
+			$anchor->setBefore($beforePg);
+		}
+
+		if( $startNum+$resultCnt < $totalcount ){        // 다음페이지
+			$nextPg = $startNum + $resultCnt;
+			$anchor->setNext($nextPg);
+		}
+
+		//번들 뒤로 이동
+		$bunbleBeforePg = (int)(($curBunbleNum-1) * $resultCnt * $anchorSacle); //이전 번들로 이동하는 번호
+		if($curBunbleNum > 0){
+			$anchor->setBundleBefore($bunbleBeforePg);
+		}
+
+		//번들 앞으로 이동
+		$bundleNextPg = (int)((1 + $curBunbleNum) * $anchorSacle * $resultCnt);
+		if( $totalPageCnt >= $anchorSacle AND ($curBunbleNum+1) * $anchorSacle < $totalPageCnt ){
+			$anchor->setBundleNext($bundleNextPg);
+		}
+
+		//맨처음
+		if($startNum != 0 AND $curBunbleNum != 0){
+			$anchor->setFirstPage(0);
+		}
+		//맨끝
+		$lastPage = (int)(($resultCnt * $totalPageCnt) - $resultCnt);
+		if( $totalPageCnt >= $anchorSacle AND ($curBunbleNum+1) * $anchorSacle <  $totalPageCnt ) {
+			$anchor->setLastPage($lastPage);
+			
+		}
+
+		$pageCount = 1;
+		
+		$pages = null;
+		for($i = 0; $i < $anchorSacle; $i++) {
+			$startCnt = (($curBunbleNum * $anchorSacle) + $i) * $resultCnt;
+			$pageNum = ($curBunbleNum * $anchorSacle) + $i + 1;
+			if($startCnt < $totalcount) {
+				if ($startCnt != $startNum) {
+					$pages[$i][0] = (string)($pageNum);
+					$pages[$i][1] = (string)($startCnt);
+				} else {
+					$pages[$i][0] = (string)($pageNum);
+					$pages[$i][1] = "-1";
+					$anchor->setCurPageNumber($pageNum);
+				}
+				$anchor->setPageCount($pageCount);
+				$pageCount++;
+			}
+		}
+		$anchor->setPages($pages);
+		return $anchor;
+	}
+
+	
+
+	function getImgSrc($ATTACH_MIME){
+		
+		$imgSrc = "";
+		
+		if( strpos($ATTACH_MIME,"hansofthwp") ||  strpos($ATTACH_MIME,"octet-stream")) {
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_hwp.png";
+		}else if( strpos($ATTACH_MIME,"powerpoint") || strpos($ATTACH_MIME,"presentation") ){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_ppt.png";
+		}else if( strpos($ATTACH_MIME,"excel") || strpos($ATTACH_MIME,"sheet") ){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_xls.png";
+		}else if( strpos($ATTACH_MIME,"msword") || strpos($ATTACH_MIME,"plain") ){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_doc.png";
+		}else if( strpos($ATTACH_MIME,"pdf") ){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_pdf.png";
+		}else if( strpos($ATTACH_MIME,"gif") || strpos($ATTACH_MIME,"jpeg") || strpos($ATTACH_MIME,"png") ){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_jpg.png";
+		}else if( strpos($ATTACH_MIME,"zip")){
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_zip.png";
+		}else{
+			$imgSrc = "/".drupal_get_path('theme', $GLOBALS['theme'])."/images/common/icon_file.png";
+		}	
+		
+		return $imgSrc;
+	}
+
+	function getResultViewKeyword($searchKeyword,$reSearchKeyword,$exceptKeyword){
+		
+		//$wnUtils2 = new WNUtils();
+		$resultViewKeyWord = "";
+		
+		if( Count($reSearchKeyword) > 1 && Count($exceptKeyword) > 1) {
+			$resultViewKeyWord = "&#39;<span class='txt-blue'>".$searchKeyword."</span>&#39; 검색결과내 ";	
+			$resultViewKeyWord =  $this->getRemoveImage($resultViewKeyWord,$reSearchKeyword,"research");
+			$resultViewKeyWord .= "을/를 포함하고";
+
+			$resultViewKeyWord =  $this->getRemoveImage($resultViewKeyWord,$exceptKeyword,"except");
+			$resultViewKeyWord .= "을/를 제외한 검색결과";
+
+		}else if( Count($reSearchKeyword) > 1 ){
+			$resultViewKeyWord = "&#39;<span class='txt-blue'>".$searchKeyword."</span>&#39; 검색결과내";	
+			$resultViewKeyWord =  $this->getRemoveImage($resultViewKeyWord,$reSearchKeyword,"research");
+			$resultViewKeyWord .= "을/를 포함한 검색결과";
+		}else if( Count($exceptKeyword) > 1 ){
+			$resultViewKeyWord = "&#39;<span class='txt-blue'>".$searchKeyword."</span>&#39; 검색결과내 ";	
+			$resultViewKeyWord =  $this->getRemoveImage($resultViewKeyWord,$exceptKeyword,"except");
+			$resultViewKeyWord .= "을/를 제외한 검색결과";
+		}else{
+			$resultViewKeyWord = "&#39;<span class='txt-blue'>".$searchKeyword."</span>&#39; 검색결과 ";	
+		}
+		return $resultViewKeyWord;
+	}
+
+	function getRemoveImage($resultViewKeyWord,$keyword,$reOrExcept){
+
+		//$keyword = explode(' ', $keyword);
+
+		for($i = 1; $i < Count($keyword); $i++ ) {
+			//$resultViewKeyWord .= SUBSTR( $keyword[$i],1, strlen($keyword[$i])-1);
+			$resultViewKeyWord .= "&#39<span class='txt-orange'>".$keyword[$i]."</span>&#39;     <a href='#' title='".$keyword[$i]." 검색결과삭제'><img class='remove' name='".$i."/".$reOrExcept."'src='/sites/all/themes/seoulIC/images/common/btn_delete.gif' alt='검색어 결과삭제'></a>";
+			
+		}
+		return $resultViewKeyWord;
+	}
+
+
+	function getRealSearchKeyword($searchKeyword,$reSearchKeyword,$exceptKeyword){
+
+		$realSearchKeyword = "";
+		$realSearchKeyword .= $searchKeyword;
+
+		for($i = 1; $i < Count($reSearchKeyword); $i++ ) {
+			$realSearchKeyword .= " ".$reSearchKeyword[$i];
+		}
+
+		for($i = 1; $i < Count($exceptKeyword); $i++ ) {
+			$tokens = explode(' ', $exceptKeyword[$i]);
+			$sumKeyword = "";
+			for($j = 0; $j < Count($tokens); $j++ ) {
+				$sumKeyword .= "!".$tokens[$j]; 
+			}
+			$realSearchKeyword = "(".$realSearchKeyword.") ".$sumKeyword;
+		}
+
+		return $realSearchKeyword;
+	}
+
+	function replaceSpecialChar($str){
+
+		$str = str_replace("&amp;gt;",">",$str);
+	
+		return $str;
+	}
+
+	function getViewCateTaxonomy($taxonomys, $i){
+		$taxonomy = explode('>', $taxonomys);
+
+
+		return $taxonomy[$i];
+	}
+
+	function getRankScore($searchField){
+
+		if($searchField == "ALL") {
+			return "TITLE/100,CONTENT/30,WRITER/5";
+		}
+
+		//제목,내용,작성자,키워드,첨부파일
+		$searchField = str_replace("TITLE", "TITLE/100", $searchField);
+		$searchField = str_replace("CONTENT", "CONTENT/30", $searchField);
+		$searchField = str_replace("WRITER", "WRITER/5", $searchField);
+		//$searchField = str_replace("ATTACHCON", "ATTACHCON/20", $searchField);
+		//$searchField = str_replace("ATTACHNAME", "ATTAcHNAME/1", $searchField);
+		
+		return $searchField;
+	}
+
+	function getAttachUri($ATTACH_URI) {
+	
+		$ATTACH_URI = str_replace("public://", "", $ATTACH_URI);
+		$ATTACH_URI = "/sites/default/files/".$ATTACH_URI;
+		
+		return $ATTACH_URI;
+	}
+
+	function getBoostCondition($boostKeywords) {
+		// 출장/100,관리/1000 
+		//$boostKeywords = "출장/-100";
+		$boostCondition = "";
+		
+		$boostKeyword = explode(',', $boostKeywords);
+		for($i=0; $i<count($boostKeyword); $i++) {
+
+			$boostKeyword2 = explode('/', $boostKeyword[$i]);
+			$count = count($boostKeyword2);
+			
+			if( ($count==2) ) {
+				$boostCondition .= "<TKCRD_NM:contains:".$boostKeyword2[0]."^".$boostKeyword2[1].">|";
+			}
+		}
+
+		if(strlen($boostCondition)>0) {
+			substr($boostCondition,0,strlen($boostCondition)-1);
+		}
+	
+		return $boostCondition;
+	}
+	function getSortCondition($sortField) {
+		// "WEIGHT/DESC,".$sortField."/".$sortOrder
+		// "WEIGHT/DESC,".$sortField."/".$sortOrder  Date VIEW_CNT
+		$sortCondition = "";
+		if($sortField == "RANK") {
+			//sortCondition = "WEIGHT/DESC,RANK/DESC,DATE/DESC,VIEW_CNT/DESC";
+			$sortCondition = "RANK/DESC,DATE/DESC";
+		}else if($sortField == "DATE") {
+			$sortCondition = "DATE/DESC,RANK/DESC";
+		}
+
+		return $sortCondition;
+	}
+
+	function getAllTaxnomy($cateQueryValues,$i) {
+
+
+		$cateQueryValue = explode('>', $cateQueryValues);
+
+		$allTaxnomy = "";
+		if($i==0) { 
+			$allTaxnomy="";
+		}else if($i==1) {
+			$allTaxnomy = $cateQueryValue[0];
+		}else if($i==2) {
+			$allTaxnomy = $cateQueryValue[0].">".$cateQueryValue[1];
+		}
+		
+		return $allTaxnomy;
+	}
+
+	function makePrefixQuery($seCodes){
+		$seCode = explode(',', $seCodes);
+		$preFixQuery = "";
+		for($i=0; $i<count($seCode); $i++) {
+			//$prefixQuery .= $seCode[$i];
+			if( $i != (count($seCode)-1) ) {
+				$prefixQuery .= "<SE_CODE:contains:!".$seCode[$i].">|";
+			}else {
+				$prefixQuery .= "<SE_CODE:contains:!".$seCode[$i].">";
+			}
+			
+		}
+		return $prefixQuery;
+	}
+
+	function checkIp($ip){
+		
+		if( $ip == "115.84.165.209" ||  $ip == "115.84.165.210" || $ip == "115.84.165.211" ||  $ip =="115.84.165.213" ) {
+			return true;
+		}
+		return false;
+	}
+
+		
+}
+?>
