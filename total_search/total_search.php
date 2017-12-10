@@ -210,10 +210,12 @@ $popkeywords = $xml->Query;
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <link rel="stylesheet" type="text/css" href="http://mp.mx.co.kr/style/common/common.css" /> <!-- 반영할때 확인 해야함 -->
 <link rel="stylesheet" type="text/css" href="/total_search/style/total_search.css" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css" />
-<script src="/total_search/js/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/total_search/style/glDatePicker.default.css" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="/total_search/js/jquery.cookie.js"></script>
+<script src="/total_search/js/glDatePicker.min.js"></script>
 <script src="/total_search/js/search.js"></script>
 </head>
 <body>
@@ -238,23 +240,23 @@ $popkeywords = $xml->Query;
         <div class="term">
         	<h2>기간</h2>
             <div class="range" id="dataRangeButton">
-                <a id="range1" class="list1 on" title="전체" href="#none">전체</a>
-                <a id="range2" class="list2" title="1주" href="#none">1주</a>
-                <a id="range3" class="list3" title="1개월" href="#none">1개월</a>
-                <a id="range4" class="list4" title="1년" href="#none">1년</a>
+                <a id="range1" class="list1 on" title="전체" href=",">전체</a>
+                <a id="range2" class="list2" title="1주" href="<?= date('Y-m-d', strtotime("-1 week")) ?>,<?= date('Y-m-d') ?>">1주</a>
+                <a id="range3" class="list3" title="1개월" href="<?= date('Y-m-d', strtotime("-1 month")) ?>,<?= date('Y-m-d') ?>">1개월</a>
+                <a id="range4" class="list4" title="1년" href="<?= date('Y-m-d', strtotime("-1 year")) ?>,<?= date('Y-m-d') ?>">1년</a>
             </div>
             <div class="date_search">
                 <p>
                     <label class="blind" for="start_day">시작일</label>
-                    <input id="start_day" class="hasDatepicker" type="text" readonly value="시작일">
-                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                    <input id="start_day" class="hasDatepicker" type="text" readonly value="<?= $startDate == '' ? '시작일' : str_replace('/', '-', $startDate) ?>">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;" id="start_day_img">
                 </p>
                 <p>
                     <label class="blind" for="end_day">종료일</label>
-                    <input id="end_day" class="hasDatepicker" type="text" readonly value="종료일">
-                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;">
+                    <input id="end_day" class="hasDatepicker" type="text" readonly value="<?= $endDate == '' ? '종료일' : str_replace('/', '-', $endDate) ?>">
+                    <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;" id="end_day_img">
                 </p>
-                <input class="date_apply" type="button" value="날짜적용">
+                <input class="date_apply" type="button" value="날짜적용" id="dateApplyButton">
             </div>
         </div>
         <div class="leftArea">
@@ -281,6 +283,8 @@ $popkeywords = $xml->Query;
                         <input id="sortField" name="sortField" type="hidden" value="<?= $sortField ?>">
                         <input id="searchField" name="searchField" type="hidden" value="<?= $searchField ?>">
                         <input id="popKeywordType" name="popKeywordType" type="hidden" value="<?= $popKeywordType ?>">
+                        <input id="startDate" name="startDate" type="hidden" value="<?= $startDate ?>">
+                        <input id="$endDate" name="$endDate" type="hidden" value="<?= $endDate ?>">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" href="#none"><span>상세검색</span></a>
                         <p>
@@ -534,7 +538,7 @@ $popkeywords = $xml->Query;
                         ?>
                         <li>
                             <a href="<?= $popkeywords[$i] ?>">
-                                <span class="num top"><?= $i + 1 ?></span>
+                                <span class="num<?php if($i < 5) { ?> top<?php } ?>"><?= $i + 1 ?></span>
                                 <span class="tit"><?= $popkeywords[$i] ?></span>
                                 <span class="rank">
                                     <?php

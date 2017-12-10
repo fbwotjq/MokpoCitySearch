@@ -220,8 +220,9 @@ $(document).ready(function() {
         $('#range3').attr('class', 'list3');
         $('#range4').attr('class', 'list4');
         var ranges = $(this).attr('href');
-        $("#start_day").val(ranges);
-        $("#end_day").val(ranges);
+        var rangesSplits = ranges.split(',');
+        $("#start_day").val(rangesSplits[0]);
+        $("#end_day").val(rangesSplits[1]);
     });
 
     $('#range2').click(function (event) {
@@ -234,8 +235,9 @@ $(document).ready(function() {
         $('#range3').attr('class', 'list3');
         $('#range4').attr('class', 'list4');
         var ranges = $(this).attr('href');
-        $("#start_day").val(ranges);
-        $("#end_day").val(ranges);
+        var rangesSplits = ranges.split(',');
+        $("#start_day").val(rangesSplits[0]);
+        $("#end_day").val(rangesSplits[1]);
     });
 
     $('#range3').click(function (event) {
@@ -248,8 +250,9 @@ $(document).ready(function() {
         $('#range3').attr('class', 'list3 on');
         $('#range4').attr('class', 'list4');
         var ranges = $(this).attr('href');
-        $("#start_day").val(ranges);
-        $("#end_day").val(ranges);
+        var rangesSplits = ranges.split(',');
+        $("#start_day").val(rangesSplits[0]);
+        $("#end_day").val(rangesSplits[1]);
     });
 
     $('#range4').click(function (event) {
@@ -262,8 +265,9 @@ $(document).ready(function() {
         $('#range3').attr('class', 'list3');
         $('#range4').attr('class', 'list4 on');
         var ranges = $(this).attr('href');
-        $("#start_day").val(ranges);
-        $("#end_day").val(ranges);
+        var rangesSplits = ranges.split(',');
+        $("#start_day").val(rangesSplits[0]);
+        $("#end_day").val(rangesSplits[1]);
     });
 
     $('#search_field_all').click(function (event) {
@@ -322,14 +326,41 @@ $(document).ready(function() {
 
     });
 
-    $("#start_day").datepicker({
-        nextText: '다음 달',
-        prevText: '이전 달'
+    $('#start_day').glDatePicker({
+        onClick: function(target, cell, date, data) {
+            var month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1));
+            var dated = (date.getDate() + 1 < 10 ? '0' + (date.getDate() + 1) : (date.getDate() + 1));
+            target.val(date.getFullYear() + '-' + month + '-' + dated);
+            if(data != null) {
+                alert(data.message + '\n' + dated);
+            }
+        }
     });
 
-    $("#end_day").datepicker({
-        nextText: '다음 달',
-        prevText: '이전 달'
+    $('#end_day').glDatePicker({
+        onClick: function(target, cell, date, data) {
+            var month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1));
+            var dated = (date.getDate() + 1 < 10 ? '0' + (date.getDate() + 1) : (date.getDate() + 1));
+            target.val(date.getFullYear() + '-' + month + '-' + dated);
+            if(data != null) {
+                alert(data.message + '\n' + dated);
+            }
+        }
+    });
+
+    $('#start_day_img').click(function () {
+        $('#start_day').click();
+    });
+
+    $('#end_day_img').click(function () {
+        $('#start_day').click();
+    });
+
+    $('#dateApplyButton').click(function () {
+        var startDate = $('#start_day').val();
+        var endDate = $('#end_day').val();
+        $('#startDate').val(startDate);
+        $('#endDate').val(endDate);
     });
 
 });
