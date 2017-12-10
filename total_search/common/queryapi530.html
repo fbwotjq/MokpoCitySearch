@@ -1,0 +1,8331 @@
+<?php
+
+define( "VERSION_STR", "5.3.0" );
+define( "VERSION_NUM", 5300 );
+
+define( "MAX_RESULT_NUM", 1000 );
+define( "MAX_UID_NUM", 1000 );
+
+define( "MAX_CHARSET_NUM", 9 );
+define( "MAX_COLLECTION_NUM", 127 );
+define( "MAX_SORT_FIELD_NUM", 128 );
+define( "MAX_MULTIGROUPBY_FIELD_NUM", 256 );
+define( "MAX_CATEGORYGROUPBY_FIELD_NUM", 256 );
+define( "MAX_CATEGORY_DEPTH", 32 );
+define( "MAX_PROPERTYGROUP_FIELD_NUM", 5 );
+define( "RECV_BUFFER_SIZE", 1024 * 100 );
+define( "MAX_RECV_BUFFER_SIZE", 1024 * 1024 * 10 );
+
+define( "MAX_INT_VALUE", 2147483647 );
+define( "INT_TRUE", 1 );
+define( "INT_FALSE", 0 );
+
+// Request Type
+define( "SEARCH_QUERY_REQUEST", 1 );
+define( "UID_REQUEST", 2 );
+define( "MORPHEME_ANALYSIS_REQUEST", 3 );
+define( "RECENT_QUERY_LIST_REQUEST", 4 );
+define( "DUPLICATE_DOCUMENTS_REQUEST", 5 );
+define( "REJECT_QUERY_REQUEST", 6 );
+
+// Response Type
+define( "RESPONSE_TYPE_MASK", 0x700 );
+define( "RESPONSE_TYPE_NORMAL", 0x100 );
+define( "RESPONSE_TYPE_XML", 0x200 );
+define( "RESPONSE_TYPE_JSON", 0x400 );
+
+// Result Type
+define( "SEARCH_QUERY_RESULT", 1 );
+define( "UID_RESULT", 2 );
+define( "MORPHEME_ANALYSIS_RESULT", 3 );
+define( "RECENT_QUERY_LIST_RESULT", 4 );
+define( "DUPLICATE_DOCUMENTS_RESULT", 5 );
+define( "REJECT_QUERY_RESULT", 6 );
+
+define( "CONST_EMPTY_STR", "" );
+define( "NO_ERR_STR", "No error" );
+
+?>
+<?php
+/// @file apierror.php
+/// @brief header file of
+/// @author KyoungHoon
+/// @date 2010-02-03
+
+define( "NO_ERROR", 0 );
+$NO_ERR_S = "No error";
+
+// Warning
+define( "ERR_EXCEED_MAX_COLLECTION_NUM", 1001 );
+define( "ERR_EXCEED_MAX_COLLECTION_NUM_S",
+		"[ERROR] Number of selected collection can't exceed 64." );
+
+define( "ERR_EXCEED_MAX_SORT_FIELD_NUM", 1002 );
+define( "ERR_EXCEED_MAX_SORT_FIELD_NUM_S",
+        "[ERROR] Number of selected sort field can't exceed 128." );
+
+
+define( "ERR_INVALID_COLLECTION_NAME", 1005 );
+define( "ERR_INVALID_COLLECTION_NAME_S",
+        "[ERROR] Check the collection name again." );
+
+define( "ERR_INVALID_DOCUMENT_INDEX", 1006 );
+define( "ERR_INVALID_DOCUMENT_INDEX_S",
+        "[ERROR] Invalid result document index." );
+
+define( "ERR_INVALID_FIELD_NAME", 1007 );
+define( "ERR_INVALID_FIELD_NAME_S",
+        "[ERROR] Invalid result field name." );
+
+define( "ERR_INVALID_GROUP_INDEX", 1008 );
+define( "ERR_INVALID_GROUP_INDEX_S",
+        "[ERROR] Invalid result group index." );
+
+define( "ERR_INVALID_PROPERTY_INDEX", 1009 );
+define( "ERR_INVALID_PROPERTY_INDEX_S",
+        "[ERROR] Invalid result property index." );
+
+define( "ERR_NULL_ARGUMENT", 1010 );
+define( "ERR_NULL_ARGUMENT_S",
+        "[ERROR] Don't use null string as input parameter." );
+
+define( "ERR_EMPTY_ARGUMENT", 1011 );
+define( "ERR_EMPTY_ARGUMENT_S",
+        "[ERROR] Don't use empty string as input parameter." );
+
+define( "ERR_EXCEED_MAX_MULTI_GROUPBY_FIELD_NUM", 1012 );
+define( "ERR_EXCEED_MAX_MULTI_GROUPBY_FIELD_NUM_S",
+        "[ERROR] Number of selected multi groupby field can't exceed 128." );
+
+define( "ERR_EXCEED_MAX_UID_NUM", 1013 );
+define( "ERR_EXCEED_MAX_UID_NUM_S",
+        "[ERROR] Number of selected uid can't exceed 1000." );
+
+// Error
+define( "ERR_CONNECT_SERVER_FAILED", 1014 );
+define( "ERR_CONNECT_SERVER_FAILED_S",
+        "[ERROR] Can't connect to search server. Check the IP, PORT, and search server." );
+
+define( "ERR_INVALID_CODEPAGE", 1015 );
+define( "ERR_INVALID_CODEPAGE_S",
+        "[ERROR] Not support encoding type." );
+
+define( "ERR_MEMORY_ALLOC_FAILED", 1016 );
+define( "ERR_MEMORY_ALLOC_FAILED_S",
+        "[ERROR] Can't allocate memory." );
+
+define( "ERR_INVALID_MODE_VALUE", 1017 );
+define( "ERR_INVALID_MODE_VALUE_S",
+        "[ERROR] Invalid mode value. Valid mode value is 0, 2 or 3." );
+
+define( "ERR_NOT_SET_CODEPAGE", 1018 );
+define( "ERR_NOT_SET_CODEPAGE_S",
+        "[ERROR] Call w3SetCodePage() function first." );
+
+define( "ERR_SEND_REQUEST_PACKET_FAILED", 1019 );
+define( "ERR_SEND_REQUEST_PACKET_FAILED_S",
+        "[ERROR] Can't send request packet to search server." );
+
+define( "ERR_RECEIVE_TIMEOUT", 1020 );
+define( "ERR_RECEIVE_TIMEOUT_S",
+        "[ERROR] Receive time out from search server." );
+
+define( "ERR_RECEIVE_RESULT_FAILED", 1021 );
+define( "ERR_RECEIVE_RESULT_FAILED_S",
+        "[ERROR] Can't receive result packet from search server." );
+
+define( "ERR_INVALID_RESULT_BODY_LENGTH", 1022 );
+define( "ERR_INVALID_RESULT_BODY_LENGTH_S",
+        "[ERROR] Invalid result body length." );
+
+define( "ERR_RESULT_PACKET_PARSE_FAILED", 1023 );
+define( "ERR_RESULT_PACKET_PARSE_FAILED_S",
+        "[ERROR] Can't parse result packet." );
+
+define( "ERR_CONNECTION_REJECTED", 1024 );
+define( "ERR_CONNECTION_REJECTED_S",
+        "[ERROR] Connection is rejected by search server's firewall." );
+
+define( "ERR_INVALID_INT_ARGUMENT", 1025 );
+define( "ERR_INVALID_INT_ARGUMENT_S",
+        "[ERROR] Invalid integer argument value." );
+
+define( "ERR_CALL_AFTER_RECEIVE_RESULT", 1026 );
+define( "ERR_CALL_AFTER_RECEIVE_RESULT_S",
+        "[ERROR] Call w3GetCollectionError() or w3GetCollectionErrorInfo() after w3Receive*Result() function." );
+
+define( "ERR_REQUEST_CATEGORY_GROUPBY_FIELD_NUM", 1027 );
+define( "ERR_REQUEST_CATEGORY_GROUPBY_FIELD_NUM_S",
+        "[ERROR] Too many CategoryGroupBy field or depthes, or using redundant field-depth" );
+
+define( "ERR_CATEGORY_GROUPBY_DEPTH_NUM", 1028 );
+define( "ERR_CATEGORY_GROUPBY_DEPTH_NUM_S",
+		"[ERROR] Detph should be between 1 to 32" );
+
+?>
+<?php
+
+class CollectionError
+{
+	var $sId_;
+
+	var $nErr_;
+	var $sErrMsg_;
+
+	/*
+	 * Constructor
+	 */
+	function CollectionError()
+	{
+		$this->init();
+	}
+
+	///
+	/// @brief
+	///
+	function clear()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		// id
+		$this->sId_ = null;
+
+		// error
+		$this->nErr_ = 0;
+		$this->sErrMsg_ = null;
+	}
+
+	function setId( $sId )
+	{
+		$this->sId_ = $sId;
+	}
+
+	function getId()
+	{
+		return $this->sId_;
+	}
+
+	function setError( $nErr, $sErrMsg )
+	{
+		// error
+		$this->nErr_ = $nErr;
+
+		// error msg
+		$this->sErrMsg_ = $sErrMsg;
+	}
+
+	function getError()
+	{
+		return $this->nErr_;
+	}
+
+	function getErrorMsg()
+	{
+		return $this->sErrMsg_;
+	}
+}
+
+?>
+<?php
+
+class ErrorManager
+{
+	// common error
+	var $nErr_;
+	var $sErrMsg_;
+
+	// collection error
+	var $nCount_;
+	var $pCollectionErrors_ = array();
+
+	/*
+	 * Constructor
+	 */
+	function ErrorManager()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->nErr_ = 0; // no error
+		$this->sErrMsg_ = null;
+
+		$this->nCount_ = 0;
+	}
+
+	function clear()
+	{
+		$this->init();
+	}
+
+	function setError( $nErr, $sErrMsg )
+	{
+		// error already set
+		if( $this->nErr_ != 0 )
+			return;
+
+		// error
+		$this->nErr_ = $nErr;
+
+		// error msg
+		$this->sErrMsg_ = $sErrMsg;
+	}
+
+	function getError()
+	{
+		return $this->nErr_;
+	}
+
+	function getErrorMsg()
+	{
+		return $this->sErrMsg_;
+	}
+
+	function setCollectionError( $sCollectionId, $nErr, $sErrMsg )
+	{
+		if( $sCollectionId == null ||
+			$sErrMsg == null )
+			return;
+
+		if( ( $collectionError =& $this->getCollectionErrorObj( $sCollectionId ) ) == null ) // not found
+		{
+			if( ( $collectionError =& $this->createCollectionError( $sCollectionId ) ) == null ) // failed
+				return;
+		}
+
+		$collectionError->setError( $nErr, $sErrMsg );
+	}
+
+	function getCollectionError( $sCollectionId )
+	{
+		if( ( $collectionError =& $this->getCollectionErrorObj( $sCollectionId ) ) != null ) // found
+			return $collectionError->getError();
+
+		return NO_ERROR; // not found
+	}
+
+	function getCollectionErrorMsg( $sCollectionId )
+	{
+		if( ( $collectionError =& $this->getCollectionErrorObj( $sCollectionId ) ) != null ) // found
+			return $collectionError->getErrorMsg();
+
+		return null;
+	}
+
+	function &getCollectionErrorObj( $sId )
+	{
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pCollectionErrors_[ $i ]->getId(), $sId ) == 0 )
+				return $this->pCollectionErrors_[ $i ];
+		}
+
+		$nullValue = NULL;
+		return $nullValue;
+	}
+
+	function &createCollectionError( $sId )
+	{
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return null;
+
+		if( ( $this->pCollectionErrors_[ $this->nCount_ ] = new CollectionError() ) == null ) // failed
+			return null;
+
+		$this->pCollectionErrors_[ $this->nCount_++ ]->setId( $sId );
+
+		return $this->pCollectionErrors_[ $this->nCount_ - 1 ];
+	}
+}
+
+?>
+<?php
+
+function __intToBytes( $src )
+{
+    return pack( "N", $src );
+}
+
+function __shortToBytes( $src )
+{
+    return pack( "n", $src );
+}
+
+function __bytesToInt( $src )
+{
+    $tmp = array_values( unpack( "N", $src ) );
+    return $tmp[ 0 ];
+}
+
+function __bytesToShort( $src )
+{
+    $tmp = array_values( unpack( "n", $src ) );
+    return $tmp[ 0 ];
+}
+
+?>
+<?php
+
+class Encode
+{
+    var $buffer;
+    var $offset;
+    var $charset;
+
+    function set( &$buf )
+	{
+		$this->buffer =& $buf;
+		$this->offset = 0;
+    }
+
+    function encode()
+	{
+		$this->buffer = null;
+		$this->offset = 0;
+    }
+
+    function append( $src, $len )
+	{
+		if( $src != null )
+		{
+			$this->buffer .= substr( $src, 0, $len );
+			$this->offset += $len;
+		}
+		$this->buffer .= pack( "C", 0 );
+		$this->offset++;
+    }
+
+    function setCharset( $charset )
+	{
+		$this->charset = $charset;
+    }
+
+    function appendString( $src )
+	{
+		$this->append( $src, strlen( $src ) );
+    }
+
+    function append4( $src )
+	{
+		$tmp = __intToBytes( $src );
+		$this->buffer .= $tmp;
+		$this->offset += 4;
+    }
+
+    function append2( $src )
+	{
+		$tmp = __shortToBytes( $src );
+		$this->buffer .= $tmp;
+		$this->offset += 2;
+    }
+
+    function append1( $src )
+	{
+		$this->buffer .= pack( "C", $src );
+		$this->offset++;
+    }
+
+    function getSize()
+	{
+		return $this->offset;
+    }
+}
+
+?>
+<?php
+
+class Decode
+{
+    var $buffer;
+    var $offset;
+    var $charset;
+
+	function Decode()
+	{
+		$this->offset = 0;
+		$this->buffer = null;
+    }
+
+    function set( &$buf )
+	{
+		$this->offset = 0;
+		$this->buffer =& $buf;
+    }
+
+    function setCharSet( $charset )
+	{
+		$this->charset = $charset;
+    }
+
+    function read()
+	{
+		if( ( $pos = strpos( $this->buffer, 0, $this->offset ) ) == false )
+		{
+			$this->offset = strlen( $this->buffer );
+			return null;
+		}
+		if( ( $len = $pos - $this->offset ) == 0 )
+		{
+			$this->offset++;
+			return null;
+		}
+
+		$tmp = substr( $this->buffer, $this->offset, $len );
+		$this->offset = $pos + 1;
+
+		return $tmp;
+    }
+
+    function readString()
+	{
+		$tmp = $this->read();
+		if( $tmp == null )
+			return "";
+		else
+			return $tmp;
+    }
+
+    function read4()
+	{
+		$tmp = substr( $this->buffer, $this->offset, 4 );
+		$this->offset += 4;
+
+		return __bytesToInt( $tmp );
+    }
+    
+    function read2()
+	{
+		$tmp = substr( $this->buffer, $this->offset, 2 );
+		$this->offset += 2;
+
+		return __bytesToShort( $tmp );
+    }
+
+    function read1()
+	{
+		$tmp = array_values( unpack( "c", substr( $this->buffer, $this->offset++, 1 ) ) );
+		return $tmp[ 0 ];
+    }
+
+    function getSize()
+	{
+		return $this->offset;
+    }
+}
+
+?>
+<?php
+
+class CommonInfo
+{
+	/* page encoding */
+	var $encoding_;
+
+	/* query */
+	var $query_;
+
+	/* session */
+	var $session1_;
+	var $session2_;
+	var $session3_;
+
+	/* Log */
+	var $nQueryLog_;
+
+	/* OR operator */
+	var $bOrOperator_;
+
+	/* spell check */
+	var $spellCorrectionQuery_;
+	var $nUnder_;
+
+	/* timeout */
+	var $nTimeout_;
+
+	/* trace log timeout */
+	var $nTraceLogTimeout_;
+	
+
+	/*
+	 * Constructor
+	 */
+	function CommonInfo()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->encoding_ = null;
+		$this->query_ = null;
+
+		$this->session1_ = null;
+		$this->session2_ = null;
+		$this->session3_ = null;
+
+		$this->nQueryLog_ = 1;
+
+		$this->bOrOperator_ = false;
+
+		$this->spellCorrectionQuery_ = null;
+		$this->nUnder_ = 0;
+
+		$this->nTimeout_ = 0;
+		$this->nTraceLogTimeout_ = -1;
+	}
+
+	/*
+	 * Encoding
+	 */
+	function setEncoding( $encoding )
+	{
+		$this->encoding_ = $encoding;
+	}
+
+	function getEncoding()
+	{
+		return $this->encoding_;
+	}
+
+	/*
+	 * Session
+	 */
+	function hasSessions()
+	{
+		if( $this->session1_ != null &&
+			$this->session2_ != null &&
+			$this->session3_ != null )
+			return true;
+
+		return false;
+	}
+
+	function setSessions( $session1, $session2, $session3 )
+	{
+		$this->session1_ = $session1;
+		$this->session2_ = $session2;
+		$this->session3_ = $session3;
+	}
+
+	function getSession1()
+	{ return $this->session1_; }
+
+	function getSession2()
+	{ return $this->session2_; }
+
+	function getSession3() { return $this->session3_; }
+
+	/*
+	 * Query
+	 */
+	function setQuery( $query ) { $this->query_ = $query; }
+	function getQuery() { return $this->query_; }
+
+	/*
+	 * Log
+	 */
+	function setQueryLog( $nLog ) { $this->nQueryLog_ = $nLog; }
+	function getQueryLog() { return $this->nQueryLog_; }
+
+	/*
+	 * OR operator
+	 */
+	function setOrOperator( $bFlag ) { $this->bOrOperator_ = $bFlag; }
+	function isOrOperator() { return $this->bOrOperator_; }
+
+	/*
+	 * spell check
+	 */
+	function setSpellCorrectionQuery( $query, $nUnder )
+	{
+		$this->spellCorrectionQuery_ = $query;
+		$this->nUnder_ = $nUnder;
+	}
+	function getSpellCorrectionQuery() { return $this->spellCorrectionQuery_; }
+	function getUnder() { return $this->nUnder_; }
+
+	/*
+	 * timeout
+	 */
+	function setTimeout( $nTimeout ) { $this->nTimeout_ = $nTimeout; }
+	function getTimeout() { return $this->nTimeout_; }
+
+	/*
+	 * trace log timeout
+	 */
+	function setTraceLogTimeout( $nTimeout ) { $this->nTraceLogTimeout_ = $nTimeout; }
+	function getTraceLogTimeout() { return $this->nTraceLogTimeout_; }
+}
+
+?>
+<?php
+
+class PageInfo
+{
+	/* start, count */
+	var $nStart_;
+	var $nCount_;
+
+	/*
+	 * Constructor
+	 */
+	function PageInfo()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->nStart_ = 0;
+		$this->nCount_ = 0;
+	}
+
+	function set( $nStart, $nCount )
+	{
+		$this->nStart_ = $nStart;
+		$this->nCount_ = $nCount;
+	}
+
+	function getStart()
+	{
+		return $this->nStart_;
+	}
+
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+}
+
+?>
+<?php
+
+class QueryAnalyzer
+{
+	var $bLa_;           // LA 적용
+	var $bIgnoreCase_;   // 대소문자 구분
+	var $bOriginal_;     // 원래의 토큰 적용
+	var $bSynonym_;      // 동의어 적용
+
+	/*
+	 * Constructor
+	 */
+	function QueryAnalyzer()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->bLa_ = false;
+		$this->bIgnoreCase_ = true;
+		$this->bOriginal_ = false;
+		$this->bSynonym_ = false;
+	}
+
+	function set( $bLa,
+			$bIgnoreCase,
+			$bOriginal,
+			$bSynonym )
+	{
+		$this->bLa_ = $bLa;
+		$this->bIgnoreCase_ = $bIgnoreCase;
+		$this->bOriginal_ = $bOriginal;
+		$this->bSynonym_ = $bSynonym;
+	}
+
+	function isLa()
+	{
+		return $this->bLa_;
+	}
+
+	function isIgnoreCase()
+	{
+		return $this->bIgnoreCase_;
+	}
+
+	function isOriginal()
+	{
+		return $this->bOriginal_;
+	}
+
+	function isSynonym()
+	{
+		return $this->bSynonym_;
+	}
+}
+
+?>
+<?php
+
+class FieldSet 
+{
+	/* containers */
+	var $fields_ = array();
+	var $displayLengths_ = array();
+	var $nCount_;
+
+	/*
+	 * Constructor
+	 */
+	function FieldSet()
+	{
+	}
+
+	function initFieldSet()
+	{
+		unset( $fields_ );
+		unset( $displayLengths_);
+		$this->nCount_ = 0;
+	}
+
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+
+	function add( $field )
+	{
+		$this->fields_[ $this->nCount_++ ] = $field;
+	}
+
+	function addWithDisplay( $field, $nDisplay )
+	{
+		$this->fields_[ $this->nCount_ ] = $field;
+		$this->displayLengths_[ $this->nCount_++ ] = $nDisplay;
+	}
+
+
+	function get( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->fields_[ $nIndex ];
+	}
+
+	function getDisplay( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->displayLengths_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class SortField extends FieldSet
+{
+	/* containers */
+	var $orders_ = array();
+	var $nOrderCount_;
+
+	function SortField()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->initFieldSet();
+
+		$this->nOrderCount_ = 0;
+	}
+
+	function addOrder( $nOrder )
+	{
+		$this->orders_[ $this->nOrderCount_++ ] = $nOrder;
+	}
+
+	function getOrder( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nOrderCount_ )
+			return -1;
+
+		return $this->orders_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class SearchField extends FieldSet
+{
+	function SearchField()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->initFieldSet();
+	}
+}
+
+?>
+<?php
+
+class DocumentField extends FieldSet
+{
+	var $bHighlight_;
+	var $bSnippet_;
+
+	/*
+	 * Constructor
+	 */
+	function DocumentField()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->initFieldSet();
+
+		$this->bHighlight_ = false;
+		$this->bSnippet_ = false;
+	}
+
+	function set( $bHighlight, $bSnippet )
+	{
+		$this->bHighlight_ = $bHighlight;
+		$this->bSnippet_ = $bSnippet;
+	}
+
+	function isHighlight()
+	{
+		return $this->bHighlight_;
+	}
+
+	function isSnippet()
+	{
+		return $this->bSnippet_;
+	}
+}
+
+?>
+<?php
+
+class DateRange
+{
+	var $sStart_;
+	var $sEnd_;
+
+	/*
+	 * Constructor
+	 */
+	function DateRange()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->sStart_ = null;
+		$this->sEnd_ = null;
+	}
+
+	function hasDate()
+	{
+		if( $this->sStart_ != null &&
+			$this->sEnd_ != null )
+			return true;
+
+		return false;
+	}
+
+	function set( $sStart, $sEnd )
+	{
+		$this->sStart_ = $sStart;
+		$this->sEnd_ = $sEnd;
+	}
+
+	function getStart()
+	{
+		return $this->sStart_;
+	}
+
+	function getEnd()
+	{
+		return $this->sEnd_;
+	}
+}
+
+?>
+<?php
+
+class Query
+{
+	var $sCollectionQuery_;
+	var $sPrefixQuery_;
+	var $sFilterQuery_;
+
+	var $sAuthorityQuery_;
+	var $sAuthCollection_;
+	var $sAuthTargetField_;
+	var $sAuthReferField_;
+
+	var $sCategoryQueryField_ = array();
+	var $sCategoryQuery_ = array();
+	var $nCategoryQueryCount_;
+
+	var $nJoinOperator_;
+	var $bHasQuery_;
+
+	/*
+	 * Constructor
+	 */
+	function Query()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->sCollectionQuery_ = null;
+		$this->sPrefixQuery_ = null;
+		$this->sFilterQuery_ = null;
+
+		$this->sAuthorityQuery_ = null;
+		$this->sAuthCollection_ = null;
+		$this->sAuthTargetField_ = null;
+		$this->sAuthReferField_ = null;
+
+		unset( $this->sCategoryQueryField_ );
+		unset( $this->sCategoryQuery_ );
+		$this->nCategoryQueryCount_ = 0;
+
+		$this->nJoinOperator_ = 1; // AND
+		$this->bHasQuery_ = false;
+	}
+
+	function hasQuery()
+	{
+		return $this->bHasQuery_;
+	}
+
+	/* collection query */
+	function hasCollectionQuery()
+	{
+		if( $this->sCollectionQuery_ != null )
+			return true;
+
+		return false;
+	}
+
+	function setCollectionQuery( $sQuery )
+	{
+		$this->sCollectionQuery_ = $sQuery;
+
+		if( $this->bHasQuery_ == false )
+			$this->bHasQuery_ = true;
+	}
+
+	function getCollectionQuery()
+	{
+		return $this->sCollectionQuery_;
+	}
+
+	/* prefix query */
+	function hasPrefixQuery()
+	{
+		if( $this->sPrefixQuery_ != null )
+			return true;
+
+		return false;
+	}
+
+	function setPrefixQuery( $sQuery, $nJoinOperator )
+	{
+		$this->sPrefixQuery_ = $sQuery;
+		$this->nJoinOperator_ = $nJoinOperator;
+
+		if( $this->bHasQuery_ == false )
+			$this->bHasQuery_ = true;
+	}
+
+	function getPrefixQuery()
+	{
+		return $this->sPrefixQuery_;
+	}
+
+	function getJoinOperator()
+	{
+		return $this->nJoinOperator_;
+	}
+
+	/* filter query */
+	function hasFilterQuery()
+	{
+		if( $this->sFilterQuery_ != null )
+			return true;
+
+		return false;
+	}
+
+	function setFilterQuery( $sQuery )
+	{
+		$this->sFilterQuery_ = $sQuery;
+
+		if( $this->bHasQuery_ == false )
+			$this->bHasQuery_ = true;
+	}
+
+	function getFilterQuery()
+	{
+		return $this->sFilterQuery_;
+	}
+
+	/* authority query */
+	function hasAuthorityQuery()
+	{
+		if( $this->sAuthorityQuery_ != null )
+			return true;
+
+		return false;
+	}
+
+	function setAuthorityQuery( $authTargetField, 
+								$authCollection, $authReferField, $sQuery )
+	{
+		$this->sAuthorityQuery_ = $sQuery;
+		if( $this->bHasQuery_ == false )
+			$this->bHasQuery_ = true;
+
+		$this->sAuthTargetField_	= $authTargetField;
+		$this->sAuthCollection_		= $authCollection;
+		$this->sAuthReferField_		= $authReferField;
+	}
+
+	function getAuthCollection()
+	{
+		return $this->sAuthCollection_;
+	}
+	function getAuthTargetField()
+	{
+		return $this->sAuthTargetField_;
+	}
+	function getAuthReferField()
+	{
+		return $this->sAuthReferField_;
+	}
+	function getAuthorityQuery()
+	{
+		return $this->sAuthorityQuery_;
+	}
+
+	/* category query */
+	function getCategoryQueryCount()
+	{
+		return $this->nCategoryQueryCount_;
+	}
+
+	function addCategoryQuery( $categoryQueryField, 
+							   $categoryQuery )
+	{
+		$this->sCategoryQueryField_[ $this->nCategoryQueryCount_ ] = $categoryQueryField;
+		$this->sCategoryQuery_[ $this->nCategoryQueryCount_ ] = $categoryQuery;
+		$this->nCategoryQueryCount_++;
+
+		if( $this->bHasQuery_ == false )
+			$this->bHasQuery_ = true;
+	}
+
+	function getCategoryQueryField( $nIndex )
+	{
+		return $this->sCategoryQueryField_[ $nIndex ];
+	}
+	function getCategoryQuery( $nIndex )
+	{
+		return $this->sCategoryQuery_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class GroupBy
+{
+	var $sField_;
+	var $nCount_;
+	var $sortField_;
+
+	/*
+	 * Constructor
+	 */
+	function GroupBy()
+	{
+		$this->sortField_ = new SortField();
+
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->sortField_->init();
+
+		$this->sField_ = null;
+		$this->nCount_ = 0;
+	}
+
+	function hasField()
+	{
+		if( $this->sField_ != null )
+			return true;
+
+		return false;
+	}
+
+	function set( $sField, $nCount )
+	{
+		$this->sField_ = $sField;
+		$this->nCount_ = $nCount;
+	}
+
+	function getField()
+	{
+		return $this->sField_;
+	}
+
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+
+	function &getSortField()
+	{
+		return $this->sortField_;
+	}
+}
+
+?>
+<?php
+
+class MultiGroupBy 
+{
+	/* containers */
+	var $fields_ = array();
+	var $nCount_;
+
+	function MultiGroupBy()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		unset( $fields_ );
+		$this->nCount_ = 0;
+	}
+
+	function initFieldSet()
+	{
+		$this->nCount_ = 0;
+	}
+
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+
+	function add( $field )
+	{
+		$this->fields_[ $this->nCount_++ ] = $field;
+	}
+
+	function getField( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->fields_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class CategoryGroupField
+{
+	var $name_;
+	var $depthCount_;
+	var $depthList_ = array();
+	var $sortType_ = array();
+	var $topN_ = array();
+
+	function CategoryGroupField()
+	{
+		$this->name_		= null;
+		$this->depthCount_	= 0;
+		//$this->depthList_;
+		//$this->sortType_;
+	}
+
+	function setField( $fieldName, $depth, $sortType, $topN )
+	{
+		if( $this->name_ == null )
+		{
+			$this->name_ = $fieldName;
+		}
+
+		for( $i = 0; $i < $this->depthCount_; $i++ )
+		{
+			if( $this->depthList_[$i] == $depth )
+			{
+				echo "depth was redudant\n";
+				return -1;
+			}
+		}
+
+		$this->depthList_[$this->depthCount_] = $depth;
+		$this->sortType_[$this->depthCount_] = $sortType;
+		$this->topN_[$this->depthCount_] = $topN_;
+		$this->depthCount_++;
+
+		return 0;
+	}
+}
+
+class CategoryGroupBy 
+{
+	var $fieldCount_;
+	var $fieldList_ = array();
+
+	function CategoryGroupBy()
+	{
+		$this->fieldList_;
+		for( $i = 0; $i < MAX_CATEGORYGROUPBY_FIELD_NUM; $i++ )
+		{
+			$this->fieldList_[$i] = new CategoryGroupField();
+		}
+
+		$this->fieldCount_ = 0;
+	}
+
+	function addItem( $fieldName, $depth, $sortType, $topN )
+	{
+		$i = 0;
+		for( $i = 0; $i < $this->fieldCount_; $i++ )
+		{
+			if( strcmp( $fieldName, $this->fieldList_[$i]->name_ ) == 0 )
+			{
+				break;
+			}
+		}
+
+		if( $i >= $this->fieldCount_ )
+		{
+			if( $i >= MAX_CATEGORYGROUPBY_FIELD_NUM )
+			{
+				echo "error: exceed maximum category field number\n";
+				return -1;
+			}
+			$this->fieldCount_++;
+		}
+
+		return $this->fieldList_[$i]->setField( $fieldName, $depth, $sortType, $topN );
+	}
+}
+
+?>
+<?php
+
+class PropertyGroup
+{
+	/* properties */
+	var $fields_;
+	var $nMinValue_;
+	var $nMaxValue_;
+	var $nGroupCount_;
+
+	function PropertyGroup()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->fields_ = null;
+		$this->nMinValue_ = 0;
+		$this->nMaxValue_ = 0;
+		$this->nGroupCount_ = 0;
+	}
+
+	function set( $field, $nMin, $nMax, $nGroupCount )
+	{
+		if( $this->fields_ != null )
+			return;
+
+		$this->fields_ = $field;
+		$this->nMinValue_ = $nMin;
+		$this->nMaxValue_ = $nMax;
+		$this->nGroupCount_ = $nGroupCount;
+	}
+
+	function getField()
+	{
+		return $this->fields_;
+	}
+
+	function getMinValue()
+	{
+		return $this->nMinValue_;
+	}
+
+	function getMaxValue()
+	{
+		return $this->nMaxValue_;
+	}
+
+	function getGroupCount()
+	{
+		return $this->nGroupCount_;
+	}		
+}
+
+?>
+<?php
+
+class Boost
+{
+	/* boost query */
+	var $sQuery_;
+	var $nOption_;
+
+	/* boost category */
+	var $sCategoryBoostId_;
+	var $sCategoryBoostField_;
+	var $sCategoryBoostMatchType_;
+	var $sCategoryBoostValue_;
+
+	/*
+	 * Constructor
+	 */
+	function Boost()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->sQuery_ = null;
+		$this->nOption_ = 0;
+
+		$this->sCategoryBoostId_ = null;
+		$this->sCategoryBoostField_ = null;
+		$this->sCategoryBoostMatchType_ = null;
+		$this->sCategoryBoostValue_ = null;
+	}
+
+	function hasQuery()
+	{
+		if( $this->sQuery_ != null )
+			return true;
+		return false;
+	}
+
+	function setQuery( $query, $nOption )
+	{
+		$this->sQuery_ = $query;
+		$this->nOption_ = $nOption;
+	}
+
+	function getQuery()
+	{
+		return $this->sQuery_;
+	}
+
+	function getOption()
+	{
+		return $this->nOption_;
+	}
+
+	function hasCategoryBoost()
+	{
+		if( $this->sCategoryBoostId_ != null &&
+			$this->sCategoryBoostField_ != null &&
+			$this->sCategoryBoostMatchType_ != null &&
+			$this->sCategoryBoostValue_ != null )
+			return true;
+		return false;
+	}
+
+	function setCategoryBoost( $field, $matchType, $id, $category )
+	{
+		$this->sCategoryBoostField_ = $field;
+		$this->sCategoryBoostMatchType_ = $matchType;
+		$this->sCategoryBoostId_ = $id;
+		$this->sCategoryBoostValue_ = $category;
+	}
+
+	function getCategoryBoostId()
+	{
+		return $this->sCategoryBoostId_;
+	}
+
+	function getCategoryBoostField()
+	{
+		return $this->sCategoryBoostField_;
+	}
+
+	function getCategoryBoostMatchType()
+	{
+		return $this->sCategoryBoostMatchType_;
+	}
+
+	function getCategoryBoostValue()
+	{
+		return $this->sCategoryBoostValue_;
+	}
+}
+
+?>
+<?php
+
+class RelatedCollection
+{
+	var $sId_;
+	var $pFields_ = array();
+	var $pMergeFields_ = array();
+	var $nCount_;
+	var $nResultTotalCount_;
+
+	/*
+	 * Constructor
+	 */
+	function RelatedCollection()
+	{
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->sId_ = null;
+
+		unset( $this->pFields_ );
+		unset( $this->pMergeFields_ );
+		$this->nCount_ = 0;
+
+		$this->nResultTotalCount_ = 0;
+	}
+
+	function clear()
+	{
+		$this->init();
+	}
+
+	function setId( $sId )
+	{
+		$this->sId_ = $sId;
+	}
+
+	function getId()
+	{
+		return $this->sId_;
+	}
+
+	function addMergeField( $sField, $sMergeField )
+	{
+		$this->pFields_[ $this->nCount_ ] = $sField;
+		$this->pMergeFields_[ $this->nCount_++ ] = $sMergeField;
+
+		return 0;
+	}
+
+	function getMergeField( $sField )
+	{
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pFields_[ $i ], $sField ) == 0 ) // found
+				return $this->pMergeFields_[ $i ];
+		}
+
+		return null;
+	}
+
+	function getIndex( $sField )
+	{
+		if( $sField == null )
+			return -1;
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pFields_[ $i ], $sField ) == 0 ) // found
+			{
+				return $i;
+			}
+		}
+
+		return -2; // not found
+	}
+
+	function setResultTotalCount( $nCount )
+	{
+		$this->nResultTotalCount_ = $nCount;
+	}
+
+	function getResultTotalCount()
+	{
+		return $this->nResultTotalCount_;
+	}
+}
+
+?>
+<?php
+
+class MergeField
+{
+	var $sId_;
+	var $pCollectionIds_ = array();
+	var $pFields_ = array();
+	var $nCount_;
+
+	/*
+	 * Constructor
+	 */
+	function MergeField()
+	{
+		$this->init( MAX_COLLECTION_NUM );
+	}
+
+	function clear()
+	{
+		$this->init( $this->nCount_ );
+	}
+
+	function init( $nSize )
+	{
+		$i = 0;
+
+		$this->sId_ = null;
+		$this->nCount_ = 0;
+	}
+
+	function setId( $sId )
+	{
+		$this->sId_ = $sId;
+	}
+
+	function getId()
+	{
+		return $this->sId_;
+	}
+
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+
+	function addCollectionField( $sCollectionId, $sField )
+	{
+		$nIndex = 0;
+
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return -1;
+
+		if( ( $nIndex = $this->getIndex( $sCollectionId, $sField ) ) < 0 ) // not found
+		{
+			$this->pCollectionIds_[ $this->nCount_ ] = $sCollectionId;
+			$this->pFields_[ $this->nCount_ ] = $sField;
+			$this->nCount_++;
+		}
+
+		return 0;
+	}
+
+	function getCollectionId( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->pCollectionIds_[ $nIndex ];
+	}
+
+	function getField( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->pFields_[ $nIndex ];
+	}
+
+	function getIndex( $sCollectionId, $sField )
+	{
+		$i = 0;
+
+		if( $sCollectionId == null ||
+			$sField == null )
+			return -1;
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pCollectionIds_[ $i ], $sCollectionId ) == 0 &&
+				strcmp( $this->pFields_[ $i ], $sField ) == 0 )
+			{
+				return $i;
+			}
+		}
+
+		return -2;
+	}
+}
+?>
+<?php
+
+class MergeCollection
+{
+	var $sId_;
+	var $pRelatedCollections_ = array();
+	var $nCount_;
+
+	var $pPageInfo_;
+
+	// Multi GroupBy
+	var $pMultiGroupByMergeFields_ = array();
+	var $nMultiGroupByMergeFieldCount_;
+
+    // Category GroupBy
+	var $pCategoryGroupByMergeFields_ = array();
+	var $nCategoryGroupByMergeFieldCount_;
+
+	/*
+	 * Constructor
+	 */
+	function MergeCollection()
+	{
+		$this->pPageInfo_ = new PageInfo();
+
+		$this->init();
+	}
+
+	function clear()
+	{
+		$this->init();
+	}
+
+	function setId( $sId )
+	{
+		$this->sId_ = $sId;
+	}
+
+	function getId()
+	{
+		return $this->sId_;
+	}
+
+	function size()
+	{
+		return $this->nCount_;
+	}
+
+	function addRelatedCollection( $sCollectionId )
+	{
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return -1;
+
+		if( $sCollectionId == null )
+			return -2;
+
+		if( ( $nIndex = $this->getIndex( $sCollectionId ) ) < 0 ) // not found
+		{
+			if( ( $this->pRelatedCollections_[ $this->nCount_ ] = new RelatedCollection() ) == null ) // failed
+			{
+				return -3;
+			}
+
+			 $this->pRelatedCollections_[ $this->nCount_++ ]->setId( $sCollectionId );
+		}
+
+		return 0;
+	}
+
+	function &getRelatedCollection( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->pRelatedCollections_[ $nIndex ];
+	}
+
+	function &getRelatedCollectionById( $sCollectionId )
+	{
+		if( ( $nIndex = $this->getIndex( $sCollectionId ) ) >= 0 ) // found
+			return $this->pRelatedCollections_[ $nIndex ];
+
+		return null;
+	}
+
+	function init()
+	{
+		$this->sId_ = null;
+		$this->nCount_ = 0;
+		$this->nMultiGroupByMergeFieldCount_ = 0;
+		$this->nCategoryGroupByMergeFieldCount_ = 0;
+	}
+
+	function getIndex( $sCollectionId )
+	{
+		if( $sCollectionId == null )
+			return -1;
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pRelatedCollections_[ $i ]->getId(), $sCollectionId ) == 0 ) // found
+			{
+				return $i;
+			}
+		}
+
+		return -2; // not found
+	}
+
+	function setPageInfo( $nStart, $nCount )
+	{
+		$this->pPageInfo_->set( $nStart, $nCount );
+	}
+
+	function getResultStart()
+	{
+		return $this->pPageInfo_->getStart();
+	}
+
+	function getResultCount()
+	{
+		return $this->pPageInfo_->getCount();
+	}
+	
+	// Multi GroupBy
+	function getMultiGroupByMergeFieldCount()
+	{
+		return $this->nMultiGroupByMergeFieldCount_;
+	}
+
+	function getIndexMultiGroupByMergeField( $sField )
+	{
+		$i = 0;
+
+		for( $i = 0; $i < $this->nMultiGroupByMergeFieldCount_; $i++ )
+		{
+			$pMergeField =& $this->pMultiGroupByMergeFields_[ $i ];
+			if( strcmp( $pMergeField->getId(), $sField ) == 0 ) // found
+				return $i;
+		}
+
+		return -1; // not found
+	}
+
+	function &getMultiGroupByMergeField( $nIndex )
+	{
+		return $this->pMultiGroupByMergeFields_[ $nIndex  ];
+	}
+
+	function createMultiGroupByMergeField( $sField )
+	{
+		$nIndex = 0;
+
+		if( $this->nMultiGroupByMergeFieldCount_ >= MAX_MULTIGROUPBY_FIELD_NUM )
+			return -1;
+
+		if( ( $this->pMultiGroupByMergeFields_[ $this->nMultiGroupByMergeFieldCount_ ] = new MergeField() ) == null ) // failed
+			return -2;
+
+		$pMergeField =& $this->pMultiGroupByMergeFields_ [ $this->nMultiGroupByMergeFieldCount_ ];
+		$pMergeField->setId( $sField );
+
+		$nIndex = $this->nMultiGroupByMergeFieldCount_;
+		$this->nMultiGroupByMergeFieldCount_++;
+
+		return $nIndex;
+	}
+
+	function getMergeFieldMultiGroupBy( $sCollectionId, $sField )
+	{
+		if( $sCollectionId == null ||
+			$sField == null )
+			return null;
+
+		$i = 0;
+
+		for( $i = 0; $i < $this->nMultiGroupByMergeFieldCount_; $i++ )
+		{
+			$pMergeField =& $this->pMultiGroupByMergeFields_[ $i ];
+			if( $pMergeField->getIndex( $sCollectionId, $sField ) >= 0 )
+				return $pMergeField->getId();
+		}
+
+		return null; // not found
+	}
+
+	// Category GroupBy
+	function getCategoryGroupByMergeFieldCount()
+	{
+		return $this->nCategoryGroupByMergeFieldCount_;
+	}
+
+	function getIndexCategoryGroupByMergeField( $sField )
+	{
+		$i = 0;
+
+		for( $i = 0; $i < $this->nCategoryGroupByMergeFieldCount_; $i++ )
+		{
+			$pMergeField =& $this->pCategoryGroupByMergeFields_[ $i ];
+			if( strcmp( $pMergeField->getId(), $sField ) == 0 ) // found
+				return $i;
+		}
+
+		return -1; // not found
+	}
+
+	function &getCategoryGroupByMergeField( $nIndex )
+	{
+		return $this->pCategoryGroupByMergeFields_[ $nIndex  ];
+	}
+
+	function createCategoryGroupByMergeField( $sField )
+	{
+		$nIndex = 0;
+
+		if( $this->nCategoryGroupByMergeFieldCount_ >= MAX_CATEGORYGROUPBY_FIELD_NUM )
+			return -1;
+
+		if( ( $this->pCategoryGroupByMergeFields_[ $this->nCategoryGroupByMergeFieldCount_ ] = new MergeField() ) == null ) // failed
+			return -2;
+
+		$pMergeField =& $this->pCategoryGroupByMergeFields_ [ $this->nCategoryGroupByMergeFieldCount_ ];
+		$pMergeField->setId( $sField );
+
+		$nIndex = $this->nCategoryGroupByMergeFieldCount_;
+		$this->nCategoryGroupByMergeFieldCount_++;
+
+		return $nIndex;
+	}
+
+	function getMergeFieldCategoryGroupBy( $sCollectionId, $sField )
+	{
+		if( $sCollectionId == null ||
+			$sField == null )
+			return null;
+
+		$i = 0;
+
+		for( $i = 0; $i < $this->nCategoryGroupByMergeFieldCount_; $i++ )
+		{
+			$pMergeField =& $this->pCategoryGroupByMergeFields_[ $i ];
+			if( $pMergeField->getIndex( $sCollectionId, $sField ) >= 0 )
+				return $pMergeField->getId();
+		}
+
+		return null; // not found
+	}
+
+}
+
+?>
+<?php
+
+class MergeInfoTable
+{
+	var $pMergeCollections_ = array();
+	var $nCount_;
+
+	/*
+	 * Constructor
+	 */
+	function MergeInfoTable()
+	{
+		$this->init();
+	}
+
+	function clear()
+	{
+		$this->init();
+	}
+	
+	function init()
+	{
+		$this->nCount_ = 0;
+	}
+	
+	function size() { return $this->nCount_; }
+
+	function addMergeCollection( $sMergeCollectionId, $sCollectionId )
+	{
+		$nIndex = 0;
+
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return -1;
+
+		if( $sMergeCollectionId == null ||
+			$sCollectionId == null )
+			return -2;
+
+        if( $this->hasDupRelatedCollection($sCollectionId) )
+        {
+            return -3;
+        }
+
+		$nIndex = $this->getIndex( $sMergeCollectionId );
+
+		if( $nIndex < 0 ) // not found
+		{
+			$nIndex = $this->nCount_;
+
+			if( ( $this->pMergeCollections_[ $nIndex ] = new MergeCollection() ) == null ) // failed
+			{
+				return -4;
+			}
+			$this->pMergeCollections_[ $nIndex ]->setId( $sMergeCollectionId );
+			$this->nCount_++;
+		}
+
+		return $this->pMergeCollections_[ $nIndex ]->addRelatedCollection( $sCollectionId );
+	}
+
+    function hasDupRelatedCollection( $sCollectionId )
+    {
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+            for( $j = 0; $j < $this->pMergeCollections_[ $i ]->size(); $j++ )
+            {
+                $relatedCollection =& $this->pMergeCollections_[ $i ]->getRelatedCollection( $j );
+                if( $relatedCollection != null && (strcmp( $relatedCollection->getId(), $sCollectionId ) == 0) )
+                {
+                    return $this->pMergeCollections_[ $i ];
+                }
+            }
+		}
+        return false;
+    }
+
+	function addMergeDocumentField( $sMergeCollectionId,
+			$sMergeField,
+			$sCollectionId,
+			$sField )
+	{
+		$nIndex = 0;
+
+		if( $sMergeCollectionId == null ||
+			$sMergeField == null ||
+			$sCollectionId == null ||
+			$sField == null )
+			return -1;
+
+		// MergeCollection
+		if( ( $nIndex = $this->getIndex( $sMergeCollectionId ) ) < 0 ) // not found
+			return -2;
+
+		// RelatedCollection
+		if( ( $relatedCollection =& $this->pMergeCollections_[ $nIndex ]->getRelatedCollectionById( $sCollectionId ) ) == null ) // not found
+			return -3;
+
+		return $relatedCollection->addMergeField( $sField, $sMergeField );
+	}
+
+	function getMergeDocumentField( $sMergeCollectionId,
+			$sCollectionId,
+			$sField )
+	{
+		$nIndex = 0;
+
+		if( $sMergeCollectionId == null ||
+			$sCollectionId == null ||
+			$sField == null )
+			return null;
+
+		// MergeCollection
+		if( ( $nIndex = $this->getIndex( $sMergeCollectionId ) ) < 0 ) // not found
+			return null;
+
+		// RelatedCollection
+		if( ( $relatedCollection =& $this->pMergeCollections_[ $nIndex ]->getRelatedCollectionById( $sCollectionId ) ) == null ) // not found
+			return null;
+
+		return $relatedCollection->getMergeField( $sField );
+	}
+
+	function &getMergeCollection( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->pMergeCollections_[ $nIndex ];
+	}
+
+	function &getMergeCollectionById( $sMergeCollectionId )
+	{
+		if( $sMergeCollectionId == null )
+			return null;
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pMergeCollections_[ $i ]->getId(), $sMergeCollectionId ) == 0 ) // found
+			{
+				return $this->pMergeCollections_[ $i ];
+			}
+		}
+
+		return null; // not found
+	}
+
+	function setResultTotalCountInMerge( $sMergeCollectionId, $sCollectionId, $nResultTotalCount )
+	{
+		$nIndex = 0;
+
+		// MergeCollection
+		if( ( $nIndex = $this->getIndex( $sMergeCollectionId ) ) < 0 ) // not found
+			return -1;
+
+		// RelatedCollection
+		if( ( $relatedCollection =& $this->pMergeCollections_[ $nIndex ]->getRelatedCollectionById( $sCollectionId ) ) == null ) // not found
+			return -2;
+
+		$relatedCollection->setResultTotalCount( $nResultTotalCount );
+		return 0;
+	}
+
+	function getIndex( $sMergeCollectionId )
+	{
+		if( $sMergeCollectionId == null )
+			return -1;
+
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->pMergeCollections_[ $i ]->getId(), $sMergeCollectionId ) == 0 ) // found
+			{
+				return $i;
+			}
+		}
+
+		return -2; // not found
+	}
+
+	// Multi GroupBy
+	function addMergeMultiGroupByField( $sMergeCollectionId,
+			$sMergeField,
+			$sCollectionId,
+			$sField )
+	{
+		$nIndex = 0;
+
+		// MergeCollection
+		if( ( $nIndex = $this->getIndex( $sMergeCollectionId ) ) < 0 ) // not found
+			return -1;
+		$pMergeCollection =& $this->pMergeCollections_[ $nIndex ];
+
+		if( ( $nIndex = $pMergeCollection->getIndexMultiGroupByMergeField( $sMergeField ) ) < 0 ) // not found
+		{
+			if( ( $nIndex = $pMergeCollection->createMultiGroupByMergeField( $sMergeField ) ) < 0 )
+				return -2;
+		}
+
+		// get MergeField
+		$pMergeField =& $pMergeCollection->getMultiGroupByMergeField( $nIndex );
+		if( $pMergeField->addCollectionField( $sCollectionId, $sField ) < 0 )
+			return -3;
+
+		return 0;
+	}
+
+	// Category GroupBy
+	function addMergeCategoryGroupByField( $sMergeCollectionId,
+			$sMergeField,
+			$sCollectionId,
+			$sField )
+	{
+		$nIndex = 0;
+
+		// MergeCollection
+		if( ( $nIndex = $this->getIndex( $sMergeCollectionId ) ) < 0 ) // not found
+			return -1;
+		$pMergeCollection =& $this->pMergeCollections_[ $nIndex ];
+
+		if( ( $nIndex = $pMergeCollection->getIndexCategoryGroupByMergeField( $sMergeField ) ) < 0 ) // not found
+		{
+			if( ( $nIndex = $pMergeCollection->createCategoryGroupByMergeField( $sMergeField ) ) < 0 )
+				return -2;
+		}
+
+		// get MergeField
+		$pMergeField =& $pMergeCollection->getCategoryGroupByMergeField( $nIndex );
+		if( $pMergeField->addCollectionField( $sCollectionId, $sField ) < 0 )
+			return -3;
+
+		return 0;
+	}
+}
+
+?>
+<?php
+
+class RequestCollection
+{
+	var $id_;
+	var $alias_;
+
+	/* Uid */
+	var $nUid_;
+	var $searcherId_;
+
+	/* Uids */
+	var $nUidCount_;
+	var $uids_ = array();
+	var $searcherIds_ = array();
+
+	/* PageInfo */
+	var $pageInfo_;
+
+	/* QueryAnalyzer */
+	var $queryAnalyzer_;
+
+	/* SortField */
+	var $sortField_;
+
+	/* SearchField */
+	var $searchField_;
+
+	/* DocumentField */
+	var $documentField_;
+
+	/* DateRange */
+	var $dateRange_;
+
+	/* Query */
+	var $query_;
+
+	/* GroupBy */
+	var $groupBy_;
+
+	/* MultiGroupBy */
+	var $multiGroupBy_;
+
+	/* CategoryGroupBy */
+	var $categoryGroupBy_;
+
+	/* PropertyGroup */
+	var $propertyGroup_;
+
+	/* Boost */
+	var $boost_;
+
+	/* Ranking */
+	var $rankingType_;
+	var $rankingOption_;
+	var $nRankingPercent_;
+
+	var $pRankingFields_ = array();
+	var $nRankingScores_ = array();
+	var $nRankingFieldCount_;
+
+	var $nMinRank_;
+	var $nMaxRank_;
+
+	/* Duplicate Detection */
+	var $bCheckDuplicate_;
+	var $duplicateDetectionCriterionField_;
+
+    /* geo distance */
+    var $latitudeField_;
+    var $longitudeField_;
+    var $latitude_;
+    var $longitude_;
+    var $distance_;
+
+
+	/*
+	 * Constructor
+	 */
+	function RequestCollection()
+	{
+		$this->pageInfo_ = new PageInfo();
+		$this->queryAnalyzer_ = new QueryAnalyzer();
+		$this->sortField_ = new SortField();
+		$this->searchField_ = new SearchField();
+		$this->documentField_ = new DocumentField();
+		$this->dateRange_ = new DateRange(); 
+		$this->query_ = new Query();
+		$this->groupBy_ = new GroupBy();
+		$this->multiGroupBy_ = new MultiGroupBy();
+		$this->categoryGroupBy_ = new CategoryGroupBy();
+		$this->propertyGroup_ = new PropertyGroup();
+		$this->boost_ = new Boost();
+		$this->duplicateDetectionCriterionField_ = new SortField();
+
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->id_ = null;
+		$this->alias_ = null;
+
+		$this->nUid_ = 0;
+		$this->nUidCount_ = 0;
+		$this->searcherId_ = null;
+
+		// Ranking
+		$this->rankingType_ = null;
+		$this->rankingOption_ = null;
+		$this->nRankingPercent_ = 0;
+
+		unset( $pRankingFields_ );
+		unset( $nRankingScores_ );
+		$this->nRankingFieldCount_ = 0;
+
+		$this->nMinRank_ = 0;
+		$this->nMaxRank_ = 0;
+
+		// Duplicate Detection
+		$this->bCheckDuplicate_ = 0;
+
+        $this->latitudeField_ = null;
+        $this->longitudeField_ = null;
+        $this->latitude_ = null;
+        $this->longitude_ = null;
+        $this->distance_ = -1;
+	}
+
+	function setId( $id )
+	{
+		$this->id_ = $id;
+	}
+
+	function getId()
+	{
+		return $this->id_;
+	}
+
+	function hasAlias()
+	{
+		if( $this->alias_ != null )
+			return true;
+		return false;
+	}
+
+	function setAlias( $alias )
+	{
+		$this->alias_ = $alias;
+	}
+
+	function getAlias()
+	{
+		return $this->alias_;
+	}
+
+	function &getPageInfo()
+	{ return $this->pageInfo_; }
+
+	function &getQueryAnalyzer()
+	{ return $this->queryAnalyzer_; }
+
+	function &getSortField()
+	{ return $this->sortField_; }
+
+	function &getSearchField()
+	{ return $this->searchField_; }
+
+	function &getDocumentField()
+	{ return $this->documentField_; }
+
+	function &getDateRange()
+	{ return $this->dateRange_; }
+
+	function &getQuery()
+	{ return $this->query_; }
+
+	function &getGroupBy()
+	{ return $this->groupBy_; }
+
+	function &getMultiGroupBy()
+	{ return $this->multiGroupBy_; }
+
+	function &getCategoryGroupBy()
+	{ return $this->categoryGroupBy_; }
+
+	function &getPropertyGroup()
+	{ return $this->propertyGroup_; }
+
+	function &getBoost()
+	{ return $this->boost_; }
+
+	function &getDuplicateDetectionCriterionField()
+	{ return $this->duplicateDetectionCriterionField_; }
+
+	/* <Uid> */
+	function setUid( $nUid, $searcherId )
+	{
+		$this->nUid_ = $nUid;
+		$this->searcherId_ = $searcherId;
+	}
+	function getUid() { return $this->nUid_; }
+	function getSearcherId() { return $this->searcherId_; }
+
+	/* <Uids> */
+	function getUidCount()
+	{ return $this->nUidCount_; }
+
+	function addUid( $nUid, $searcherId )
+	{
+		$this->uids_[ $this->nUidCount_ ] = $nUid;
+		$this->searcherIds_[ $this->nUidCount_++ ] = $searcherId;
+	}
+
+	function getUidByIndex( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nUidCount_ )
+			return -1;
+
+		return $this->uids_[ $nIndex ];
+	}
+
+	function getSearcherIdByIndex( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nUidCount_ )
+			return -1;
+
+		return $this->searcherIds_[ $nIndex ];
+	}
+
+	// Ranking
+	function setRankingInfo( $type, $option, $nPercent )
+	{
+		$this->rankingType_ = $type;
+		$this->rankingOption_ = $option;
+		$this->nRankingPercent_ = $nPercent;
+		return 0;
+	}
+
+	function getRankingType()
+	{
+		return $this->rankingType_;
+	}
+
+	function getRankingOption()
+	{
+		return $this->rankingOption_;
+	}
+
+	function getRankingPercent()
+	{
+		return $this->nRankingPercent_;
+	}
+
+	function getRankingFieldCount()
+	{
+		return $this->nRankingFieldCount_;
+	}
+
+	function initRankingField()
+	{
+		$this->nRankingFieldCount_ = 0;
+	}
+
+	function addRankingField( $field, $nScore )
+	{
+		$this->pRankingFields_[ $this->nRankingFieldCount_ ] = $field;
+		$this->nRankingScores_[ $this->nRankingFieldCount_++ ] = $nScore;
+
+		return 0;
+	}
+	
+	function getRankingField( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nRankingFieldCount_ )
+			return null;
+
+		return $this->pRankingFields_[ $nIndex ];
+	}
+
+	function getRankingScore( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nRankingFieldCount_ )
+			return 0;
+
+		return $this->nRankingScores_[ $nIndex ];
+	}
+
+	function hasRankRange()
+	{
+		if( $this->nMinRank_ >= 0 && $this->nMaxRank_ > 0 )
+			return true;
+		return false;
+	}
+
+	function setRankRange( $nMinRank, $nMaxRank )
+	{
+		$this->nMinRank_ = $nMinRank;
+		$this->nMaxRank_ = $nMaxRank;
+	}
+
+	function getMinRank()
+	{
+		return $this->nMinRank_;
+	}
+
+	function getMaxRank()
+	{
+		return $this->nMaxRank_;
+	}
+
+	// Duplicate Detection
+	function setCheckDuplicate() { $this->bCheckDuplicate_ = 1; }
+	function setCheckDuplicateWithoutFiltering() { $this->bCheckDuplicate_ = 2; }
+	function getCheckDuplicate() { return $this->bCheckDuplicate_; }
+
+    function setGeoDistance( $latitudeField, $latitude, $longitudeField, $longitude, $distance )
+    {
+        $this->latitudeField_   = $latitudeField;
+        $this->latitude_        = $latitude;
+
+        $this->longitudeField_  = $longitudeField;
+        $this->longitude_       = $longitude;
+
+        $this->distance_        = $distance;
+    }
+
+    function getLatitudeField()
+    {
+        return $this->latitudeField_;
+    }
+    function getLongitudeField()
+    {
+        return $this->longitudeField_;
+    }
+    function getLatitude()
+    {
+        return $this->latitude_;
+    }
+    function getLongitude()
+    {
+        return $this->longitude_;
+    }
+    function getDistanceLimit()
+    {
+        return $this->distance_;
+    }
+}
+
+?>
+<?php
+
+class Request
+{
+	var $commonInfo_;
+	var $requestCollections_ = array();
+	var $collections_ = array();
+	var $nCount_;
+	var $body_;
+	var $encode_;
+
+	/*
+	 * Constructor
+	 */
+	function Request()
+	{
+		$this->commonInfo_ = new CommonInfo();
+		$this->encode_ = new Encode();
+
+		$this->init();
+	}
+
+	function init()
+	{
+		$this->body_ = "";
+		$this->nCount_ = 0;
+	}
+
+	function &getBody()
+	{
+		return $this->body_;
+	}
+
+	/* SEARCH_QUERY_REQUEST */
+	function makeBodySearchQueryRequest( &$pBuffer, &$mergeInfoTable )
+	{
+		if( $this->nCount_ < 0 )
+		{
+			return -1;
+		}
+
+		$this->encode_->set( $pBuffer );
+		$this->encode_->setCharSet( $this->commonInfo_->getEncoding() );
+
+		// <Common> element
+		$this->appendCommonElement( true );
+
+		// <MergeCollection> element
+		$this->appendMergeCollectionElement( $mergeInfoTable );
+
+		// Collection
+		$this->encode_->append1( $this->nCount_ );
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( ( $requestCollection =& $this->getRequestCollection( $i ) ) == null ) return -3;
+
+			// <Collection> element
+			$this->appendCollectionElementHeader( $requestCollection );
+
+			// <PageInfo> element
+			$this->appendPageInfoElement( $requestCollection, false );
+
+			// <QueryAnalyzer> element
+			$this->appendQueryAnalyzerElement( $requestCollection );
+
+			// <SortField> element
+			$this->appendSortFieldElement( $requestCollection );
+
+			// <SearchField> element
+			$this->appendSearchFieldElement( $requestCollection );
+
+			// <DocumentField> element
+			$this->appendDocumentFieldElement( $requestCollection );
+
+			// <DateRange> element
+			$this->appendDateRangeElement( $requestCollection );
+
+			// <Query> element
+			$this->appendQueryElement( $requestCollection );
+
+			// <GroupBy> element
+			$this->appendGroupByElement( $requestCollection );
+
+			// <MultiGroupBy> element
+			$this->appendMultiGroupByElement( $requestCollection );
+
+			// <PropertyGroup>
+			$this->appendPropertyGroupElement( $requestCollection );
+
+			// <Boost> element
+			$this->appendBoostElement( $requestCollection );
+
+			// <Ranking>
+			$this->appendRankingElement( $requestCollection );
+
+			// <DuplicateDetection> element
+			$this->appendDuplicateDetectionElement( $requestCollection );
+
+			// <CategoryGroupBy> element
+			$this->appendCategoryGroupByElement( $requestCollection );
+
+			// <GeoDistance> element
+			$this->appendGeoDistanceElement( $requestCollection );
+		}
+
+		return $this->encode_->getSize();
+	}
+
+	/* UID_REQUEST */
+	function makeBodyUidRequest( &$pBuffer, &$mergeInfoTable )
+	{
+		if( $this->nCount_ < 1 )
+		{
+			return -1;
+		}
+
+		$this->encode_->set( $pBuffer );
+		$this->encode_->setCharSet( $this->commonInfo_->getEncoding() );
+
+		// <Common> element
+		$this->appendCommonElement( true );
+
+		// <MergeCollection> element
+		$this->appendMergeCollectionElement( $mergeInfoTable );
+
+		// Collection
+		$this->encode_->append1( $this->nCount_ );
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( ( $requestCollection =& $this->getRequestCollection( $i ) ) == null ) return -2;
+
+			// <Collection> element
+			$this->appendCollectionElementHeader( $requestCollection );
+
+			/*XXX ???
+			// <PageInfo> element
+			$this->appendPageInfoElement( $requestCollection, true );
+			*/
+
+			// <Uids> element
+			$this->appendUidsElement( $requestCollection );
+
+			// <QueryAnalyzer> element
+			$this->appendQueryAnalyzerElement( $requestCollection );
+
+			// <SearchField> element
+			$this->appendSearchFieldElement( $requestCollection );
+
+			// <DocumentField> element
+			$this->appendDocumentFieldElement( $requestCollection );
+
+			// <Query> element
+			$this->appendQueryElement( $requestCollection );
+
+			// <DuplicateDetection> element
+			$this->appendDuplicateDetectionElement( $requestCollection );
+
+			// <GeoDistance> element
+			$this->appendGeoDistanceElement( $requestCollection );
+		}
+
+		return $this->encode_->getSize();
+	}
+
+	/* MORPHEME_ANALYSIS_REQUEST */
+	function makeBodyMorphemeAnalysisRequest( &$pBuffer )
+	{
+		if( $this->nCount_ < 1 )
+		{
+			return -1;
+		}
+
+		$this->encode_->set( $pBuffer );
+		$this->encode_->setCharSet( $this->commonInfo_->getEncoding() );
+
+		// <Common> element
+		$this->appendCommonElement( true );
+
+		// Collection
+		$this->encode_->append1( $this->nCount_ );
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( ( $requestCollection =& $this->getRequestCollection( $i ) ) == null ) return -3;
+
+			// <Collection> element
+			$this->appendCollectionElementHeader( $requestCollection );
+
+			// <QueryAnalyzer> element
+			$this->appendQueryAnalyzerElement( $requestCollection );
+
+			// <SearchField> element
+			$this->appendSearchFieldElement( $requestCollection );
+
+			// <Query> element
+			$this->appendQueryElement( $requestCollection );
+		}
+
+		return $this->encode_->getSize();
+	}
+
+	/* RECENT_QUERYLIST_REQUEST_TYPE */
+	function makeBodyRecentQueryListRequest( &$pBuffer, $nCount )
+	{
+		$this->encode_->set( $pBuffer );
+		$this->encode_->setCharSet( $this->commonInfo_->getEncoding() );
+
+		// <Common> element
+		$this->appendCommonElement( false );
+
+		// <RequestQuery count="100"/>
+		$this->encode_->append4( $nCount );
+
+		return $this->encode_->getSize();
+	}
+
+	/* DUPLICATE_DOCUMENTS_REQUEST */
+	function makeBodyDuplicateDocumentsRequest( &$pBuffer )
+	{
+		if( $this->nCount_ < 0 )
+		{
+			return -1;
+		}
+
+		$this->encode_->set( $pBuffer );
+		$this->encode_->setCharSet( $this->commonInfo_->getEncoding() );
+
+		// <Common> element
+		$this->appendCommonElement( true );
+
+		// Collection
+		$this->encode_->append1( $this->nCount_ );
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( ( $requestCollection =& $this->getRequestCollection( $i ) ) == null ) return -2;
+
+			// <Collection> element
+			$this->appendCollectionElementHeader( $requestCollection );
+
+			// <PageInfo> element
+			$this->appendPageInfoElement( $requestCollection, false );
+
+			// <Uid> element
+			$this->appendUidElement( $requestCollection );
+
+			// <QueryAnalyzer> element
+			$this->appendQueryAnalyzerElement( $requestCollection );
+
+			// <SortField> element
+			$this->appendSortFieldElement( $requestCollection );
+
+			// <SearchField> element
+			$this->appendSearchFieldElement( $requestCollection );
+
+			// <DocumentField> element
+			$this->appendDocumentFieldElement( $requestCollection );
+
+			// <Boost> element
+			$this->appendBoostElement( $requestCollection );
+
+			// <Ranking>
+			$this->appendRankingElement( $requestCollection );
+		}
+
+		return $this->encode_->getSize();
+	}
+
+	function addCollection( $collection )
+	{
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return -1;
+
+        if( $this->getRequestCollectionByName( $collection ) == null )
+        {
+
+            if( ( $this->requestCollections_[ $this->nCount_ ] = new RequestCollection() ) == null )
+                return -2;
+
+            $this->collections_[ $this->nCount_ ] = $collection;
+            $this->requestCollections_[ $this->nCount_ ]->setId( $collection );
+
+            $this->nCount_++;
+        }
+
+		return 0;
+	}
+
+	function addAliasCollection( $alias, $collection )
+	{
+		if( $this->nCount_ >= MAX_COLLECTION_NUM )
+			return -1;
+
+        if( $this->getRequestCollectionByName( $alias ) == null )
+        {
+            if( ( $this->requestCollections_[ $this->nCount_ ] = new RequestCollection() ) == null )
+                return -2;
+
+            $this->collections_[ $this->nCount_ ] = $alias;
+
+            $this->requestCollections_[ $this->nCount_ ]->setId( $collection );
+            $this->requestCollections_[ $this->nCount_ ]->setAlias( $alias );
+
+            $this->nCount_++;
+        }
+
+		return 0;
+	}
+
+	function &getCommonInfo()
+	{
+		return $this->commonInfo_;
+	}
+
+	function getCollectionCount()
+	{
+		return $this->nCount_;
+	}
+
+	function getCollectionName( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->collections_[ $nIndex ];
+	}
+
+	function &getRequestCollection( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->requestCollections_[ $nIndex ];
+	}
+
+	function &getRequestCollectionByName( $collection )
+	{
+        $requestCollection = null;
+		for( $i = 0; $i < $this->nCount_; $i++ )
+		{
+			if( strcmp( $this->collections_[ $i ], $collection ) == 0 ) // found
+            {
+				$requestCollection =& $this->requestCollections_[ $i ];
+                break;
+            }
+		}
+
+		return $requestCollection;
+	}
+
+	// <Common encoding="EUC-KR" log="Y" tracelog="1" oroperator="Y" timeout="">
+	//  <SessionInfo>
+	//   <Session1></Session1>
+	//   <Session2></Session2>
+	//   <Session3></Session3>
+	//  </SessionInfo>
+	//  <Query></Query>
+	//  <SpellCorrectionQuery under=""></SpellCorrectionQuery>
+	// </Common>
+	function appendCommonElement( $bQuery )
+	{
+		$nLog = 0;
+
+		// <Common> 
+		$this->encode_->appendString( $this->commonInfo_->getEncoding() );
+
+		// log
+		$nLog = $this->commonInfo_->getQueryLog();
+		$this->encode_->append1( $nLog );
+
+		// tracelog
+		if( ( $nLog = $this->commonInfo_->getTraceLogTimeout() ) >= 0 )
+		{
+			$this->encode_->append1( 1 );
+			$this->encode_->append4( $nLog );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+
+		// oroperator
+		$this->encode_->append1( $this->commonInfo_->isOrOperator() == true ? 1 : 0 );
+
+		// timeout
+		$this->encode_->append4( $this->commonInfo_->getTimeout() );
+
+		// <SessionString>
+		if( $this->commonInfo_->hasSessions() == true )
+		{
+			$this->encode_->append1( 1 );
+
+			$this->encode_->appendString( $this->commonInfo_->getSession1() );
+			$this->encode_->appendString( $this->commonInfo_->getSession2() );
+			$this->encode_->appendString( $this->commonInfo_->getSession3() );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+
+		// <Query>
+		$query = $this->commonInfo_->getQuery();
+		if( $query != null )
+		{
+			$this->encode_->append1( 1 );
+			$this->encode_->appendString( $query );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+
+		// <SpellCorrectionQuery under="">
+		$query = $this->commonInfo_->getSpellCorrectionQuery();
+		if( $query != null )
+		{
+			$this->encode_->append1( 1 );
+			$this->encode_->appendString( $query );
+			$this->encode_->append4( $this->commonInfo_->getUnder() );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	// <MergeCollection id="">
+	//  <Collection id=""/>
+	//  <MultiGroupBy field="">
+	//    <Collection id="" field=""/>
+	//  </MultiGroupBy>
+	// </MergeCollection>
+	function appendMergeCollectionElement( &$mergeInfoTable )
+	{
+		$nCount = $mergeInfoTable->size();
+
+		$this->encode_->append1( $nCount );
+		for( $i = 0; $i < $nCount; $i++ )
+		{
+			$mergeCollection =& $mergeInfoTable->getMergeCollection( $i );
+			$nCollectionCount = $mergeCollection->size();
+
+			$id = $mergeCollection->getId();
+
+			// <MergeCollection>
+			$this->encode_->appendString( $id );
+
+			// <PageInfo start="" count=""/>
+			$this->encode_->append4( $mergeCollection->getResultStart() );
+			$this->encode_->append4( $mergeCollection->getResultCount() );
+
+			$this->encode_->append1( $nCollectionCount );
+			for( $j = 0; $j < $nCollectionCount; $j++ )
+			{
+				$relatedCollection =& $mergeCollection->getRelatedCollection( $j );
+				$id = $relatedCollection->getId();
+
+				// <Collection id=""/>
+				$this->encode_->appendString( $id );
+			}
+
+			/* Multi GroupBy */
+			$nMultiGroupByMergeFieldCount = $mergeCollection->getMultiGroupByMergeFieldCount();
+
+			$this->encode_->append1( $nMultiGroupByMergeFieldCount );
+			for( $j = 0; $j < $nMultiGroupByMergeFieldCount; $j++ )
+			{
+				$pMultiGroupByField =& $mergeCollection->getMultiGroupByMergeField( $j );
+				$pField = $pMultiGroupByField->getId();
+
+				// <MultiGroupBy field="">
+				$this->encode_->appendString( $pField );
+
+				$nCollectionCount = $pMultiGroupByField->getCount();
+				$this->encode_->append1( $nCollectionCount );
+				for( $k = 0; $k < $nCollectionCount; $k++ )
+				{
+					// get collection id, field
+					$id = $pMultiGroupByField->getCollectionId( $k );
+					$pField = $pMultiGroupByField->getField( $k );
+
+					$this->encode_->appendString( $id );
+					$this->encode_->appendString( $pField );
+				}
+			}
+
+			/* Category GroupBy */
+			$nCategoryGroupByMergeFieldCount = $mergeCollection->getCategoryGroupByMergeFieldCount();
+
+			$this->encode_->append1( $nCategoryGroupByMergeFieldCount );
+			for( $j = 0; $j < $nCategoryGroupByMergeFieldCount; $j++ )
+			{
+				$pCategoryGroupByField =& $mergeCollection->getCategoryGroupByMergeField( $j );
+				$pField = $pCategoryGroupByField->getId();
+
+				// <CategoryGroupBy field="">
+				$this->encode_->appendString( $pField );
+
+				$nCollectionCount = $pCategoryGroupByField->getCount();
+				$this->encode_->append1( $nCollectionCount );
+				for( $k = 0; $k < $nCollectionCount; $k++ )
+				{
+					// get collection id, field
+					$id = $pCategoryGroupByField->getCollectionId( $k );
+					$pField = $pCategoryGroupByField->getField( $k );
+
+					$this->encode_->appendString( $id );
+					$this->encode_->appendString( $pField );
+				}
+			}
+		}
+	}
+
+	// <Collection id="news" alias="economy">
+	function appendCollectionElementHeader( &$requestCollection )
+	{
+		// id
+		$this->encode_->appendString( $requestCollection->getId() );
+
+		// alias
+		if( $requestCollection->hasAlias() == true )
+		{
+			$this->encode_->append1( 1 );
+			$this->encode_->appendString( $requestCollection->getAlias() );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+
+		$this->encode_->append1( 0 );
+	}
+
+	// <PageInfo start="0" count="20"/>
+	function appendPageInfoElement( &$requestCollection, $bUidRequest )
+	{
+		$nStart = 0;
+		$nCount = 0;
+
+		if( $bUidRequest == true )
+		{
+			$nCount = $requestCollection->getUidCount();
+		}
+		else
+		{
+			$pageInfo =& $requestCollection->getPageInfo();
+			$nStart = $pageInfo->getStart();
+			$nCount = $pageInfo->getCount();
+		}
+
+		// <PageInfo>
+		$this->encode_->append4( $nStart );
+		$this->encode_->append4( $nCount );
+	}
+
+	// <QueryAnalyzer la="Y" ignorecase="Y" original="Y" synonym="Y"/>
+	function appendQueryAnalyzerElement( &$requestCollection )
+	{
+		$queryAnalyzer =& $requestCollection->getQueryAnalyzer();
+
+		// <QueryAnalyzer>
+		$this->encode_->append1( $queryAnalyzer->isLa() == true ? 1 : 0 );
+		$this->encode_->append1( $queryAnalyzer->isIgnoreCase() == true ? 1 : 0 );
+		$this->encode_->append1( $queryAnalyzer->isOriginal() == true ? 1 : 0 );
+		$this->encode_->append1( $queryAnalyzer->isSynonym() == true ? 1 : 0 );
+	}
+
+	// <SortField>
+	//  <Field name="RANK" order="DESC"/>
+	// </SortField>
+	function appendSortFieldElement( &$requestCollection )
+	{
+		$sortField =& $requestCollection->getSortField();
+		$nFieldCount = $sortField->getCount();
+
+		$this->encode_->append1( $nFieldCount );
+
+		// <SortField>
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$field = $sortField->get( $i );
+			$order = $sortField->getOrder( $i );
+
+			$this->encode_->appendString( $field );
+			$this->encode_->append1( $order ); // 0 : ASC, 1 : DESC
+		}
+	}
+
+	// <SearchField>
+	//  <Field name="title"/>
+	// </SearchField>
+	function appendSearchFieldElement( &$requestCollection )
+	{
+		$searchField =& $requestCollection->getSearchField();
+		$nFieldCount = $searchField->getCount();
+
+		$this->encode_->append1( $nFieldCount );
+		// <SearchField>
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$field = $searchField->get( $i );
+
+			$this->encode_->appendString( $field );
+		}
+	}
+
+	// <DocumentField highlight="Y" snippet="Y">
+	//  <Field name="title"/>
+	// </DocumentField>
+	function appendDocumentFieldElement( &$requestCollection )
+	{
+		$documentField =& $requestCollection->getDocumentField();
+		$nFieldCount = $documentField->getCount();
+
+
+		$this->encode_->append2( $nFieldCount );
+
+		if( $nFieldCount > 0 )
+		{
+			// highlight
+			$this->encode_->append1( $documentField->isHighlight() == true ? 1 : 0 );
+
+			// snippet
+			$this->encode_->append1( $documentField->isSnippet() == true ? 1 : 0 );
+		}
+
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$field = $documentField->get( $i );
+			$nDisplay = $documentField->getDisplay( $i );
+
+			// <Field>
+			$this->encode_->appendString( $field );
+			$this->encode_->append4( $nDisplay );
+		}
+	}
+
+	// <DateRange start="1970/01/01 09:00:01" end="2009/08/03 11:30:00"/>
+	function appendDateRangeElement( &$requestCollection )
+	{
+		$dateRange =& $requestCollection->getDateRange();
+
+		if( $dateRange->hasDate() == true )
+		{
+			$startDate = $dateRange->getStart();
+			$endDate = $dateRange->getEnd();
+
+			$this->encode_->append1( 1 );
+
+			$this->encode_->appendString( $startDate );
+			$this->encode_->appendString( $endDate );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	// <Query>
+	//  <CollectionQuery><![CDATA[ ]]></CollectionQuery>
+	//  <PrefixQuery join=""><![CDATA[ ]]></PrefixQuery>
+	//  <FilterQuery><![CDATA[ ]]></FilterQuery>
+	//  <AuthorityQuery><![CDATA[ ]]></AuthorityQuery>
+	// </Query>
+	function appendQueryElement( &$requestCollection )
+	{
+		$query =& $requestCollection->getQuery();
+
+		// <CollectionQuery>
+		$collectionQuery = $query->getCollectionQuery();
+		$this->encode_->append1( $collectionQuery != null ? 1 : 0 );
+		if( $collectionQuery != null )
+			$this->encode_->appendString( $collectionQuery );
+
+		// <PrefixQuery join="">
+		$prefixQuery = $query->getPrefixQuery();
+		$this->encode_->append1( $prefixQuery != null ? 1 : 0 );
+		if( $prefixQuery != null )
+		{
+			$this->encode_->appendString( $prefixQuery );
+			$this->encode_->append1( $query->getJoinOperator() );
+		}
+
+		// <FilterQuery>
+		$filterQuery = $query->getFilterQuery();
+		$this->encode_->append1( $filterQuery != null ? 1 : 0 );
+		if( $filterQuery != null )
+			$this->encode_->appendString( $filterQuery );
+
+		// <AuthorityQuery>
+		$authorityQuery = $query->getAuthorityQuery();
+		$this->encode_->append1( $authorityQuery != null ? 1 : 0 );
+		if( $authorityQuery != null )
+		{
+			$this->encode_->appendString( $query->getAuthTargetField() );
+			$this->encode_->appendString( $query->getAuthCollection() );
+			$this->encode_->appendString( $query->getAuthReferField() );
+			$this->encode_->appendString( $authorityQuery );
+		}
+
+		// <CategoryQuery>
+		$nFieldCount = $query->getCategoryQueryCount();
+		$this->encode_->append4( $nFieldCount );
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$this->encode_->appendString( $query->getCategoryQueryField( $i ) );
+			$this->encode_->appendString( $query->getCategoryQuery( $i ) );
+		}
+	}
+
+	// <GroupBy field="category" count="5">
+	//  <SortField>
+	//   <Field name="price" order="DESC"/>
+	//  </SortField>
+	// </GroupBy>
+	function appendGroupByElement( &$requestCollection )
+	{
+		$groupBy =& $requestCollection->getGroupBy();
+
+		if( $groupBy->hasField() == true )
+		{
+			$this->encode_->append1( 1 );
+
+			$field = $groupBy->getField();
+			$nCount = $groupBy->getCount();
+
+			// <GroupBy>
+			$this->encode_->appendString( $field );
+			$this->encode_->append4( $nCount );
+
+			$sortField =& $groupBy->getSortField();
+			$nFieldCount = $sortField->getCount();
+
+			// <SortField>
+			$this->encode_->append1( $nFieldCount );
+			for( $i = 0; $i < $nFieldCount; $i++ )
+			{
+				$field = $sortField->get( $i );
+				$order = $sortField->getOrder( $i );
+
+				// <Field>
+				$this->encode_->appendString( $field );
+				$this->encode_->append1( $order ); // 0 : ASC, 1 : DESC
+			}
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	// <MultiGroupBy>
+	//  <Field name="price"/>
+	// </MultiGroupBy>
+	function appendMultiGroupByElement( &$requestCollection )
+	{
+		$multiGroupBy =& $requestCollection->getMultiGroupBy();
+		$nFieldCount = $multiGroupBy->getCount();
+
+		$this->encode_->append1( $nFieldCount );
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$field = $multiGroupBy->getField( $i );
+
+			// <Field>
+			$this->encode_->appendString( $field );
+		}
+	}
+
+	// <CategoryGroupBy>
+	function appendCategoryGroupByElement( &$requestCollection )
+	{
+		$categoryGroupBy =& $requestCollection->getCategoryGroupBy();
+
+		$this->encode_->append4( $categoryGroupBy->fieldCount_ );
+		for( $i = 0; $i < $categoryGroupBy->fieldCount_; $i++ )
+		{
+			$this->encode_->appendString( $categoryGroupBy->fieldList_[$i]->name_ );
+			$this->encode_->append4( $categoryGroupBy->fieldList_[$i]->depthCount_ );
+			for( $j = 0; $j < $categoryGroupBy->fieldList_[$i]->depthCount_; $j++ )
+			{
+				$this->encode_->append4( $categoryGroupBy->fieldList_[$i]->depthList_[$j] );	
+				$this->encode_->append1( $categoryGroupBy->fieldList_[$i]->sortType_[$j] );
+				$this->encode_->append4( $categoryGroupBy->fieldList_[$i]->topN_[$j] );
+			}
+		}
+	}
+
+	// <PropertyGroup>
+	//  <Field name="price" from="0" to="10000" groupcount="10"/>
+	// </PropertyGroup>
+	function appendPropertyGroupElement( &$requestCollection )
+	{
+		$propertyGroup =& $requestCollection->getPropertyGroup();
+
+		if( ( $field = $propertyGroup->getField() ) != null )
+		{
+			// <PropertyGroup>
+			$this->encode_->append1( 1 );
+
+			$nMinValue = $propertyGroup->getMinValue();
+			$nMaxValue = $propertyGroup->getMaxValue();
+			$nGroupCount = $propertyGroup->getGroupCount();
+
+			// <Field>
+			$this->encode_->appendString( $field );
+			$this->encode_->append4( $nMinValue );
+			$this->encode_->append4( $nMaxValue );
+			$this->encode_->append4( $nGroupCount );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	// <Boost>
+	//  <Query><![CDATA[]]></Query>
+	//  <Category id="boost1" field="category" matchtype="SUB_MATCH"><![CDATA[]]></Category>
+	// </Boost>
+	function appendBoostElement( &$requestCollection )
+	{
+		$boost =& $requestCollection->getBoost();
+		$query = $boost->getQuery();
+
+		$this->encode_->append1( $query != null ? 1 : 0 );
+		if( $query != null )
+		{
+			$this->encode_->appendString( $query );
+			$this->encode_->append1( $boost->getOption() );
+		}
+
+		if( $boost->hasCategoryBoost() == true )
+		{
+			$id = $boost->getCategoryBoostId();
+			$field = $boost->getCategoryBoostField();
+			$matchtype = $boost->getCategoryBoostMatchType();
+			$category = $boost->getCategoryBoostValue();
+
+			// <Category>
+			$this->encode_->append1( 1 );
+			$this->encode_->appendString( $category );
+			$this->encode_->appendString( $id );
+			$this->encode_->appendString( $field );
+			$this->encode_->appendString( $matchtype );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	function appendRankingElement( &$requestCollection )
+	{
+		$type = $requestCollection->getRankingType();
+		$option = $requestCollection->getRankingOption();
+		$nPercent = $requestCollection->getRankingPercent();
+
+		// <Ranking>
+		// type="" option="" percent=""
+		if( $type != null && is_null( $option ) != true )
+		{
+			$this->encode_->append1( 1 );
+
+			$this->encode_->appendString( $type );
+			$this->encode_->appendString( $option );
+			$this->encode_->append4( $nPercent );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+
+		// <RankScore>
+		$nFieldCount = $requestCollection->getRankingFieldCount();
+		$this->encode_->append1( $nFieldCount );
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			// <Field name="" score=""/>
+			$field = $requestCollection->getRankingField( $i );
+			$nScore = $requestCollection->getRankingScore( $i );
+
+			$this->encode_->appendString( $field );
+			$this->encode_->append4( $nScore );
+		}
+
+		// <RankRange min="" max=""/>
+		if( $requestCollection->hasRankRange() == true )
+		{
+			$this->encode_->append1( 1 );
+
+			$nMinRank = $requestCollection->getMinRank();
+			$nMaxRank = $requestCollection->getMaxRank();
+
+			$this->encode_->append4( $nMinRank );
+			$this->encode_->append4( $nMaxRank );
+		}
+		else
+		{
+			$this->encode_->append1( 0 );
+		}
+	}
+
+	function appendDuplicateDetectionElement( &$requestCollection )
+	{
+		$duplicateDetectionCriterionField =& $requestCollection->getduplicateDetectionCriterionField();
+		$nFieldCount = $duplicateDetectionCriterionField->getCount();
+
+		// <DuplicateDetection check=""/>
+		$this->encode_->append1( $requestCollection->getCheckDuplicate() );
+		$this->encode_->append1( $nFieldCount );
+
+		// <DEDUP SORTBASE FIELD>
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$field = $duplicateDetectionCriterionField->get( $i );
+			$order = $duplicateDetectionCriterionField->getOrder( $i );
+
+			$this->encode_->appendString( $field );
+			$this->encode_->append1( $order ); // 0 : ASC, 1 : DESC
+		}
+	}
+
+    function appendGeoDistanceElement( &$requestCollection )
+    {
+        $latField = $requestCollection->getLatitudeField();
+        $longField = $requestCollection->getLongitudeField();
+        $latitude = $requestCollection->getLatitude();
+        $longitude = $requestCollection->getLongitude();
+        $distance = $requestCollection->getDistanceLimit();
+
+        if( $latField == null || $longField == null )
+        {
+            $this->encode_->append1( 0 );
+        }
+        else
+        {
+            $this->encode_->append1( 1 );
+
+            $this->encode_->appendString( $latField );
+            $this->encode_->appendString( $latitude );
+
+            $this->encode_->appendString( $longField );
+            $this->encode_->appendString( $longitude );
+
+            $this->encode_->append4( $distance );
+        }
+	}
+
+
+
+	// <Uid>1:sc1</Uid>
+	function appendUidElement( &$requestCollection )
+	{
+		if( $requestCollection->getUidCount() > 0 )
+		{
+			$this->encode_->append4( 1 ); // uid count
+
+			$nUid = $requestCollection->getUidByIndex( 0 );
+			$searcherId = $requestCollection->getSearcherIdByIndex( 0 );
+
+			$this->encode_->append4( $nUid );
+			$this->encode_->appendString( $searcherId );
+		}
+		else
+		{
+			$this->encode_->append4( 0 );
+		}
+	}
+
+	// <Uids>1:sc1,2:sc1,3:sc1,...998:sc2,999:sc3</Uids>
+	function appendUidsElement( &$requestCollection )
+	{
+		$nUidCount = $requestCollection->getUidCount();
+
+		$this->encode_->append4( $nUidCount );
+
+		// <Uids>
+		for( $i = 0; $i < $nUidCount; $i++ )
+		{
+			$this->encode_->append4( $requestCollection->getUidByIndex( $i ) );
+			$this->encode_->appendString( $requestCollection->getSearcherIdByIndex( $i ) );
+		}
+	}
+}
+
+?>
+<?php
+
+class MorphemeAnalysisResult
+{
+	var $fields_ = array();
+	var $values_ = array();
+	var $nFieldCount_;
+
+	/*
+	 * Constructor
+	 */
+	function MorphemeAnalysisResult()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nFieldCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function add( $field, $morphemeResult )
+	{
+		if( $field == null ||
+			is_null( $morphemeResult ) )
+			return -1;
+
+		$this->fields_[ $this->nFieldCount_ ] = $field;
+		$this->values_[ $this->nFieldCount_++ ] = $morphemeResult;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function get( $field )
+	{
+		for( $i = 0; $i < $this->nFieldCount_; $i++ )
+		{
+			if( strcmp( $this->fields_[ $i ], $field ) == 0 )
+				return $this->values_[ $i ];
+		}
+
+		return null;
+	}
+}
+
+?>
+<?php
+
+class Document
+{
+	var $nUid_;
+	var $nRank_;
+	var $strDate_;
+	var $nWeight_;
+
+	var $fields_;
+	var $values_;
+	var $nFieldCount_;
+
+	// Duplicate Detection
+	var $nDuplicateDocumentCount_;
+
+	// CollectionId
+	var $collectionId_;
+	// SearcherId
+	var $searcherId_;
+
+	/*
+	 * Constructor
+	 */
+	function Document()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nUid_ = 0;
+		$this->nRank_ = 0;
+		$this->strDate_ = null;
+		$this->nWeight_ = 0;
+
+		$this->nFieldCount_ = 0;
+
+		$this->nDuplicateDocumentCount_ = 0;
+		$this->searcherId_ = null;
+	}
+
+	/*
+	 *
+	 */
+	function setBasicProperties( $nUid, $nRank, $strDate, $nWeight )
+	{
+		$this->nUid_ = $nUid;
+		$this->nRank_ = $nRank;
+		$this->strDate_ = $strDate;
+		$this->nWeight_ = $nWeight;
+	}
+
+	/*
+	 *
+	 */
+	function getUid()
+	{
+		return $this->nUid_;
+	}
+
+	/*
+	 *
+	 */
+	function getRank()
+	{
+		return $this->nRank_;
+	}
+
+	/*
+	 *
+	 */
+	function getDate()
+	{
+		return $this->strDate_;
+	}
+
+	/*
+	 *
+	 */
+	function getWeight()
+	{
+		return $this->nWeight_;
+	}
+
+	/*
+	 *
+	 */
+	function addFieldValue( $field, $value )
+	{
+		$bFound = false;
+
+		if( is_null( $field ) ||
+			is_null( $value ) )
+			return -1;
+
+		$this->fields_[ $this->nFieldCount_ ] = $field;
+		$this->values_[ $this->nFieldCount_++ ] = $value;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function getFieldValue( $field )
+	{
+		for( $i = 0; $i < $this->nFieldCount_; $i++ )
+		{
+			if( strcmp( $this->fields_[ $i ], $field ) == 0 ) // found
+				return $this->values_[ $i ];
+		}
+
+		return null;
+	}
+
+	/*
+	 *
+	 */
+	function setDuplicateDocumentCount( $nCount ) { $this->nDuplicateDocumentCount_ = $nCount; }
+	function getDuplicateDocumentCount() { return $this->nDuplicateDocumentCount_; }
+
+	/*
+	 *
+	 */
+	function setCollectionId( $collectionId ) { $this->collectionId_ = $collectionId; }
+	function getCollectionId() { return $this->collectionId_; }
+	function setSearcherId( $searcherId ) { $this->searcherId_ = $searcherId; }
+	function getSearcherId() { return $this->searcherId_; }
+}
+
+?>
+<?php
+
+class DocumentSet
+{
+	var $documents_ = array();
+	var $nDocumentCount_;
+	var $nTotalDocumentCount_;
+
+	/*
+	 * Constructor
+	 */
+	function DocumentSet()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nDocumentCount_ = 0;
+		$this->nTotalDocumentCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function createDocuments( $nDocumentCount, $nTotalDocumentCount )
+	{
+		if( $nDocumentCount < 0 ||
+			$nTotalDocumentCount < 0 )
+			return -1;
+
+		if( $nDocumentCount > 0 )
+		{
+			for( $i = 0; $i < $nDocumentCount; $i++ )
+				if( ( $this->documents_[ $i ] = new Document() ) == null )
+					return -2;
+		}
+
+		$this->nDocumentCount_ = $nDocumentCount;
+		$this->nTotalDocumentCount_ = $nTotalDocumentCount;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function &getDocument( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nDocumentCount_ )
+			return null;
+
+		return $this->documents_[ $nIndex ];
+	}
+
+	/*
+	 *
+	 */
+	function getDocumentCount()
+	{
+		return $this->nDocumentCount_;
+	}
+
+	/*
+	 *
+	 */
+	function getTotalDocumentCount()
+	{
+		return $this->nTotalDocumentCount_;
+	}
+
+	/*
+	 *
+	 */
+	function getDocumentIndex( $nUid )
+	{
+		$i = 0;
+
+		for( $i = 0; $i < $this->nDocumentCount_; $i++ )
+		{
+			$document =& $this->documents_[ $i ];
+			if( $document->getUid() == $nUid ) // found
+			{
+				return $i;
+			}
+		}
+
+		return -1; // not found
+	}
+}
+
+?>
+<?php
+
+class GroupResult
+{
+	var $groups_ = array();
+	var $nGroupCount_;
+	var $nTotalGroupCount_;
+	var $nTotalDocumentCount_;
+
+	/*
+	 * Constructor
+	 */
+	function GroupResult()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nGroupCount_ = 0;
+		$this->nTotalGroupCount_ = 0;
+		$this->nTotalDocumentCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function createGroups( $nGroupCount, $nTotalGroupCount, $nTotalDocumentCount )
+	{
+		for( $i = 0; $i < $nGroupCount; $i++ )
+		{
+			if( ( $this->groups_[ $i ] = new DocumentSet() ) == null )
+				return -1;
+		}
+
+		$this->nGroupCount_ = $nGroupCount;
+		$this->nTotalGroupCount_ = $nTotalGroupCount;
+		$this->nTotalDocumentCount_ = $nTotalDocumentCount;
+
+		return 0;
+	}
+
+	function &getDocumentSet( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nGroupCount_ )
+			return null;
+
+		return $this->groups_[ $nIndex ];
+	}
+
+	/*
+	 *
+	 */
+	function getGroupCount()
+	{
+		return $this->nGroupCount_;
+	}
+
+	/*
+	 *
+	 */
+	function getTotalGroupCount()
+	{
+		return $this->nTotalGroupCount_;
+	}
+
+	/*
+	 *
+	 */
+	function getDocumentCount()
+	{
+		$nCount = 0;
+		
+		for( $i = 0; $i < $this->nGroupCount_; $i++ )
+		{
+			$documentSet =& $this->groups_[ $i ];
+			$nCount += $documentSet->getDocumentCount();
+		}
+
+		return $nCount;
+
+	}
+
+	/*
+	 *
+	 */
+	function getTotalDocumentCount()
+	{
+		return $this->nTotalDocumentCount_;
+	}
+}
+
+?>
+<?php
+
+class MultiGroupResult
+{
+	var $fields_ = array();
+	var $values_ = array();
+	var $nFieldCount_;
+
+	/*
+	 * Constructor
+	 */
+	function MultiGroupResult()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		unset( $this->fields_ );
+		unset( $this->values_ );
+		$this->nFieldCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function addFieldValue( $field, $value )
+	{
+		if( $field == null ||
+			is_null( $value ) )
+			return -1;
+
+		$this->fields_[ $this->nFieldCount_ ] = $field;
+		$this->values_[ $this->nFieldCount_++ ] = $value;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function getFieldValue( $field )
+	{
+		for( $i = 0; $i < $this->nFieldCount_; $i++ )
+		{
+			if( strcmp( $this->fields_[ $i ], $field ) == 0 ) // found
+				return $this->values_ [ $i ];
+		}
+
+		return null;
+	}
+}
+
+?>
+<?php
+
+class ResultCategory
+{
+	var $cname_;
+	var $count_;
+
+	function ResultCategory()
+	{
+		$this->cname_ = null;
+		$this->coutn_ = 0;
+	}
+}
+
+class ResultCategoryGroupPerDepth
+{
+	var $depth_;
+	var $categoryCount_;
+	var $resultCategory_;
+
+	function ResultCategoryGroupPerDepth()
+	{
+		$this->depth_ = 0;
+		$this->categoryCount_ = 0;
+		$this->resultCategoryList_ = null;
+	}
+}
+
+class ResultCategoryGroupField
+{
+	var $fieldName_;
+	var $depthCount_;
+	var $depthDataList_ = array();
+
+	function ResultCategoryGroupField()
+	{
+		$this->fieldName	= null;
+		$this->depthCount_	= 0;
+
+		for( $i = 0; $i < MAX_CATEGORY_DEPTH + 1; $i++ )
+		{
+			$this->depthDataList_[$i] = new ResultCategoryGroupPerDepth();
+		}
+	}
+}
+
+class CategoryGroupResult
+{
+	var $fieldCount_;
+	var $resultCategoryGroupField_ = array();
+
+	function CategoryGroupResult()
+	{
+		$this->fieldCount_ = 0;
+		for( $i = 0; $i < MAX_CATEGORYGROUPBY_FIELD_NUM; $i++ )
+		{
+			$this->resultCategoryGroupField_[$i] = new ResultCategoryGroupField();
+		}
+	}
+
+	function allocResultCategory( $fieldName, $depth, $categoryCount )
+	{
+		$fieldIdx = $this->getFieldIndex( $fieldName );
+		if( $fieldIdx < 0 )
+		{
+			$fieldIdx = $this->fieldCount_;
+			$this->fieldCount_++;
+		}
+
+		// set field
+		if( $this->resultCategoryGroupField_[$fieldIdx]->fieldName_ == null )
+		{
+			$this->resultCategoryGroupField_[$fieldIdx]->fieldName_ = $fieldName;
+		}
+
+		// set depth
+		if( $this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->resultCategoryList_ == null )
+		{
+			for( $i = 0; $i < $categoryCount; $i++ )
+			{
+				$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->resultCategoryList_[$i]
+					= new ResultCategory();
+			}
+		}
+
+		return 0;
+	}
+
+	function addResult( $fieldIdx, $depth, $categoryName, $docCount )
+	{
+		// set depth
+		if( $this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->depth_ == 0 )
+		{
+			$this->resultCategoryGroupField_[$fieldIdx]->depthCount_++;
+			$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->depth_ = $depth;
+		}
+
+		// set category
+		$categoryCount = 
+			$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->categoryCount_;
+
+		$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->categoryCount_++;
+
+		$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->resultCategoryList_[$categoryCount]->cname_
+			= $categoryName;
+		$this->resultCategoryGroupField_[$fieldIdx]->depthDataList_[$depth]->resultCategoryList_[$categoryCount]->count_
+			= $docCount;
+
+		return 0;
+	}
+
+	function getFieldIndex( $fieldName )
+	{
+		for( $i = 0; $i < $this->fieldCount_; $i++ )
+		{
+			if( strcmp( $fieldName, $this->resultCategoryGroupField_[$i]->fieldName_ ) == 0 )
+			{
+				return $i;
+			}
+		}
+		return -1;
+	}
+
+	function getField( $fieldName )
+	{
+		$fieldIdx = $this->getFieldIndex( $fieldName );
+		if( $fieldIdx < 0 )
+		{
+			return null;
+		}
+		else
+		{
+			return $this->resultCategoryGroupField_[$fieldIdx];
+		}
+	}
+
+	function getDepth( $fieldName, $depth )
+	{
+		$fieldContainer = null;
+		if( null == ($fieldContainer = $this->getField( $fieldName )) )
+		{
+			return null;
+		}
+
+		return $fieldContainer->depthDataList_[$depth];
+	}
+
+	function getCategory( $fieldName, $depth, $resultIndex )
+	{
+		$depthContainer = null;
+		if( null == ($depthContainer = $this->getDepth( $fieldName, $depth )) )
+		{
+			return null;
+		}
+		if( $depthContainer->categoryCount_ <= resultIndex )
+		{
+			return null;
+		}
+
+		return $depthContainer->resultCategoryList_[ $resultIndex ];
+	}
+
+
+}
+
+?>
+<?php
+
+class Property
+{
+	var $nMinValue_;
+	var $nMaxValue_;
+	var $nDocumentCount_;
+
+	/*
+	 * Constructor
+	 */
+	function Property()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nMinValue_ = 0;
+		$this->nMaxValue_ = 0;
+		$this->nDocumentCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function set( $nMinValue, $nMaxValue, $nDocumentCount )
+	{
+		$this->nMinValue_ = $nMinValue;
+		$this->nMaxValue_ = $nMaxValue;
+		$this->nDocumentCount_ = $nDocumentCount;
+	}
+
+	/*
+	 *
+	 */
+	function getMinValue()
+	{
+		return $this->nMinValue_;
+	}
+
+	/*
+	 *
+	 */
+	function getMaxValue()
+	{
+		return $this->nMaxValue_;
+	}
+
+	/*
+	 *
+	 */
+	function getDocumentCount()
+	{
+		return $this->nDocumentCount_;
+	}
+}
+
+?>
+<?php
+
+class PropertyField
+{
+	var $properties_ = array();
+	var $nPropertyCount_;
+	var $nMinValue_;
+	var $nMaxValue_;
+
+	/*
+	 * Constructor
+	 */
+	function PropertyField()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nPropertyCount_ = 0;
+
+		$this->nMinValue_ = 0;
+		$this->nMaxValue_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function set( $nMinValue, $nMaxValue )
+	{
+		$this->nMinValue_ = $nMinValue;
+		$this->nMaxValue_ = $nMaxValue;
+	}
+
+	/*
+	 *
+	 */
+	function getPropertyCount()
+	{
+		return $this->nPropertyCount_;
+	}
+
+	/*
+	 *
+	 */
+	function getMinValue()
+	{
+		return $this->nMinValue_;
+	}
+
+	/*
+	 *
+	 */
+	function getMaxValue()
+	{
+		return $this->nMaxValue_;
+	}
+
+	/*
+	 *
+	 */
+	function createProperties( $nPropertyCount )
+	{
+		if( $nPropertyCount <= 0 )
+			return -1;
+	
+		for( $i = 0; $i < $nPropertyCount; $i++ )
+		{
+			if( ( $this->properties_[ $i ] = new Property() ) == null )
+				return -2;
+		}
+
+		$this->nPropertyCount_ = $nPropertyCount;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function &getProperty( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nPropertyCount_ )
+			return null;
+
+		return $this->properties_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class ResultCollection
+{
+	var $id_;
+	var $alias_;
+
+	var $morphemeAnalysisResult_;
+	var $groupResult_;
+	var $documentSet_;
+	var $multiGroupResult_;
+	var $categoryGroupResult_;
+	var $propertyField_;
+
+	/*
+	 * Constructor
+	 */
+	function ResultCollection()
+	{
+		$this->morphemeAnalysisResult_ = new MorphemeAnalysisResult();
+		$this->groupResult_ = new GroupResult();
+		$this->documentSet_ = new DocumentSet();
+		$this->multiGroupResult_ = new MultiGroupResult();
+		$this->categoryGroupResult_ = new CategoryGroupResult();
+		$this->propertyField_ = new PropertyField();
+
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->id_ = null;
+		$this->alias_ = null;
+	}
+
+	/*
+	 *
+	 */
+	function setId( $id ) { $this->id_ = $id; }
+
+	/*
+	 *
+	 */
+	function getId() { return $this->id_; }
+
+	/*
+	 *
+	 */
+	function setAlias( $alias ) { $this->alias_ = $alias; }
+
+	/*
+	 *
+	 */
+	function getAlias() { return $this->alias_; }
+
+	/*
+	 *
+	 */
+	function &getMorphemeAnalysisResult()
+	{
+		return $this->morphemeAnalysisResult_;
+	}
+
+	/*
+	 *
+	 */
+	function &getGroupResult()
+	{
+		return $this->groupResult_;
+	}
+
+	/*
+	 *
+	 */
+	function &getDocumentSet()
+	{
+		return $this->documentSet_;
+	}
+
+	/*
+	 *
+	 */
+	function &getMultiGroupResult()
+	{
+		return $this->multiGroupResult_;
+	}
+
+	/*
+	 *
+	 */
+	function &getCategoryGroupResult()
+	{
+		return $this->categoryGroupResult_;
+	}
+
+	/*
+	 *
+	 */
+	function &getPropertyField()
+	{
+		return $this->propertyField_;
+	}
+}
+
+?>
+<?php
+
+class QuerySet
+{
+	var $querys_ = array();
+	var $nCount_;
+
+	/*
+	 * Constructor
+	 */
+	function QuerySet()
+	{
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nCount_ = 0;
+	}
+
+	/*
+	 *
+	 */
+	function add( $query )
+	{
+		if( $query == null )
+			return -1;
+
+		$this->querys_[ $this->nCount_++ ] = $query;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function getCount()
+	{
+		return $this->nCount_;
+	}
+
+	/*
+	 *
+	 */
+	function get( $nIndex )
+	{
+		if( $nIndex < 0 ||
+			$nIndex >= $this->nCount_ )
+			return null;
+
+		return $this->querys_[ $nIndex ];
+	}
+}
+
+?>
+<?php
+
+class Result
+{
+	var $nCollectionCount_;
+	var $resultCollections_ = array();
+
+	var $recentQuerySet_;
+	var $suggestedQuery_;
+    var $body_;
+	var $decode_;
+
+	/*
+	 * Constructor
+	 */
+	function Result()
+	{
+		$this->recentQuerySet_ = new QuerySet();
+		$this->decode_ = new Decode();
+
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->nCollectionCount_ = 0;
+		$this->suggestedQuery_ = null;
+        $this->body_ = null;
+
+		$this->recentQuerySet_->init();
+	}
+
+	/*
+	 *
+	 */
+	function &getResultCollectionByName( $collection )
+	{
+		$alias = null;
+		$id = null;
+
+		for( $i = 0; $i < $this->nCollectionCount_; $i++ )
+		{
+			$alias = $this->resultCollections_[ $i ]->getAlias();
+			$id = $this->resultCollections_[ $i ]->getId();
+
+			// if matches alias
+			if( $alias != null &&
+				strcmp( $alias, $collection ) == 0 ) // found
+				return $this->resultCollections_[ $i ];
+
+			// if alias is null & matches id
+            if( $alias == null &&
+                $id != null &&
+				strcmp( $id, $collection ) == 0 ) // found
+				return $this->resultCollections_[ $i ];
+		}
+
+		return null;
+	}
+
+	/*
+	 *
+	 */
+	function &getRecentQuerySet()
+	{
+		return $this->recentQuerySet_;
+	}
+
+	/*
+	 *
+	 */
+	function &getSuggestedQuery()
+	{
+		return $this->suggestedQuery_;
+	}
+	
+
+	// SEARCH_QUERY_RESULT
+	function parseSearchQueryResult( &$pBuffer,
+			$charset,
+			&$mergeInfoTable,
+			&$errorManager )
+	{
+		$nRawDataSize = 0;
+		$nCollectionCount = 0;
+		$bByteFlag = 0;
+		$ret = 0;
+		$i = 0;
+
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+		// <SuggestedQuery>
+		if( ( $ret = $this->extractSuggestedQueryElement() ) < 0 )
+			return -3;
+
+		// <MergeCollection>
+		if( ( $ret = $this->extractMergeCollectionElement( $mergeInfoTable ) ) < 0 )
+			return -4;
+
+		// <RawDataInfo>
+		$nCollectionCount = $this->decode_->read1();
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			$nRawDataSize = $this->decode_->read4();
+		}
+	
+		// <Collection>
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			if( ( $resultCollection =& $this->extractCollectionElement() ) == null )
+			{
+				return -5;
+			}
+
+			// <Error>
+			if( ( $ret = $this->extractErrorElement( $resultCollection, $errorManager ) ) < 0 )
+			{
+				if( $ret == -2 )
+					continue;
+
+				return $ret;
+			}
+
+			// <MorphemeAnalysis>
+			if( ( $ret = $this->extractMorphemeAnalysisElement( $resultCollection ) ) < 0 )
+			{
+				return $ret;
+			}
+
+			// <PropertyGroup>
+			if( ( $ret = $this->extractPropertyGroupElement( $resultCollection ) ) < 0 )
+			{
+				return $ret;
+			}
+
+			// <MultiGroup>
+			if( ( $ret = $this->extractMultiGroupElement( $resultCollection ) ) < 0 )
+			{
+				return ret;
+			}
+
+			// <CategoryGroup>
+			if( ( $ret = $this->extractCategoryGroupElement( $resultCollection ) ) < 0 )
+			{
+				return ret;
+			}
+
+			$bByteFlag = $this->decode_->read1();
+
+			if( $bByteFlag == 1 )
+			{
+				// <GroupResult>
+				if( ( $ret = $this->extractGroupResultElement( $resultCollection, $mergeInfoTable ) ) < 0 )
+				{
+					return $ret;
+				}
+			}
+			else
+			{
+				// <DocumentSet>
+				if( ( $ret = $this->extractDocumentSetElement( $resultCollection, $mergeInfoTable ) ) < 0 )
+				{
+					return $ret;
+				}
+			}
+		}
+
+		return $this->decode_->getSize();
+	}
+
+	// UID_RESULT
+	function parseUidResult( &$pBuffer,
+			$charset,
+			&$mergeInfoTable,
+			&$errorManager )
+	{
+		$nCollectionCount = 0;
+		$bByteFlag = 0;
+		$nRawDataSize = 0;
+		$i = 0;
+
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+		// <RawDataInfo>
+		$nCollectionCount = $this->decode_->read1();
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			$nRawDataSize = $this->decode_->read4();
+		}
+
+		// <Collection>
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			if( ( $resultCollection =& $this->extractCollectionElement() ) == null )
+			{
+				return -1;
+			}
+
+			// <Error>
+			if( ( $ret = $this->extractErrorElement( $resultCollection, $errorManager ) ) < 0 )
+			{
+				if( $ret == -2 )
+					continue;
+
+				return $ret;
+			}
+
+			// <MorphemeAnalysis>
+			if( ( $ret = $this->extractMorphemeAnalysisElement( $resultCollection ) ) < 0 )
+			{
+				return $ret;
+			}
+
+			$bByteFlag = $this->decode_->read1();
+			// <DocumentSet>
+			if( ( $ret = $this->extractDocumentSetElement( $resultCollection, $mergeInfoTable ) ) < 0 )
+			{
+				return $ret;
+			}
+		}
+
+		return $this->decode_->getSize();
+	}
+
+	// MORPHEME_ANALYSIS_RESULT
+	function parseMorphemeAnalysisResult( &$pBuffer,
+			$charset,
+			&$errorManager )
+	{
+		$nCollectionCount = 0;
+		$bByteFlag = 0;
+		$nRawDataSize = 0;
+		$i = 0;
+
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+		$nCollectionCount = $this->decode_->read1();
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			$nRawDataSize = $this->decode_->read4();
+		}
+
+		// <Collection>
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			if( ( $resultCollection =& $this->extractCollectionElement() ) == null )
+			{
+				return -1;
+			}
+
+			// <Error>
+			if( ( $ret = $this->extractErrorElement( $resultCollection, $errorManager ) ) < 0 )
+			{
+				if( $ret == -2 )
+					continue;
+
+				return $ret;
+			}
+
+			// <MorphemeAnalysis>
+			if( ( $ret = $this->extractMorphemeAnalysisElement( $resultCollection ) ) < 0 )
+			{
+				return $ret;
+			}
+		}
+
+		return $this->decode_->getSize();
+	}
+
+	/* RECENT_QUERYLIST_RESULT */ 
+	function parseRecentQueryListResult( &$pBuffer,
+			$charset,
+			&$errorManager )
+	{
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+		if( ( $ret = $this->extractQuerySetElement() ) < 0 )
+		{
+			return $ret;
+		}
+
+		return $this->decode_->getSize();
+	}
+
+	// DUPLICATE_DOCUMENTS_RESULT
+	function parseDuplicateDocumentsResult( &$pBuffer,
+			$charset,
+			&$mergeInfoTable,
+			&$errorManager )
+	{
+		$nCollectionCount = 0;
+		$bByteFlag = 0;
+		$nRawDataSize = 0;
+		$i = 0;
+
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+
+		$nCollectionCount = $this->decode_->read1();
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			$nRawDataSize = $this->decode_->read4();
+		}
+
+		// <Collection>
+		for( $i = 0; $i < $nCollectionCount; $i++ )
+		{
+			if( ( $resultCollection =& $this->extractCollectionElement() ) == null )
+			{
+				return -1;
+			}
+
+			// <Error>
+			if( ( $ret = $this->extractErrorElement( $resultCollection, $errorManager ) ) < 0 )
+			{
+				if( $ret == -2 )
+					continue;
+
+				return $ret;
+			}
+
+			// <MorphemeAnalysis>
+			if( ( $ret = $this->extractMorphemeAnalysisElement( $resultCollection ) ) < 0 )
+			{
+				return $ret;
+			}
+
+			$bByteFlag = $this->decode_->read1();
+			// <DocumentSet>
+			if( ( $ret = $this->extractDocumentSetElement( $resultCollection, $mergeInfoTable ) ) < 0 )
+			{
+				return $ret;
+			}
+		}
+
+		return $this->decode_->getSize();
+	}
+
+	/* XML/JSON */ 
+	function parseStringResult( &$pBuffer,
+			$charset,
+			&$errorManager )
+	{
+		if( $pBuffer == null )
+			return 0;
+
+		$this->decode_->set( $pBuffer );
+		$this->decode_->setCharSet( $charset );
+
+		$this->body_ = $this->decode_->readString();
+
+		return $this->decode_->getSize();
+	}
+	/*
+	 *
+	 */
+	function addResultCollection( $collection, $alias )
+	{
+		if( $this->nCollectionCount_ >= MAX_COLLECTION_NUM )
+			return;
+
+		if( ( $this->resultCollections_[ $this->nCollectionCount_ ] = new ResultCollection() ) != null )
+		{
+			$this->resultCollections_[ $this->nCollectionCount_ ]->setId( $collection );
+			if( $alias != null )
+				$this->resultCollections_[ $this->nCollectionCount_ ]->setAlias( $alias );
+
+			$this->nCollectionCount_++;
+		}
+	}
+
+	/*
+	 *
+	 */
+	function &extractCollectionElement()
+	{
+		$collection = null;
+		$alias = null;
+		$bByteFlag = 0;
+
+		// 'id' attribute
+		$collection = $this->decode_->readString();
+
+		$bByteFlag = $this->decode_->read1();
+		if( $bByteFlag == 1 )
+		{
+			// 'alias' attribute
+			$alias = $this->decode_->readString();
+		}
+
+		// for Restricted Word Found
+		$bByteFlag = $this->decode_->read1();
+
+		$this->addResultCollection( $collection, $alias );
+		$resultCollection =& $this->getResultCollectionByName( $alias != null ? $alias : $collection );
+
+		return $resultCollection;
+	}
+
+	/*
+	 *
+	 */
+	function extractErrorElement( &$resultCollection, &$errorManager )
+	{
+		$nErr = 0;
+		$msg = null;
+
+		// code
+		$nErr = $this->decode_->read4();
+
+		if( $nErr != 0 )
+		{
+			// error msg
+			$msg = $this->decode_->readString();
+			$errorManager->setCollectionError( $resultCollection->getId(), $nErr, $msg );
+
+			return -2;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractMorphemeAnalysisElement( &$resultCollection )
+	{
+		$nFieldCount = 0;
+		$i = 0;
+		$morphemeAnalysisResult =& $resultCollection->getMorphemeAnalysisResult();
+
+		$nFieldCount = $this->decode_->read1();
+
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$fieldName = null;
+			$value = null;
+
+			// 'name' attribute
+			$fieldName = $this->decode_->readString();
+
+			// get element's text
+			$value = $this->decode_->readString();
+
+			if( $morphemeAnalysisResult->add( $fieldName, $value ) < 0 )
+			{
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractGroupResultElement( &$resultCollection, &$mergeInfoTable )
+	{
+		$nCount = 0;
+		$nTotalCount = 0;
+		$nDocumentCount = 0;
+		$nGroupIndex = 0;
+		$nRet = 0;
+		$i = 0;
+
+		$groupResult =& $resultCollection->getGroupResult();
+
+		// 'count' attribute
+		$nCount = $this->decode_->read4();
+
+		// 'totalcount' attribute
+		$nTotalCount = $this->decode_->read4();
+
+		// 'documentcount' attribute
+		$nDocumentCount = $this->decode_->read4();
+
+		// create groups
+		if( ( $nRet = $groupResult->createGroups( $nCount, $nTotalCount, $nDocumentCount ) ) < 0 )
+		{
+			return -1;
+		}
+
+		for( $i = 0; $i < $nCount; $i++ )
+		{
+			$documentSet =& $groupResult->getDocumentSet( $nGroupIndex++ ); 
+
+			if( ( $nRet = $this->extractDocumentSet( $resultCollection->getId(), $documentSet, $mergeInfoTable ) ) < 0 )
+			{
+				return -2;
+			}
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractDocumentSet( $collection,
+			&$documentSet,
+			&$mergeInfoTable )
+	{
+		$nCount = 0;
+		$nTotalCount = 0;
+		$nDocumentIndex = 0;
+		$nRet = 0;
+		$i = 0;
+
+		// 'count' attribute
+		$nCount = $this->decode_->read4();
+
+		// 'totalcount' attribute
+		$nTotalCount = $this->decode_->read4();
+
+		// create documents
+		if( ( $nRet = $documentSet->createDocuments( $nCount, $nTotalCount ) ) < 0 )
+		{
+			return -1;
+		}
+
+		for( $i = 0; $i < $nCount; $i++ )
+		{
+			// <Document>
+			$document =& $documentSet->getDocument( $nDocumentIndex++ ); 
+
+			if( ( $nRet = $this->extractDocumentElement( $collection, $document, $mergeInfoTable ) ) < 0 )
+			{
+				return -2;
+			}
+		}
+		
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractDocumentElement( $collection,
+			&$document,
+			&$mergeInfoTable )
+	{
+		$value = null;
+		$nUid = 0;
+		$nRank = 0;
+		$strDate = null;
+		$nWeight = 0;
+		$collectionId = null;
+		$searcherId = null;
+		$nFieldCount = 0;
+		$i = 0;
+		$nRet = 0;
+
+		// 'uid' attribute
+		$nUid = $this->decode_->read4();
+		
+		// 'rank' attribute
+		$nRank = $this->decode_->read4();
+
+		// 'weight' attribute
+		$nWeight = $this->decode_->read4();
+
+		// 'date' attribute
+		$strDate = $this->decode_->readString();
+
+		// 'collectionid' attribte
+		$collectionId = $this->decode_->readString();
+
+		// 'searcherid' attribute
+		$searcherId = $this->decode_->readString();
+
+		// set uid, rank, date, weight properties
+		$document->setCollectionId( $collectionId );
+		$document->setSearcherId( $searcherId );
+		$document->setBasicProperties( $nUid, $nRank, $strDate, $nWeight );
+
+		// <DuplicateDocuments>
+		$this->extractDuplicateDocumentsElement( $document );
+
+		$nFieldCount = $this->decode_->read2();
+		// <Field>
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$fieldName = null;
+
+			// 'name' attribute
+			$fieldName = $this->decode_->readString();
+
+			// get element's text 
+			$value = $this->decode_->readString();
+
+			// find merge document field name from MergeInfoTable
+			if( $collectionId != null )
+			{
+				$mergeField = null;
+
+				if( ( $mergeField = $mergeInfoTable->getMergeDocumentField( $collection, $collectionId, $fieldName ) ) != null ) // found
+					$fieldName = $mergeField;
+			}
+
+			if( ( $nRet = $document->addFieldValue( $fieldName, $value ) ) < 0 )
+			{
+				return -1;
+			}
+		}
+		
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractDocumentSetElement( &$resultCollection, &$mergeInfoTable )
+	{
+		$nRet = 0;
+
+		$documentSet =& $resultCollection->getDocumentSet();
+
+		if( ( $nRet = $this->extractDocumentSet( $resultCollection->getId(), $documentSet, $mergeInfoTable ) ) < 0 )
+		{
+			return -2;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractMultiGroupElement( &$resultCollection )
+	{
+		$nRet = 0;
+		$nFieldCount = 0;
+		$i = 0;
+
+		$multiGroupResult =& $resultCollection->getMultiGroupResult();
+
+		$nFieldCount = $this->decode_->read1();
+
+		for( $i = 0; $i < $nFieldCount; $i++ )
+		{
+			$fieldName = null;
+			$value = null;
+
+			// 'name' attribute
+			$fieldName = $this->decode_->readString();
+
+			// get element's text
+			$value = $this->decode_->readString();
+
+			if( ( $nRet = $multiGroupResult->addFieldValue( $fieldName, $value ) ) < 0 )
+			{
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractCategoryGroupElement( &$resultCollection )
+	{
+		$categoryGroupResult =& $resultCollection->getCategoryGroupResult();
+
+		$fieldCount = $this->decode_->read4();
+		for( $i = 0; $i < $fieldCount; $i++ )
+		{
+			$fieldName = $this->decode_->readString();
+			$depthCount = $this->decode_->read4();
+			for( $j = 0; $j < $depthCount; $j++ )
+			{
+				$depth = $this->decode_->read4();
+				$categoryCount = $this->decode_->read4();
+				$categoryGroupResult->allocResultCategory( $fieldName, $depth, $categoryCount );
+				for( $k = 0; $k < $categoryCount; $k++ )
+				{
+					$categoryName = $this->decode_->readString();
+					$docCount = $this->decode_->read4();
+					$categoryGroupResult->addResult( $i, $depth, $categoryName, $docCount );
+
+					////debug
+					//echo "fieldName: " . $fieldName . "\n";
+					//echo "depthCount: " . $depthCount . "\n";
+					//echo "categoryCount: " . $categoryCount. "\n";
+					//echo "cname: " . $categoryName. "\n";
+					//echo "docCount: " . $docCount. "\n\n";
+				}
+
+			}
+
+		}
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractPropertyGroupElement( &$resultCollection )
+	{
+		$nMin = 0;
+		$nMax = 0;
+		$nPropertyCount = 0;
+		$nPropertyIndex = 0;
+		$nRet = 0;
+		$i = 0;
+		$bByteFlag = 0;
+
+		$bByteFlag = $this->decode_->read1();
+		if( $bByteFlag == 0 )
+			return 0;
+
+		$propertyField =& $resultCollection->getPropertyField();
+
+		// 'min' attribute
+		$nMin = $this->decode_->read4();
+
+		// 'max' attribute
+		$nMax = $this->decode_->read4();
+
+		// 'count' attribute
+		$nPropertyCount = $this->decode_->read4();
+
+		// set min, max value
+		$propertyField->set( $nMin, $nMax );
+
+		// create Property
+		if( ( $nRet = $propertyField->createProperties( $nPropertyCount ) ) < 0 )
+		{
+			return -1;
+		}
+
+		// <Property>
+		for( $i = 0; $i < $nPropertyCount; $i++ )
+		{
+			$nDocumentCount = 0;
+
+			if( ( $property =& $propertyField->getProperty( $nPropertyIndex++ ) ) == null )
+			{
+				return -2;
+			}
+
+			// 'min' attribute
+			$nMin = $this->decode_->read4();
+
+			// 'max' attribute
+			$nMax = $this->decode_->read4();
+
+			// 'count' attribute
+			$nDocumentCount = $this->decode_->read4();
+
+			// set min, max, document count
+			$property->set( $nMin, $nMax, $nDocumentCount );
+		}
+
+		return 0; // Success
+	}
+
+	/*
+	 *
+	 */
+	function extractQuerySetElement()
+	{
+		$value = null;
+		$nCount = 0;
+		$i = 0;
+
+		// <QuerySet>
+		$nCount = $this->decode_->read4();
+
+		for( $i = 0; $i < $nCount; $i++ )
+		{
+			// get element's text
+			$value = $this->decode_->readString();
+
+			$this->recentQuerySet_->add( $value );
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractSuggestedQueryElement()
+	{
+		$bByteFlag = 0;
+		$value = null;
+
+		$bByteFlag = $this->decode_->read1();
+
+		if( $bByteFlag == 1 )
+		{
+			// get element's text
+			$value = $this->decode_->readString();
+			$this->suggestedQuery_ = $value;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractDuplicateDocumentsElement( &$document )
+	{
+		$nCount = 0;
+
+		// 'count' attribute
+		$nCount = $this->decode_->read4();
+
+		$document->setDuplicateDocumentCount( $nCount );
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function extractMergeCollectionElement( &$mergeInfoTable )
+	{
+		$nMergeCollectionCount = 0;
+		$i = 0;
+		$j = 0;
+
+		// <MergeCollection>
+		$nMergeCollectionCount = $this->decode_->read1();
+
+		for( $i = 0; $i < $nMergeCollectionCount; $i++ )
+		{
+			$mergeCollectionId = null;
+			$nCollectionCount = 0;
+
+			// 'id' attribute
+			$mergeCollectionId = $this->decode_->readString();
+
+			$nCollectionCount = $this->decode_->read1();
+			// <Collection>
+			for( $j = 0; $j < $nCollectionCount; $j++ )
+			{
+				$collectionId = null;
+				$nResultTotalCount = 0;
+
+				// 'id' attribute
+				$collectionId = $this->decode_->readString();
+
+				// 'totalcount' attribute
+				$nResultTotalCount = $this->decode_->read4();
+
+				$mergeInfoTable->setResultTotalCountInMerge( $mergeCollectionId, $collectionId, $nResultTotalCount );
+			}
+		}
+
+		return 0;
+	}
+
+    /*
+     *
+     */
+    function getBody()
+    {
+        return $this->body_;
+    }
+}
+
+?>
+<?php
+
+class Search
+{
+	var $request_;
+	var $result_;
+	var $resultCollection_;
+
+	// socket
+	var $socket_;
+
+	// packet
+	var $pRequestBody_;
+	var $pResultBody_;
+
+	// charset
+	var $supportEncodings_  = array( "CP949","EUC-KR","UTF-8", "UTF8", "SHIFT-JIS", "EUC-JP", "GB2312", "BIG5", "ISO8859-15" );
+
+	// flags 
+	var $bCodepageReady_;
+	var $bRecvResultCalled_;
+
+	// mergeinfo table
+	var $mergeInfoTable_;
+
+	// error
+	var $msgStr_;
+	var $errorManager_;
+
+	/*
+	 * Constructor
+	 */
+	function Search()
+	{
+		$this->request_ = new Request();
+		$this->result_ = new Result();
+		$this->errorManager_ = new ErrorManager();
+
+		$this->mergeInfoTable_ = new MergeInfoTable();
+
+		$this->init();
+	}
+
+	/*
+	 *
+	 */
+	function init()
+	{
+		$this->resultCollection_ = null;
+
+		// socket
+		$this->socket_ = false;
+
+		// packet
+		$this->pRequestBody_ = null;
+		$this->pResultBody_ = null;
+
+		$this->msgStr_ = null;
+
+		$this->bCodepageReady_ = false;
+		$this->bRecvResultCalled_ = false;
+	}
+
+	/*
+	 *
+	 */
+	function w3ConnectServer( $host, $nPort, $nTimeout )
+	{
+		$apiName = "w3ConnectServer";
+
+		if( $this->checkStringArgv( $apiName, $host, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nPort, 1, 0, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nTimeout, 2, 0, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		// set timeout
+		$commonInfo =& $this->request_->getCommonInfo();
+		$commonInfo->setTimeout( $nTimeout );
+
+		$errno = 0;
+		$errstr = "";
+
+		/* create socket */
+		if( ( $this->socket_ = fsockopen( "tcp://$host", $nPort, $errno, $errstr, $nTimeout ) ) == false )
+		{
+			$this->setError( ERR_CONNECT_SERVER_FAILED, ERR_CONNECT_SERVER_FAILED_S, $apiName );
+		}
+
+		if( $this->errorManager_->getError() == ERR_CONNECT_SERVER_FAILED )
+		{
+			$this->errorManager_->clear();
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3CloseServer()
+	{
+		if( $this->socket_ != false )
+		{
+			fclose( $this->socket_ );
+			$this->socket_ = false;
+		}
+	}
+
+	/*
+	 *
+	 */
+	function w3SetCodePage( $charSet )
+	{
+		$apiName = "w3SetCodePage";
+
+		if( $this->checkStringArgv( $apiName, $charSet, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		for( $i = 0; $i < MAX_CHARSET_NUM; $i++ )
+		{
+			if( strcasecmp( $charSet, $this->supportEncodings_[ $i ] ) == 0 )
+			{
+				break;
+			}
+		}
+
+		if( $i >= MAX_CHARSET_NUM )
+		{
+			$this->setError_s( ERR_INVALID_CODEPAGE, ERR_INVALID_CODEPAGE_S, $apiName, $charSet );
+			return -1 * __LINE__;
+		}
+
+		$commonInfo =& $this->request_->getCommonInfo();
+		$commonInfo->setEncoding( $charSet );
+
+		$this->bCodepageReady_ = true;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetCommonQuery( $query, $bOrOperator )
+	{
+		$apiName = "w3SetCommonQuery";
+
+		if( $this->checkStringArgv( $apiName, $query, 0, false, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bOrOperator, 1, INT_FALSE, INT_TRUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		$commonInfo =& $this->request_->getCommonInfo();
+
+		$commonInfo->setQuery( $query );
+		$commonInfo->setOrOperator( $bOrOperator == 0 ? false : true );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetSessionInfo( $session1, $session2, $session3 )
+	{
+		$apiName = "w3SetSessionInfo";
+
+		if( $this->checkStringArgv( $apiName, $session1, 0, false, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $session2, 1, false, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $session3, 2, false, null ) < 0 )
+			return -1 * __LINE__;
+
+		$commonInfo =& $this->request_->getCommonInfo();
+		$commonInfo->setSessions( $session1, $session2, $session3 );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetQueryLog( $nLog )
+	{
+		$apiName = "w3SetQueryLog";
+
+		if( $this->checkIntArgv( $apiName, $nLog, 0, INT_FALSE, INT_TRUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		$commonInfo =& $this->request_->getCommonInfo();
+		$commonInfo->setQueryLog( $nLog );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetTraceLog( $nTimeout )
+	{
+		$apiName = "w3SetTraceLog";
+
+		if( $this->checkIntArgv( $apiName, $nTimeout, 0, 0, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		$commonInfo =& $this->request_->getCommonInfo();
+		$commonInfo->setTraceLogTimeout( $nTimeout );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetSpellCorrectionQuery( $query, $nUnder )
+	{
+		$apiName = "w3SetSpellCorrectionQuery";
+
+		if( $this->checkStringArgv( $apiName, $query, 0, false, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nUnder, 1, 0, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		$commonInfo =& $this->request_->getCommonInfo();
+
+		$commonInfo->setSpellCorrectionQuery( $query, $nUnder );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddCollection( $collection )
+	{
+		$apiName = "w3AddCollection";
+		$ret = 0;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $ret = $this->request_->addCollection( $collection ) ) < 0 )
+		{
+			if( $ret == -1 )
+			{
+				$this->setError_s( ERR_EXCEED_MAX_COLLECTION_NUM, ERR_EXCEED_MAX_COLLECTION_NUM_S,
+						$apiName, $collection );
+			}
+			else
+			{
+				$this->setError_s( ERR_MEMORY_ALLOC_FAILED, ERR_MEMORY_ALLOC_FAILED_S,
+						$apiName, $collection );
+			}
+
+			return -1 * __LINE__;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddAliasCollection( $alias, $collection )
+	{
+		$apiName = "w3AddAliasCollection";
+		$ret = 0;
+
+		if( $this->checkStringArgv( $apiName, $alias, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $ret = $this->request_->addAliasCollection( $alias, $collection ) ) < 0 )
+		{
+			if( $ret == -1 )
+			{
+				$this->setError_s( ERR_EXCEED_MAX_COLLECTION_NUM, ERR_EXCEED_MAX_COLLECTION_NUM_S,
+						$apiName, $alias );
+			}
+			else
+			{
+				$this->setError_s( ERR_MEMORY_ALLOC_FAILED, ERR_MEMORY_ALLOC_FAILED_S,
+						$apiName, $alias );
+			}
+
+			return -1 * __LINE__;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetPageInfo( $collection, $nStart, $nCount )
+	{
+		$apiName = "w3SetPageInfo";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nStart, 1, 0, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nCount, 2, 1, MAX_INT_VALUE, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+		{
+			return -1 * __LINE__;
+		}
+
+		$pageInfo =& $requestCollection->getPageInfo();
+		$pageInfo->set( $nStart, $nCount );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetQueryAnalyzer( $collection, $bLa, $bIgnorecase, $bOriginal, $bSynonym )
+	{
+		$apiName = "w3SetQueryAnalyzer";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bLa, 1, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bIgnorecase, 2, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bOriginal, 3, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bSynonym, 4, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$queryAnalyzer =& $requestCollection->getQueryAnalyzer();
+		$queryAnalyzer->set( $bLa == 0 ? false : true,
+				$bIgnorecase == 0 ? false : true,
+				$bOriginal == 0 ? false : true,
+				$bSynonym == 0 ? false : true );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetHighlight( $collection, $bHighlight, $bSnippet )
+	{
+		$apiName = "w3SetHighlight";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bHighlight, 1, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $bSnippet, 2, INT_FALSE, INT_TRUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$documentField =& $requestCollection->getDocumentField();
+
+		$documentField->set( $bHighlight == 0 ? false : true, $bSnippet == 0 ? false : true );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function addSortFieldImpl( $apiName, $collection, $field, $nOrder )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nOrder, 2, 0, 1, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$sortField =& $requestCollection->getSortField();
+		if( $sortField->getCount() >= MAX_SORT_FIELD_NUM )
+		{
+			$this->setError_cS( ERR_EXCEED_MAX_SORT_FIELD_NUM, ERR_EXCEED_MAX_SORT_FIELD_NUM_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		$sortField->add( $field );
+		$sortField->addOrder( $nOrder );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddSortField( $collection, $field, $nOrder )
+	{
+		$apiName = "w3AddSortField";
+
+		return $this->addSortFieldImpl($apiName, $collection, $field, $nOrder);
+	}
+
+	/*
+	 *
+	 */
+	function w3SetSortField( $collection, $fieldList )
+	{
+		$apiName = "w3SetSortField";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$sortField =& $requestCollection->getSortField();
+		$sortField->init();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+            $nOrder = 0;
+			if( count($token) >= 2 )
+			{
+				if( strcasecmp( $token[1], "DESC" ) == 0 )
+					$nOrder = 1;
+				else if( strcasecmp( $token[1], "ASC" ) == 0 )
+					$nOrder = 0;
+				else
+					return -1 * __LINE__;
+			}
+
+			if( $this->addSortFieldImpl($apiName, $collection, $token[0], $nOrder) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function addSearchFieldImpl( $apiName, $collection, $field )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$searchField =& $requestCollection->getSearchField();
+		$searchField->add( $field );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddSearchField( $collection, $field )
+	{
+		$apiName = "w3AddSearchField";
+
+		return $this->addSearchFieldImpl( $apiName, $collection, $field );
+	}
+
+	/*
+	 *
+	 */
+	function w3SetSearchField( $collection, $fieldList )
+	{
+		$apiName = "w3SetSearchField";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$searchField =& $requestCollection->getSearchField();
+		$searchField->initFieldSet();
+
+		$ft = strtok($fieldList, ",");
+		while( $ft != false )
+		{
+			$token = $ft;
+
+			if( $this->addSearchFieldImpl( $apiName, $collection, $token ) < 0 )
+			{
+				return $ret;
+			}
+
+			$ft = strtok(",");
+		}
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function addDocumentFieldImpl( $apiName, $collection, $field, $nDisplay )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nDisplay, 2, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$documentField =& $requestCollection->getDocumentField();
+		$documentField->addWithDisplay( $field, $nDisplay );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddDocumentField( $collection, $field, $nDisplay )
+	{
+		$apiName = "w3AddDocumentField";
+
+		return $this->addDocumentFieldImpl($apiName, $collection, $field, $nDisplay);
+	}
+
+	/*
+	 *
+	 */
+	function w3SetDocumentField( $collection, $fieldList )
+	{
+		$apiName = "w3SetDocumentField";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$documentField =& $requestCollection->getDocumentField();
+		$documentField->initFieldSet();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+            $nDisplay = 0;
+			if( count($token) >= 2 )
+			{
+				$nDisplay = $token[1];
+			}
+
+			if( $this->addDocumentFieldImpl($apiName, $collection, $token[0], $nDisplay) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetDateRange( $collection, $startDate, $endDate )
+	{
+		$apiName = "w3SetDateRange";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $startDate, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $endDate, 2, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$dateRange =& $requestCollection->getDateRange();
+		$dateRange->set( $startDate, $endDate );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddUid( $collection, $nUid, $searcherId )
+	{
+		$apiName = "w3AddUid";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nUid, 1, 1, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $searcherId, 2, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		if( $requestCollection->getUidCount() >= MAX_UID_NUM )
+		{
+			$this->setError_cN( ERR_EXCEED_MAX_UID_NUM, ERR_EXCEED_MAX_UID_NUM_S,
+					$apiName, $collection, $nUid );
+			return -1 * __LINE__;
+		}
+
+		$requestCollection->addUid( $nUid, $searcherId );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetCollectionQuery( $collection, $collectionQuery )
+	{
+		$apiName = "w3SetCollectionQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collectionQuery, 1, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$query =& $requestCollection->getQuery();
+		$query->setCollectionQuery( $collectionQuery );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetPrefixQuery( $collection, $prefixQuery, $nOperator )
+	{
+		$apiName = "w3SetPrefixQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $prefixQuery, 1, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nOperator, 2, 0, 1, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$query =& $requestCollection->getQuery();
+		$query->setPrefixQuery( $prefixQuery, $nOperator );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetFilterQuery( $collection, $filterQuery )
+	{
+		$apiName = "w3SetFilterQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $filterQuery, 1, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$query =& $requestCollection->getQuery();
+		$query->setFilterQuery( $filterQuery );
+		
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetAuthorityQuery( $collection, $authTargetField, 
+								  $authCollection, $authReferField, $authorityQuery )
+	{
+		$apiName = "w3SetAuthorityQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $authorityQuery, 1, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$query =& $requestCollection->getQuery();
+		$query->setAuthorityQuery( $authTargetField, $authCollection, $authReferField, $authorityQuery );
+		
+		return 0;
+	}
+
+	/*
+	 * SEARCH_QUERY_RESULT
+	 */
+	function w3ReceiveSearchQueryResult( $nMode )
+	{
+		$apiName = "w3ReceiveSearchQueryResult";
+
+		return $this->receiveResult( $apiName, SEARCH_QUERY_REQUEST, RESPONSE_TYPE_NORMAL, $nMode, 0 );
+	}
+
+	function w3ReceiveSearchQueryResultAsXml( $nMode )
+	{
+		$apiName = "w3ReceiveSearchQueryResultAsXml";
+
+		return $this->receiveResult( $apiName, SEARCH_QUERY_REQUEST, RESPONSE_TYPE_XML, $nMode, 0 );
+	}
+
+	function w3ReceiveSearchQueryResultAsJson( $nMode )
+	{
+		$apiName = "w3ReceiveSearchQueryResultAsJson";
+
+		return $this->receiveResult( $apiName, SEARCH_QUERY_REQUEST, RESPONSE_TYPE_JSON, $nMode, 0 );
+	}
+
+	/*
+	 * UID_RESULT
+	 */
+	function w3ReceiveUidResult( $nMode )
+	{
+		$apiName = "w3ReceiveUidResult";
+
+		return $this->receiveResult( $apiName, UID_REQUEST, RESPONSE_TYPE_NORMAL, $nMode, 0 );
+	}
+
+	function w3ReceiveUidResultAsXml( $nMode )
+	{
+		$apiName = "w3ReceiveUidResultAsXml";
+
+		return $this->receiveResult( $apiName, UID_REQUEST, RESPONSE_TYPE_XML, $nMode, 0 );
+	}
+
+	function w3ReceiveUidResultAsJson( $nMode )
+	{
+		$apiName = "w3ReceiveUidResultAsJson";
+
+		return $this->receiveResult( $apiName, UID_REQUEST, RESPONSE_TYPE_JSON, $nMode, 0 );
+	}
+
+	/*
+	 * MORPHEME_ANALYSIS_RESULT
+	 */
+	function w3ReceiveMorphemeAnalysisResult( $nMode )
+	{
+		$apiName = "w3ReceiveMorphemeAnalysisResult";
+
+		return $this->receiveResult( $apiName, MORPHEME_ANALYSIS_REQUEST, RESPONSE_TYPE_NORMAL, $nMode, 0 );
+	}
+
+	function w3ReceiveMorphemeAnalysisResultAsXml( $nMode )
+	{
+		$apiName = "w3ReceiveMorphemeAnalysisResultAsXml";
+
+		return $this->receiveResult( $apiName, MORPHEME_ANALYSIS_REQUEST, RESPONSE_TYPE_XML, $nMode, 0 );
+	}
+
+	function w3ReceiveMorphemeAnalysisResultAsJson( $nMode )
+	{
+		$apiName = "w3ReceiveMorphemeAnalysisResultAsJson";
+
+		return $this->receiveResult( $apiName, MORPHEME_ANALYSIS_REQUEST, RESPONSE_TYPE_JSON, $nMode, 0 );
+	}
+
+	/*
+	 * RECENT_QUERYLIST_RESULT
+	 */
+	function w3ReceiveRecentQueryListResult( $nMode, $nQueryCount )
+	{
+		$apiName = "w3ReceiveRecentQueryListResult";
+
+		return $this->receiveResult( $apiName, RECENT_QUERY_LIST_REQUEST, RESPONSE_TYPE_NORMAL, $nMode, $nQueryCount );
+	}
+
+	function w3ReceiveRecentQueryListResultAsXml( $nMode, $nQueryCount )
+	{
+		$apiName = "w3ReceiveRecentQueryListResultAsXml";
+
+		return $this->receiveResult( $apiName, RECENT_QUERY_LIST_REQUEST, RESPONSE_TYPE_XML, $nMode, $nQueryCount );
+	}
+
+	function w3ReceiveRecentQueryListResultAsJson( $nMode, $nQueryCount )
+	{
+		$apiName = "w3ReceiveRecentQueryListResultAsJson";
+
+		return $this->receiveResult( $apiName, RECENT_QUERY_LIST_REQUEST, RESPONSE_TYPE_JSON, $nMode, $nQueryCount );
+	}
+
+	/*
+	 * DUPLICATE_DOCUMENTS_RESULT
+	 */
+	function w3ReceiveDuplicateDocumentsResult( $nMode )
+	{
+		$apiName = "w3ReceiveDuplicateDocumentsResult";
+
+		return $this->receiveResult( $apiName, DUPLICATE_DOCUMENTS_REQUEST, RESPONSE_TYPE_NORMAL, $nMode, 0 );
+	}
+
+	function w3ReceiveDuplicateDocumentsResultAsXml( $nMode )
+	{
+		$apiName = "w3ReceiveDuplicateDocumentsResultAsXml";
+
+		return $this->receiveResult( $apiName, DUPLICATE_DOCUMENTS_REQUEST, RESPONSE_TYPE_XML, $nMode, 0 );
+	}
+	function w3ReceiveDuplicateDocumentsResultAsJson( $nMode )
+	{
+		$apiName = "w3ReceiveDuplicateDocumentsResultAsJson";
+
+		return $this->receiveResult( $apiName, DUPLICATE_DOCUMENTS_REQUEST, RESPONSE_TYPE_JSON, $nMode, 0 );
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultCount( $collection )
+	{
+		$apiName = "w3GetResultCount";
+		$nCount = 0;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$documentSet =& $this->resultCollection_->getDocumentSet();
+		if( ( $nCount = $documentSet->getDocumentCount() ) == 0 )
+		{
+			$groupResult =& $this->resultCollection_->getGroupResult();
+			$nCount = $groupResult->getDocumentCount();
+		}
+
+		return $nCount;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultTotalCount( $collection )
+	{
+		$apiName = "w3GetResultTotalCount";
+		$nTotalCount = 0;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$documentSet =& $this->resultCollection_->getDocumentSet();
+		$nTotalCount = $documentSet->getTotalDocumentCount();
+
+		if( $nTotalCount == 0 )
+		{
+			$groupResult =& $this->resultCollection_->getGroupResult();
+			$nTotalCount = $groupResult->getTotalDocumentCount();
+		}
+
+		return $nTotalCount;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultTotalCountInMerge( $mergeCollection, $collection )
+	{
+		$apiName = "w3GetResultTotalCountInMerge";
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $mergeCollectionObj = $this->mergeInfoTable_->getMergeCollectionById( $mergeCollection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S, $apiName, $mergeCollection );
+			return -1 * __LINE__;
+		}
+
+		if( ( $relatedCollection = $mergeCollectionObj->getRelatedCollectionById( $collection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S, $apiName, $collection );
+			return -1 * __LINE__;
+		}
+
+		return $relatedCollection->getResultTotalCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetUid( $collection, $nIndex )
+	{
+		$apiName = "w3GetUid";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return -1 * __LINE__;
+
+		return $document->getUid();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetRank( $collection, $nIndex )
+	{
+		$apiName = "w3GetRank";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return -1 * __LINE__;
+
+		return $document->getRank();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDate( $collection, $nIndex )
+	{
+		$apiName = "w3GetDate";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return CONST_EMPTY_STR;
+
+		return $document->getDate();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetWeight( $collection, $nIndex )
+	{
+		$apiName = "w3GetWeight";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return -1 * __LINE__;
+
+		return $document->getWeight();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCollectionId( $collection, $nIndex )
+	{
+		$apiName = "w3GetCollectionId";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return CONST_EMPTY_STR;
+
+		if( ( $searcherId = $document->getCollectionId() ) == null )
+			return CONST_EMPTY_STR;
+
+		return $searcherId;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetSearcherId( $collection, $nIndex )
+	{
+		$apiName = "w3GetSearcherId";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return CONST_EMPTY_STR;
+
+		if( ( $searcherId = $document->getSearcherId() ) == null )
+			return CONST_EMPTY_STR;
+
+		return $searcherId;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDuplicateDocumentCount( $collection, $nIndex )
+	{
+		$apiName = "w3GetDuplicateDocumentCount";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return -1 * __LINE__;
+
+		return $document->getDuplicateDocumentCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetField( $collection, $field, $nIndex )
+	{
+		$apiName = "w3GetField";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( ( $document =& $this->getDocument( $apiName, $collection, $nIndex ) ) == null )
+			return CONST_EMPTY_STR;
+
+		$fieldValue = $document->getFieldValue( $field );
+
+		if( is_null( $fieldValue ) )
+		{
+			if( $this->mergeInfoTable_->getIndex( $collection ) < 0 )
+			{
+				$this->setError_cS( ERR_INVALID_FIELD_NAME, ERR_INVALID_FIELD_NAME_S,
+						$apiName, $collection, $field );
+			}
+			return CONST_EMPTY_STR;
+		}
+
+		return $fieldValue;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetHighlightByField( $collection, $field )
+	{
+		$apiName = "w3GetHighlightByField";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return CONST_EMPTY_STR;
+
+		$morphemeAnalysisResult =& $this->resultCollection_->getMorphemeAnalysisResult();
+		$morphemes = $morphemeAnalysisResult->get( $field );
+
+		if( is_null( $morphemes ) )
+			return CONST_EMPTY_STR;
+
+		return $morphemes;
+	}
+
+	/*
+	 *
+	 */
+	function w3SelectDocument( $collection, $nUid )
+	{
+		$apiName = "w3SelectDocument";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$documentSet =& $this->resultCollection_->getDocumentSet();
+		return $documentSet->getDocumentIndex( $nUid );
+	}
+
+	/*
+	 *
+	 */
+	function w3SetGroupBy( $collection, $field, $nCount )
+	{
+		$apiName = "w3SetGroupBy";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nCount, 2, 1, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$groupBy =& $requestCollection->getGroupBy();
+		if( $groupBy->hasField() == false )
+		{
+			$groupBy->set( $field, $nCount );
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function addSortFieldInGroupImpl( $apiName, $collection, $field, $nOrder )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nOrder, 2, 0, 1, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$groupBy =& $requestCollection->getGroupBy();
+		$sortField =& $groupBy->getSortField();
+
+		if( $sortField->getCount() >= MAX_SORT_FIELD_NUM )
+		{
+			$this->setError_cS( ERR_EXCEED_MAX_SORT_FIELD_NUM, ERR_EXCEED_MAX_SORT_FIELD_NUM_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		$sortField->add( $field );
+		$sortField->addOrder( $nOrder );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddSortFieldInGroup( $collection, $field, $nOrder )
+    {
+        $apiName = "w3AddSortFieldInGroup";
+
+        return $this->addSortFieldInGroupImpl( $apiName, $collection, $field, $nOrder );
+    }
+
+	/*
+	 *
+	 */
+	function w3SetSortFieldInGroup( $collection, $fieldList )
+	{
+        $apiName = "w3SetSortFieldInGroup";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$groupBy =& $requestCollection->getGroupBy();
+		$sortField =& $groupBy->getSortField();
+		$sortField->init();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+            $nOrder = 0;
+			if( count($token) >= 2 )
+			{
+				if( strcasecmp( $token[1], "DESC" ) == 0 )
+					$nOrder = 1;
+				else if( strcasecmp( $token[1], "ASC" ) == 0 )
+					$nOrder = 0;
+				else
+					return -1 * __LINE__;
+			}
+
+			if( $this->addSortFieldInGroupImpl($apiName, $collection, $token[0], $nOrder) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultGroupCount( $collection )
+	{
+		$apiName = "w3GetResultGroupCount";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$groupResult =& $this->resultCollection_->getGroupResult();
+		return $groupResult->getGroupCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultTotalGroupCount( $collection )
+	{
+		$apiName = "w3GetResultTotalGroupCount";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$groupResult =& $this->resultCollection_->getGroupResult();
+		return $groupResult->getTotalGroupCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCountInGroup( $collection, $nGroupIndex )
+	{
+		$apiName = "w3GetCountInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$documentSet =& $this->getDocumentSet( $apiName, $collection, $nGroupIndex );
+		if( $documentSet == null )
+			return -1 * __LINE__;
+
+		return $documentSet->getDocumentCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetTotalCountInGroup( $collection, $nGroupIndex )
+	{
+		$apiName = "w3GetTotalCountInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$documentSet =& $this->getDocumentSet( $apiName, $collection, $nGroupIndex );
+		if( $documentSet == null )
+			return -1 * __LINE__;
+
+		return $documentSet->getTotalDocumentCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetUidInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetUidInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		return $document->getUid();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetRankInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetRankInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		return $document->getRank();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDateInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetDateInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return CONST_EMPTY_STR;
+
+		return $document->getDate();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetWeightInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetWeightInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		return $document->getWeight();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCollectionIdInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetCollectionIdInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		if( ( $searcherId = $document->getCollectionId() ) == null )
+			return CONST_EMPTY_STR;
+
+		return $searcherId;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetSearcherIdInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetSearcherIdInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		if( ( $searcherId = $document->getSearcherId() ) == null )
+			return CONST_EMPTY_STR;
+
+		return $searcherId;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDuplicateDocumentCountInGroup( $collection, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetWeightInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return -1 * __LINE__;
+
+		return $document->getDuplicateDocumentCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetFieldInGroup( $collection, $field, $nGroupIndex, $nIndex )
+	{
+		$apiName = "w3GetFieldInGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return CONST_EMPTY_STR;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return CONST_EMPTY_STR;
+
+		$document =& $this->getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex );
+		if( $document == null )
+			return CONST_EMPTY_STR;
+
+		$fieldValue = $document->getFieldValue( $field );
+		if( is_null( $fieldValue ) )
+		{
+			if( $this->mergeInfoTable_->getIndex( $collection ) < 0 )
+			{
+				$this->setError_cS( ERR_INVALID_FIELD_NAME, ERR_INVALID_FIELD_NAME_S,
+						$apiName, $collection, $field );
+			}
+			return CONST_EMPTY_STR;
+		}
+
+		return $fieldValue;
+	}
+
+	/*
+	 *
+	 */
+	function addMultiGroupByImpl( $apiName, $collection, $field )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$multiGroupBy =& $requestCollection->getMultiGroupBy();
+		if( $multiGroupBy->getCount() >= MAX_MULTIGROUPBY_FIELD_NUM )
+		{
+			$this->setError_cS( ERR_EXCEED_MAX_MULTI_GROUPBY_FIELD_NUM, ERR_EXCEED_MAX_MULTI_GROUPBY_FIELD_NUM_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		$multiGroupBy->add( $field );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddMultiGroupBy( $collection, $field )
+    {
+		$apiName = "w3AddMultiGroupBy";
+
+        return $this->addMultiGroupByImpl($apiName, $collection, $field);
+    }
+
+	/*
+	 *
+	 */
+	function w3SetMultiGroupBy( $collection, $fieldList )
+	{
+		$apiName = "w3SetMultiGroupBy";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$multiGroupBy =& $requestCollection->getMultiGroupBy();
+		$multiGroupBy->initFieldSet();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+			if( $this->addMultiGroupByImpl($apiName, $collection, $token) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetMultiGroupByResult( $collection, $field )
+	{
+		$apiName = "w3GetMultiGroupByResult";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$multiGroupResult =& $this->resultCollection_->getMultiGroupResult();
+		$fieldValue = $multiGroupResult->getFieldValue( $field );
+
+		if( is_null( $fieldValue ) )
+			return CONST_EMPTY_STR;
+
+		return $fieldValue;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddCategoryQuery( $collection, $field, $category )
+	{
+		$apiName = "w3AddCategoryQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$query =& $requestCollection->getQuery();
+		$query->addCategoryQuery( $field, $category );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddCategoryGroupBy( $collection, $field, $depthList )
+	{
+		$apiName = "w3AddCategoryGroupBy";
+		$requestCollection = null;
+		$categoryGroupBy = null;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $depthList, 2, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$categoryGroupBy = $requestCollection->getCategoryGroupBy();
+
+		// Tokenize depthList with sorting order
+		$ft = strtok( $depthList, "," );
+		while( $ft !== false )
+		{
+			$sortType = 0x10;
+			$topN = 0;
+
+			$pos = strpos( $ft, "/" );
+			if( $pos == null )
+			{
+				$depth = $ft;
+			}
+			else 
+			{
+				$depth = substr( $ft, 0, $pos );
+				$order = substr( $ft, $pos+1 );
+
+                $pos = strpos( $order, "/" );
+                if( $pos != null )
+                {
+                    $topN = substr( $order, $pos+1 );
+                    $order = substr( $order, 0, $pos );
+                }
+
+				if( strcmp( $order, "SN" ) == 0 )
+				{
+					$sortType = 0x10;
+				}
+				else if( strcmp( $order, "SC" ) == 0 )
+				{
+					$sortType = 0x20;
+				}
+				else if( strcmp( $order, "RSN" ) == 0 )
+				{
+					$sortType = 0x11;
+				}
+				else if( strcmp( $order, "RSC" ) == 0 )
+				{
+					$sortType = 0x21;
+				}
+			}
+
+			if( $depth < 1 || $depth > 32 )
+			{
+				$this->setError_cS( ERR_CATEGORY_GROUPBY_DEPTH_NUM, ERR_CATEGORY_GROUPBY_DEPTH_NUM_S,
+						$apiName, $collection, $field );
+				return -1 * __LINE__;
+			}
+			
+			if( $categoryGroupBy->addItem( $field, $depth, $sortType, $topN ) < 0 )
+			{
+				$this->setError_cS( ERR_REQUEST_CATEGORY_GROUPBY_FIELD_NUM, ERR_REQUEST_CATEGORY_GROUPBY_FIELD_NUM_S,
+						$apiName, $collection, $field );
+				return -1 * __LINE__;
+			}
+
+			$ft = strtok( "," );
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCategoryCount( $collection, $field, $depth )
+	{
+		$apiName = "w3GetCategoryCount";
+		$categoryGroupResult = null;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+		if( $this->checkIntArgv( $apiName, $depth, 2, 1, MAX_CATEGORY_DEPTH, $collection ) < 0 )
+			return -1 * __LINE__;
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$categoryGroupResult =& $this->resultCollection_->getCategoryGroupResult();
+        if( $categoryGroupResult == null )
+            return 0;
+
+		$depthContainer = $categoryGroupResult->getDepth( $field, $depth );
+		if( $depthContainer == null )
+		{
+			return 0;
+		}
+
+		return $depthContainer->categoryCount_;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCategoryName( $collection, $field, $depth, $categoryIdx )
+	{
+		$apiName = "w3GetCategoryName";
+		$categoryGroupResult = null;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return null;
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return null;
+		if( $this->checkIntArgv( $apiName, $depth, 2, 1, MAX_CATEGORY_DEPTH, $collection ) < 0 )
+			return null;
+		if( $this->checkIntArgv( $apiName, $categoryIdx, 3, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return null;
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$categoryGroupResult =& $this->resultCollection_->getCategoryGroupResult();
+        if( $categoryGroupResult == null )
+            return CONST_EMPTY_STR;
+
+		$depthContainer = $categoryGroupResult->getDepth( $field, $depth );
+		if( $depthContainer == null )
+		{
+			return CONST_EMPTY_STR;
+		}
+
+		if( $depthContainer->resultCategoryList_ == null )
+		{
+			return CONST_EMPTY_STR;
+		}
+
+		return $depthContainer->resultCategoryList_[$categoryIdx]->cname_;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDocumentCountInCategory( $collection, $field, $depth, $categoryIdx )
+	{
+		$apiName = "w3GetDocumentCountInCategory";
+		$categoryGroupResult = null;
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+		if( $this->checkIntArgv( $apiName, $depth, 2, 1, MAX_CATEGORY_DEPTH, $collection ) < 0 )
+			return -1 * __LINE__;
+		if( $this->checkIntArgv( $apiName, $categoryIdx, 3, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$categoryGroupResult =& $this->resultCollection_->getCategoryGroupResult();
+        if( $categoryGroupResult == null )
+            return CONST_EMPTY_STR;
+
+		$depthContainer = $categoryGroupResult->getDepth( $field, $depth );
+		if( $depthContainer == null )
+		{
+			return CONST_EMPTY_STR;
+		}
+
+		if( $depthContainer->resultCategoryList_ == null )
+		{
+			return CONST_EMPTY_STR;
+		}
+
+		return $depthContainer->resultCategoryList_[$categoryIdx]->count_;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetPropertyGroup( $collection, $field, $nMin, $nMax, $nGroupCount )
+	{
+		$apiName = "w3SetPropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nMin, 2, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nMax, 3, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nGroupCount, 4, 1, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$propertyGroup =& $requestCollection->getPropertyGroup();
+		$propertyGroup->set( $field, $nMin, $nMax, $nGroupCount );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCountPropertyGroup( $collection )
+	{
+		$apiName = "w3GetCountPropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+		return $propertyField->getPropertyCount();
+	}
+
+	/*
+	 *
+	 */		
+	function w3GetMinValuePropertyGroup( $collection )
+	{
+		$apiName = "w3GetMinValuePropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+
+		return $propertyField->getMinValue();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetMaxValuePropertyGroup( $collection )
+	{
+		$apiName = "w3GetMaxValuePropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+
+		return $propertyField->getMaxValue();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetMinValueInPropertyGroup( $collection, $nIndex )
+	{
+		$apiName = "w3GetMinValueInPropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+		if( ( $property = $propertyField->getProperty( $nIndex ) ) == null )
+		{
+			$this->setError_cN( ERR_INVALID_PROPERTY_INDEX, ERR_INVALID_PROPERTY_INDEX_S,
+					$apiName, $collection, $nIndex );
+			return -1 * __LINE__;
+		}
+
+		return $property->getMinValue();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetMaxValueInPropertyGroup( $collection, $nIndex )
+	{
+		$apiName = "w3GetMaxValueInPropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+		if( ( $property = $propertyField->getProperty( $nIndex ) ) == null )
+		{
+			$this->setError_cN( ERR_INVALID_PROPERTY_INDEX, ERR_INVALID_PROPERTY_INDEX_S,
+					$apiName, $collection, $nIndex );
+			return -1 * __LINE__;
+		}
+
+		return $property->getMaxValue();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetDocumentCountInPropertyGroup( $collection, $nIndex )
+	{
+		$apiName = "w3GetDocumentCountInPropertyGroup";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		$propertyField =& $this->resultCollection_->getPropertyField();
+		if( ( $property = $propertyField->getProperty( $nIndex ) ) == null )
+		{
+			$this->setError_cN( ERR_INVALID_PROPERTY_INDEX, ERR_INVALID_PROPERTY_INDEX_S,
+					$apiName, $collection, $nIndex );
+			return -1 * __LINE__;
+		}
+
+		return $property->getDocumentCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3SetBoostQuery( $collection, $query, $nOption )
+	{
+		$apiName = "w3SetBoostQuery";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $query, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nOption, 2, 0, 2, $collection ) < 0 ) // 0, 1, 2
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$boost =& $requestCollection->getBoost();
+		if( $boost->hasQuery() == false )
+		{
+			$boost->setQuery( $query, $nOption );
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetBoostCategory( $collection, $field, $matchType, $category )
+	{
+		$apiName = "w3SetBoostCategory";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $matchType, 2, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $category, 4, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$boost =& $requestCollection->getBoost();
+		if( $boost->hasCategory() == false )
+		{
+			$boost->setCategoryBoost( $field, $matchType, "none", $category );
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetRecentQueryListSize()
+	{
+		$recentQuerySet =& $this->result_->getRecentQuerySet();
+		return $recentQuerySet->getCount();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetRecentQuery( $nIndex )
+	{
+		$apiName = "w3GetRecentQuery";
+
+		$recentQuerySet =& $this->result_->getRecentQuerySet();
+		if( ( $query = $recentQuerySet->get( $nIndex ) ) == null )
+		{
+			//TODO
+			// setError(..)
+			return CONST_EMPTY_STR;
+		}
+
+		return $query;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetSuggestedQuery()
+	{
+		$apiName = "w3GetSuggestedQuery";
+
+		if( ( $query = $this->result_->getSuggestedQuery() ) == null )
+			return CONST_EMPTY_STR;
+
+		return $query;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetRanking( $collection, $type, $option, $nPercent )
+	{
+		$apiName = "w3SetRanking";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $type, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $option, 2, false, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nPercent, 3, 0, 10000, $collection ) < 0 ) // 0 ~ 10000
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		return $requestCollection->setRankingInfo( $type, $option, $nPercent );
+	}
+
+	/*
+	 *
+	 */
+	function addSearchFieldScoreImpl( $apiName, $collection, $field, $nScore )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nScore, 2, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		if( $requestCollection->addRankingField( $field, $nScore ) < 0 )
+			return -1 * __LINE__;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddSearchFieldScore( $collection, $field, $nScore )
+	{
+		$apiName = "w3AddSearchFieldScore";
+
+		return $this->addSearchFieldScoreImpl($apiName, $collection, $field, $nScore);
+	}
+
+	/*
+	 *
+	 */
+	function w3SetSearchFieldScore( $collection, $fieldList )
+	{		
+		$apiName = "w3SetSearchFieldScore";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$requestCollection->initRankingField();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+            $nScore = 0;
+			if( count($token) >= 2 )
+			{
+				$nScore = $token[1];
+			}
+
+			if( $this->addSearchFieldScoreImpl($apiName, $collection, $token[0], $nScore) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetRankRange( $collection, $nMinRank, $nMaxRank )
+	{
+		$apiName = "w3SetRankRange";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nMinRank, 1, 0, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nMaxRank, 2, 1, MAX_INT_VALUE, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$requestCollection->setRankRange( $nMinRank, $nMaxRank );
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddMergeCollection( $mergeCollection, $collection )
+	{
+		$apiName = "w3AddMergeCollection";
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		// check pCollection is found
+		if( $this->getRequestCollectionByName( $apiName, $collection ) == null ) // not found
+			return -1 * __LINE__;
+
+		return $this->mergeInfoTable_->addMergeCollection( $mergeCollection, $collection );
+	}
+
+	/*
+	 *
+	 */
+	function w3AddMergeDocumentField( $mergeCollection,
+			$mergeField,
+			$collection,
+			$field )
+	{
+		$apiName = "w3AddMergeDocumentField";
+		$bFieldFound = false;
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $mergeField, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 2, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 3, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		// check pCollection is found
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S,
+					$apiName, $collection );
+			return -1 * __LINE__;
+		}
+
+		$documentField =& $requestCollection->getDocumentField();
+
+		// check pField is found
+		for( $i = 0; $i < $documentField->getCount(); $i++ )
+		{
+			if( strcmp( $documentField->get( $i ), $field ) == 0 ) // found
+			{
+				$bFieldFound = true;
+				break;
+			}
+		}
+
+		if( $bFieldFound == false ) // not found
+		{
+			$this->setError_cS( ERR_INVALID_FIELD_NAME, ERR_INVALID_FIELD_NAME_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		return $this->mergeInfoTable_->addMergeDocumentField( $mergeCollection, $mergeField, $collection, $field );
+	}
+
+	/*
+	 *
+	 */
+	function w3AddMergeMultiGroupByField( $mergeCollection,
+			$mergeField,
+			$collection,
+			$field )
+	{
+		$apiName = "w3AddMergeMultiGroupByField";
+		$bFieldFound = false;
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $mergeField, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 2, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 3, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		// check pCollection is found
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S,
+					$apiName, $collection );
+			return -1 * __LINE__;
+		}
+
+		$pMultiGroupBy =& $requestCollection->getMultiGroupBy();
+
+		// check pField is found
+		for( $i = 0; $i < $pMultiGroupBy->getCount(); $i++ )
+		{
+			if( strcmp( $pMultiGroupBy->getField( $i ), $field ) == 0 ) // found
+			{
+				$bFieldFound = true;
+				break;
+			}
+		}
+
+		if( $bFieldFound == false ) // not found
+		{
+			$this->setError_cS( ERR_INVALID_FIELD_NAME, ERR_INVALID_FIELD_NAME_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		return $this->mergeInfoTable_->addMergeMultiGroupByField( $mergeCollection, $mergeField, $collection, $field );
+	}
+
+	/*
+	 *
+	 */
+	function w3AddMergeCategoryGroupByField( $mergeCollection,
+			$mergeField,
+			$collection,
+			$field )
+	{
+		$apiName = "w3AddMergeCategoryGroupByField";
+		$bFieldFound = false;
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $mergeField, 1, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $collection, 2, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 3, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		// check pCollection is found
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S,
+					$apiName, $collection );
+			return -1 * __LINE__;
+		}
+
+		$pCategoryGroupBy =& $requestCollection->getCategoryGroupBy();
+		for( $i = 0; $i < $pCategoryGroupBy->fieldCount_; $i++ )
+		{
+			if( strcmp( $field, $pCategoryGroupBy->fieldList_[$i]->name_ ) == 0 ) // found
+			{
+				$bFieldFound = true;
+				break;
+			}
+		}
+
+		if( $bFieldFound == false ) // not found
+		{
+			$this->setError_cS( ERR_INVALID_FIELD_NAME, ERR_INVALID_FIELD_NAME_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		return $this->mergeInfoTable_->addMergeCategoryGroupByField( $mergeCollection, $mergeField, $collection, $field );
+	}
+
+	/*
+	 *
+	 */
+	function w3SetMergePageInfo( $mergeCollection,
+			$nStart,
+			$nCount )
+	{
+		$apiName = "w3SetMergePageInfo";
+
+		if( $this->checkStringArgv( $apiName, $mergeCollection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nStart, 1, 0, MAX_INT_VALUE, $mergeCollection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nCount, 2, 1, MAX_INT_VALUE, $mergeCollection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $mergeCollectionObj =& $this->mergeInfoTable_->getMergeCollectionById( $mergeCollection ) ) == null ) // not found
+		{
+			$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S,
+					$apiName, $mergeCollection );
+			return -1 * __LINE__;
+		}
+
+		$mergeCollectionObj->setPageInfo( $nStart, $nCount );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetDuplicateDetection( $collection )
+	{
+		$apiName = "w3SetDuplicateDetection";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$requestCollection->setCheckDuplicate();
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3SetDuplicateDetectionWithoutFiltering( $collection )
+	{
+		$apiName = "w3SetDuplicateDetectionWithoutFiltering";
+
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$requestCollection->setCheckDuplicateWithoutFiltering();
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function addDuplicateDetectionCriterionFieldImpl( $apiName, $collection, $field, $nOrder )
+	{
+		if( $this->checkStringArgv( $apiName, $collection, 0, true, null ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkStringArgv( $apiName, $field, 1, true, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( $this->checkIntArgv( $apiName, $nOrder, 2, 0, 1, $collection ) < 0 )
+			return -1 * __LINE__;
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$duplicateDetectionCriterionField =& $requestCollection->getDuplicateDetectionCriterionField();
+		if( $duplicateDetectionCriterionField->getCount() >= MAX_SORT_FIELD_NUM )
+		{
+			$this->setError_cS( ERR_EXCEED_MAX_SORT_FIELD_NUM, ERR_EXCEED_MAX_SORT_FIELD_NUM_S,
+					$apiName, $collection, $field );
+			return -1 * __LINE__;
+		}
+
+		$duplicateDetectionCriterionField->add( $field );
+		$duplicateDetectionCriterionField->addOrder( $nOrder );
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function w3AddDuplicateDetectionCriterionField( $collection, $field, $nOrder )
+	{
+		$apiName = "w3AddDuplicateDetectionCriterionField";
+
+		return $this->addDuplicateDetectionCriterionFieldImpl($apiName, $collection, $field, $nOrder);
+	}
+
+	/*
+	 *
+	 */
+	function w3SetDuplicateDetectionCriterionField( $collection, $fieldList )
+	{
+		$apiName = "w3SetDuplicateDetectionCriterionField";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		$duplicateDetectionCriterionField =& $requestCollection->getDuplicateDetectionCriterionField();
+		$duplicateDetectionCriterionField->init();
+
+        $ft = strtok( $fieldList, "," );
+        while( $ft !== false )
+        {
+			$token = explode("/", $ft);
+
+            $nOrder = 0;
+			if( count($token) >= 2 )
+			{
+				if( strcasecmp( $token[1], "DESC" ) == 0 )
+					$nOrder = 1;
+				else if( strcasecmp( $token[1], "ASC" ) == 0 )
+					$nOrder = 0;
+				else
+					return -1 * __LINE__;
+			}
+
+			if( $this->addDuplicateDetectionCriterionFieldImpl($apiName, $collection, $token[0], $nOrder) < 0 )
+				return -1 * __LINE__;
+
+            $ft = strtok( "," );
+        }
+
+		return 0;
+	}
+
+	function w3SetGeoDistance( $collection, $latitudeField, $latitude, $longitudeField, $longitude, $distance )
+	{
+		$apiName = "w3SetGeoDistance";
+
+		if( ( $requestCollection =& $this->getRequestCollectionByName( $apiName, $collection ) ) == null )
+			return -1 * __LINE__;
+
+		return $requestCollection->setGeoDistance( $latitudeField, $latitude, $longitudeField, $longitude, $distance );
+	}
+
+
+	/*
+	 *
+	 */
+	function w3GetResultXml()
+	{
+        $body = $this->result_->getBody();
+		if( $body == null )
+			return CONST_EMPTY_STR;
+
+		return $body;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetResultJson()
+	{
+        $body = $this->result_->getBody();
+		if( $body == null )
+			return CONST_EMPTY_STR;
+
+		return $body;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetError()
+	{
+		return $this->errorManager_->getError();
+	}
+
+	/*
+	 *
+	 */
+	function w3GetErrorInfo()
+	{
+		$sErrMsg = null;
+
+		if( ( $sErrMsg = $this->errorManager_->getErrorMsg() ) == null )
+			return NO_ERR_STR;
+
+		return $sErrMsg;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCollectionError( $collection )
+	{
+		// check call order
+		if( $this->bRecvResultCalled_ == false )
+			return ERR_CALL_AFTER_RECEIVE_RESULT;
+
+		if( ( $resultCollection =& $this->result_->getResultCollectionByName( $collection ) ) == null &&
+			$this->mergeInfoTable_->getIndex( $collection) < 0 )
+			return ERR_INVALID_COLLECTION_NAME;
+
+		return $this->errorManager_->getCollectionError( $collection );
+	}
+
+	/*
+	 *
+	 */
+	function w3GetCollectionErrorInfo( $collection )
+	{
+		$sErrMsg = null;
+
+		// check call order
+		if( $this->bRecvResultCalled_ == false )
+			return ERR_CALL_AFTER_RECEIVE_RESULT_S;
+
+		if( ( $resultCollection =& $this->result_->getResultCollectionByName( $collection ) ) == null &&
+			$this->mergeInfoTable_->getIndex( $collection) < 0 )
+			return ERR_INVALID_COLLECTION_NAME_S;
+
+		if( ( $sErrMsg = $this->errorManager_->getCollectionErrorMsg( $collection ) ) == null )
+			return NO_ERR_STR;
+
+		return $sErrMsg;
+	}
+
+	/*
+	 *
+	 */
+	function w3GetVersionInfo()
+	{
+		return ("V" . VERSION_STR);
+	}
+
+	function receiveResult( $apiName, $nRequestType, $nResponseType, $nMode, $nQueryCount )
+	{
+		$this->pRequestBody_ = "";
+		$this->pResultBody_ = "";
+
+		// set flag
+		$this->bRecvResultCalled_ = true;
+
+		// check error
+		if( $this->errorManager_->getError() != NO_ERROR )
+		{
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		// check mode
+		if( $nMode != 0 &&
+			$nMode != 2 &&
+			$nMode != 3 )
+		{
+			$this->setError_n( ERR_INVALID_MODE_VALUE, ERR_INVALID_MODE_VALUE_S, $apiName, $nMode );
+			$this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		$commonInfo =& $this->request_->getCommonInfo();
+
+		// check code page
+		if( $this->bCodepageReady_ != true ||
+			$commonInfo->getEncoding() == null )
+		{
+			$this->setError( ERR_NOT_SET_CODEPAGE, ERR_NOT_SET_CODEPAGE_S, $apiName );
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		// make body request stream
+		switch( $nRequestType )
+		{
+			case SEARCH_QUERY_REQUEST :
+				$nBodyLen = $this->request_->makeBodySearchQueryRequest( $this->pRequestBody_, $this->mergeInfoTable_ );
+				break;
+
+			case UID_REQUEST :
+				$nBodyLen = $this->request_->makeBodyUidRequest( $this->pRequestBody_, $this->mergeInfoTable_ );
+				break;
+
+			case MORPHEME_ANALYSIS_REQUEST :
+				$nBodyLen = $this->request_->makeBodyMorphemeAnalysisRequest( $this->pRequestBody_ );
+				break;
+
+			case RECENT_QUERY_LIST_REQUEST :
+				$nBodyLen = $this->request_->makeBodyRecentQueryListRequest( $this->pRequestBody_, $nQueryCount );
+				break;
+
+			case DUPLICATE_DOCUMENTS_REQUEST :
+				$nBodyLen = $this->request_->makeBodyDuplicateDocumentsRequest( $this->pRequestBody_ );
+				break;
+		}
+
+		if( $nBodyLen < 0 )
+		{
+			$this->setError_n( ERR_MEMORY_ALLOC_FAILED, ERR_MEMORY_ALLOC_FAILED_S, $apiName, $nBodyLen );
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		if( $nMode == 2 )
+		{
+			$this->request_->init();
+		}
+
+		// make header
+		$pHeader = "";
+		$encode = new Encode();
+		$encode->set( $pHeader );
+
+		$encode->append4( VERSION_NUM );
+		$encode->append4( $nRequestType | $nResponseType );
+		$encode->append4( $nBodyLen );
+
+		// send header
+		if( ( $ret = $this->write( $pHeader, 12 ) ) < 0 )
+		{
+			$this->setError( ERR_SEND_REQUEST_PACKET_FAILED, ERR_SEND_REQUEST_PACKET_FAILED_S, $apiName );
+		}
+
+		// send body
+		if( ( $ret = $this->write( $this->pRequestBody_, $nBodyLen ) ) < 0 )
+		{
+			$this->setError( ERR_SEND_REQUEST_PACKET_FAILED, ERR_SEND_REQUEST_PACKET_FAILED_S, $apiName );
+		}
+
+		// receive header
+		if( ( $nLen = $this->read( $pHeader, 8 ) ) != 8 )
+		{
+			if( $nLen == -2 )
+				$this->setError( ERR_RECEIVE_TIMEOUT, ERR_RECEIVE_TIMEOUT_S, $apiName );
+			else
+				$this->setError( ERR_RECEIVE_RESULT_FAILED, ERR_RECEIVE_RESULT_FAILED_S, $apiName );
+
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		// decode header
+		$decode = new Decode();
+		$decode->set( $pHeader );
+
+		$nResultType = $decode->read4();
+		$nBodyLen = $decode->read4();
+
+		// rejected by firewall setting
+		if( $nResultType == REJECT_QUERY_RESULT )
+		{
+			$this->setError( ERR_CONNECTION_REJECTED, ERR_CONNECTION_REJECTED_S, $apiName );
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		if( $nBodyLen <= 0 )
+		{
+			$this->setError_n( ERR_INVALID_RESULT_BODY_LENGTH, ERR_INVALID_RESULT_BODY_LENGTH_S,
+					$apiName, $nBodyLen );
+
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+
+		// receive body
+		if( ( $nLen = $this->read( $this->pResultBody_, $nBodyLen ) ) != $nBodyLen )
+		{
+			if( $nLen == -2 )
+				$this->setError( ERR_RECEIVE_TIMEOUT, ERR_RECEIVE_TIMEOUT_S, $apiName );
+			else
+				$this->setError( ERR_RECEIVE_RESULT_FAILED, ERR_RECEIVE_RESULT_FAILED_S, $apiName );
+
+			if( $nMode == 3 ) $this->w3CloseServer();
+			return -1 * __LINE__;
+		}
+		$this->pResultBody_[$nLen] = NULL;
+
+		if( $nMode == 3 ) $this->w3CloseServer();
+
+		$commonInfo =& $this->request_->getCommonInfo();
+		$encoding = $commonInfo->getEncoding();
+
+        if( $nResponseType == RESPONSE_TYPE_NORMAL )
+        {
+            switch( $nRequestType )
+            {
+                case SEARCH_QUERY_REQUEST :
+                    $nLen = $this->result_->parseSearchQueryResult( $this->pResultBody_, $encoding,
+                            $this->mergeInfoTable_, $this->errorManager_ );
+                    break;
+
+                case UID_REQUEST :
+                    $nLen = $this->result_->parseUidResult( $this->pResultBody_, $encoding,
+                            $this->mergeInfoTable_, $this->errorManager_ );
+                    break;
+
+                case MORPHEME_ANALYSIS_REQUEST :
+                    $nLen = $this->result_->parseMorphemeAnalysisResult( $this->pResultBody_, $encoding,
+                            $this->errorManager_ );
+                    break;
+
+                case RECENT_QUERY_LIST_REQUEST :
+                    $nLen = $this->result_->parseRecentQueryListResult( $this->pResultBody_, $encoding,
+                            $this->errorManager_ );
+                    break;
+
+                case DUPLICATE_DOCUMENTS_REQUEST :
+                    $nLen = $this->result_->parseDuplicateDocumentsResult( $this->pResultBody_, $encoding,
+                            $this->mergeInfoTable_, $this->errorManager_ );
+                    break;
+            }
+        }
+        else
+        {
+            $nLen = $this->result_->parseStringResult( $this->pResultBody_, $encoding,
+                    $this->mergeInfoTable_, $this->errorManager_ );
+        }
+
+		if( $nLen <= 0 )
+		{
+			$this->setError_n( ERR_RESULT_PACKET_PARSE_FAILED, ERR_RESULT_PACKET_PARSE_FAILED_S, $apiName, $nLen );
+			return -1 * __LINE__;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function checkStringArgv( $apiName, $stringArgv, $nArgvIndex, $bCheckEmpty, $collection )
+	{
+		/*XXX
+		if( $stringArgv == null )
+		{
+			$msgStr = "ARGV[" . $nArgvIndex . "]";
+
+			$this->setError_s( ERR_NULL_ARGUMENT, ERR_NULL_ARGUMENT_S, $apiName, $msgStr );
+			return -1 * __LINE__;
+		}
+		*/
+
+		if( $bCheckEmpty == true )
+		{
+			if( strlen( $stringArgv ) == 0 )
+			{
+				$msgStr = "ARGV[" . $nArgvIndex . "]";
+
+				if( $collection == null )
+					$this->setError_s( ERR_EMPTY_ARGUMENT, ERR_EMPTY_ARGUMENT_S, $apiName, $msgStr );
+				else
+					$this->setError_cS( ERR_EMPTY_ARGUMENT, ERR_EMPTY_ARGUMENT_S, $apiName, $collection, $msgStr );
+				return -1 * __LINE__;
+			}
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function checkIntArgv( $apiName, $nValue, $nArgvIndex, $nMinValue, $nMaxValue, $collection )
+	{
+		if( $nValue < $nMinValue ||
+			$nValue > $nMaxValue )
+		{
+			$msgStr = "ARGV[" . $nArgvIndex . "]" . " MIN:MAX[" . $nMinValue . ":" . $nMaxValue . "]";
+
+			if( $collection == null )
+				$this->setError_s( ERR_INVALID_INT_ARGUMENT, ERR_INVALID_INT_ARGUMENT_S, $apiName, $msgStr );
+			else
+				$this->setError_cS( ERR_INVALID_INT_ARGUMENT, ERR_INVALID_INT_ARGUMENT_S, $apiName, $collection, $msgStr );
+			return -1 * __LINE__;
+		}
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function write( $src, $len )
+	{
+		$remain = $len;
+		$written = 0;
+		$start = 0;
+
+		while( true )
+		{
+			if( ( $written = fwrite( $this->socket_, $src, $remain ) ) == false )
+				break;
+			if( ( $remain -= $written ) == 0 )
+				break;
+			$start = $written;
+			$src = substr( $src, $start, $remain );
+		}
+
+		return $len - $remain;
+	}
+
+	/*
+	 *
+	 */
+	function read( &$dest, $len )
+	{
+		$remain = $len;
+		$read = 0;
+		$offset = 0;
+		$dest = "";
+
+		while( $remain > 0 )
+		{
+			if( ( $tmp = fread( $this->socket_, $len ) ) == false )
+				return -1 * __LINE__;
+			$read = strlen( $tmp );
+			$dest .= $tmp;
+			if( $read == 0 )
+				break;
+			$remain -= $read;
+			$offset += $read;
+		}
+
+		return $offset;
+	}
+
+	/*
+	 *
+	 */
+	function &getRequestCollectionByName( $apiName, $collection )
+	{
+		// found
+		if( ( $requestCollection =& $this->request_->getRequestCollectionByName( $collection ) ) != null )
+			return $requestCollection;
+
+		$this->setError_s( ERR_INVALID_COLLECTION_NAME, ERR_INVALID_COLLECTION_NAME_S,
+				$apiName, $collection );
+
+		return null;
+	}
+
+	/*
+	 *
+	 */
+	function selectCollection( $apiName, $collection )
+	{
+		/*XXX
+		if( $this->errorManager_->getError() != NO_ERROR )
+			return -1 * __LINE__;
+		*/
+
+		if( ( $this->resultCollection_ =& $this->result_->getResultCollectionByName( $collection ) ) == null )
+			return -1 * __LINE__;
+
+		return 0;
+	}
+
+	/*
+	 *
+	 */
+	function &getDocumentSet( $apiName, $collection, $nGroupIndex )
+	{
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return null;
+
+		$groupResult =& $this->resultCollection_->getGroupResult();
+		$documentSet =& $groupResult->getDocumentSet( $nGroupIndex );
+		if( $documentSet == null )
+		{
+			$this->setError_cN( ERR_INVALID_GROUP_INDEX, ERR_INVALID_GROUP_INDEX_S,
+					$apiName, $collection, $nGroupIndex );
+			return null;
+		}
+
+		return $documentSet;
+	}
+
+	/*
+	 *
+	 */
+	function &getDocumentInGroup( $apiName, $collection, $nGroupIndex, $nIndex )
+	{
+		$documentSet =& $this->getDocumentSet( $apiName, $collection, $nGroupIndex );
+		if( $documentSet == null )
+			return null;
+
+		$document =& $documentSet->getDocument( $nIndex );
+		if( $document == null )
+		{
+			$this->setError_cN( ERR_INVALID_DOCUMENT_INDEX, ERR_INVALID_DOCUMENT_INDEX_S,
+					$apiName, $collection, $nIndex );
+			return null;
+		}
+
+		return $document;
+	}
+
+	/*
+	 *
+	 */
+	function &getDocument( $apiName, $collection, $nIndex )
+	{
+		if( $this->selectCollection( $apiName, $collection ) < 0 )
+			return null;
+
+		$documentSet =& $this->resultCollection_->getDocumentSet();
+		$document =& $documentSet->getDocument( $nIndex );
+		if( $document == null )
+		{
+			$this->setError_cN( ERR_INVALID_DOCUMENT_INDEX, ERR_INVALID_DOCUMENT_INDEX_S,
+					$apiName, $collection, $nIndex );
+			return null;
+		}
+
+		return $document;
+	}
+
+	/*
+	 *
+	 */
+	function setError( $nErr,
+			$sErrMsg,
+			$sApiName )
+	{
+		$this->msgStr_ = "[" . $nErr . "] " . $sErrMsg . " " . $sApiName . "()";
+		$this->errorManager_->setError( $nErr, $this->msgStr_ );
+	}
+
+	/*
+	 *
+	 */
+	function setError_s( $nErr,
+			$sErrMsg,
+			$sApiName,
+			$sAdditional )
+	{
+		$this->msgStr_ = "[" . $nErr . "] " . $sErrMsg . " " . $sApiName . "(), " . $sAdditional;
+		$this->errorManager_->setError( $nErr, $this->msgStr_ );
+	}
+
+	/*
+	 *
+	 */
+	function setError_n( $nErr,
+			$sErrMsg,
+			$sApiName,
+			$nAdditional )
+	{
+		$this->msgStr_ = "[" . $nErr . "] " . $sErrMsg . " " . $sApiName . "(), " . $nAdditional;
+		$this->errorManager_->setError( $nErr, $this->msgStr_ );
+	}
+
+	/*
+	 *
+	 */
+	function setError_cS( $nErr,
+			$sErrMsg,
+			$sApiName,
+			$sCollection,
+			$sAdditional )
+	{
+		$this->msgStr_ = "[" . $nErr . "] " . $sErrMsg . " " . $sApiName . "(), " . $sCollection . ", " . $sAdditional;
+		$this->errorManager_->setError( $nErr, $this->msgStr_ );
+	}
+
+	/*
+	 *
+	 */
+	function setError_cN( $nErr,
+			$sErrMsg,
+			$sApiName,
+			$sCollection,
+			$nAdditional )
+	{
+		$this->msgStr_ = "[" . $nErr . "] " . $sErrMsg . " " . $sApiName . "(), " . $sCollection . ", " . $nAdditional ;
+		$this->errorManager_->setError( $nErr, $this->msgStr_ );
+	}
+}
+
+?>

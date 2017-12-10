@@ -1,0 +1,118 @@
+<?php
+/**
+*  file: WNAnchor.php
+*  subject: 페이징 처리를 하기 위한 정보처리클래스
+*  ------------------------------------------------------------------------
+*  @original author: KoreaWISEnut
+*  @edit author: KoreaWISEnut
+*  @update date 2007.03.21
+*  ------------------------------------------------------------------------
+*/
+class WNAnchor 
+{
+    var $m_before = -1;
+    var $m_next = -1;
+    var $m_bundleBefore = -1;
+    var $m_bundleNext = -1;
+    var $m_firstPage = -1;
+    var $m_lastPage = -1;
+    var $m_totalPgCount = 0;
+    var $m_totlalBundlePgCount = 0;
+    var $m_pageCount = 0;
+    var $m_curPageNumber = 1;
+    var $m_pages = array(1,2);
+	
+    function WNAnchor() {
+        $m_pages[0][0] = "1";
+        $m_pages[0][1] = "-1";
+    }
+
+    function getBefore() {
+        return $this->m_before;
+    }
+
+    function setBefore($before) {
+        $this->m_before = $before;
+    }
+
+    function getFirstPage() {
+        return $this->m_firstPage;
+    }
+
+    function setFirstPage($firstPage) {
+        $this->m_firstPage = $firstPage;
+    }
+
+    function getLastPage() {
+        return $this->m_lastPage;
+    }
+
+    function setLastPage($lastPage) {
+        $this->m_lastPage = $lastPage;
+    }
+
+    function getNext() {
+        return $this->m_next;
+    }
+
+    function setNext($next) {
+        $this->m_next = $next;
+    }
+
+    function getBundleBefore() {
+        return $this->m_bundleBefore;
+    }
+
+    function setBundleBefore($bundleBefore) {
+        $this->m_bundleBefore = $bundleBefore;
+    }
+
+    function getBundleNext() {
+        return $this->m_bundleNext;
+    }
+
+    function setBundleNext($bundleNext) {
+        $this->m_bundleNext = $bundleNext;
+    }
+
+    function getTotalPgCount() {
+        return $this->m_totalPgCount;
+    }
+
+    function setTotalPgCount($totalPgCount) {
+        $this->m_totalPgCount = $totalPgCount;
+    }
+
+    function getTotlalBundlePgCount() {
+        return $this->m_totlalBundlePgCount;
+    }
+
+    function setTotlalBundlePgCount($totlalBundlePgCount) {
+        $this->m_totlalBundlePgCount = $totlalBundlePgCount;
+    }
+
+    function getPageCount() {
+        return $this->m_pageCount;
+    }
+
+    function setPageCount($pageCount) {
+        $this->m_pageCount = $pageCount;
+    }
+
+    function getCurPageNumber() {
+        return $this->m_curPageNumber;
+    }
+
+    function setCurPageNumber($curPageNumber) {
+        $this->m_curPageNumber = $curPageNumber;
+    }
+
+    function getPages() {
+        return $this->m_pages;
+    }
+
+    function setPages($pages) {
+        $this->m_pages = $pages;
+    }
+}
+?>

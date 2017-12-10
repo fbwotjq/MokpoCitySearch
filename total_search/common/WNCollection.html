@@ -1,0 +1,152 @@
+<?php
+	class WNCollection {
+		var $collectionId;
+		var $aliasId;
+		var $collectionName;
+
+		var $searchField;
+		var $documentField;
+
+		var $rankType;
+		var $rankCondition;
+		var $rankPercent;
+
+		var $prefixQuery;
+		var $filterQuery;
+
+		var $totalResultCount;
+		var $resultCount;
+/*
+		function WNCollection($collectionId, $collectionName) {
+			$this->collectionId = $collectionId;
+			$this->collectionName = $collectionName;
+		}
+*/
+		function WNCollection($collectionId, $aliasId, $collectionName) {
+			$this->collectionId = $collectionId;
+			$this->aliasId = $aliasId;
+			$this->collectionName = $collectionName;
+
+			$this->prefixQuery = "";
+			$this->filterQuery = "";
+		}
+
+		function setAliasId($aliasId) {
+			$this->aliasId = $aliasId;
+		}
+
+		function setRank($rankType, $rankCondition, $rankPercent) {
+			$this->rankType = $rankType;
+			$this->rankCondition = $rankCondition;
+			$this->rankPercent = $rankPercent;
+		}
+
+		function setField($searchField, $documentField) {
+			$this->searchField = $searchField;
+			$this->documentField = $documentField;
+		}
+
+		function setPrefixQuery($prefixQuery) {
+			$this->prefixQuery = $prefixQuery;
+		}
+		function setFilterQuery($filterQuery) {
+			$this->filterQuery = $filterQuery;
+		}
+
+		function setResultCount($totalResultCount, $resultCount) {
+			$this->totalResultCount = $totalResultCount;
+			$this->resultCount = $resultCount;
+		}
+
+/*
+		function getCollectionId() {
+			return $this->collectionId;
+		}
+*/
+	}
+
+	class WNCollectionSet {
+		var $nCollections = array();
+		var $nCount;
+
+		function WNCollectionSet() {
+			$this->init();
+		}
+
+		function init() {
+			unset( $nCollections );
+			$this->nCount = 0;
+		}
+
+		function setCollections($sCollections, $sCount) {
+			$this->nCollections = $sCollections;
+			$this->nCount = $sCount;
+		}
+
+		function addCollection( $collection ) {
+			$this->nCollections[ $this->nCount++ ] = $collection;
+		}
+
+		function getCollections() {
+			return $this->nCollections;
+		}
+
+		function getCount() {
+			return $this->nCount;
+		}
+
+		function getCollection( $sIdx ) {
+			if( $sIdx < 0 || $sIdx >= $this->nCount ) {
+				return -1;
+			}
+
+			return $this->nCollections[ $sIdx ];
+		}
+	}
+
+
+/*
+require_once "common.php";    //common function 
+require_once "mydb.php";    //db class 
+
+class board 
+{ 
+   var $db; 
+   var $FNAME; 
+
+   var $LIST_SIZE, $SQL_LIST; 
+
+   var $TOTAL; 
+   var $pagelist; 
+   var $start; 
+
+   function board($db) 
+   { 
+       $this->db=$db; 
+       $this->FNAME=$_SERVER[PHP_SELF]; 
+   } 
+
+   function config($totalsql, $listsql, $listsize) 
+   { 
+       $this->TOTAL=$this->db->qo($totalsql)+0; 
+       $this->SQL_LIST=$listsql; 
+       $this->LIST_SIZE=$listsize; 
+   } 
+
+   function blist($page, $add='', $pageline=10) 
+   { 
+       if(!$page) $page=1; 
+
+       $this->pagelist=paging($this->FNAME, $page, $this->TOTAL, $this->LIST_SIZE, $pageline, $add, $start, $end); 
+       if($start) $start--; 
+
+       $sql=$this->SQL_LIST. " limit $start, ". $this->LIST_SIZE; 
+       $data=$this->db->q($sql); 
+
+       $this->start= $this->TOTAL - $start ;     //게시물의 번호를 얻기위한 변수 
+
+       return $data; 
+   } 
+} 
+*/
+?>
