@@ -68,7 +68,7 @@ $collectionMappingDefine = array(
     ),
     'member' => array(
         array(
-            'collectionName' => 'menu',
+            'collectionName' => 'member',
             'viewCount' => 10,
             'defaultSearchField' => 'TITLE,CONTENT,WRITER',
             'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,DEPTTEL,DEPTPOS,ID,POSITION,ALIAS'
@@ -197,6 +197,11 @@ $output = curl_exec($ch);
 curl_close($ch);
 $xml = simplexml_load_string($output);
 $popkeywords = $xml->Query;
+
+if($search->w3GetError() !=0) {
+    $debugMsg = "ERROR : ".$search->w3GetErrorInfo()."<br/>\n";
+    echo $debugMsg;
+}
 
 ?>
 <!DOCTYPE html>
@@ -391,11 +396,11 @@ $popkeywords = $xml->Query;
                         <caption>직원업무안내표로 이름,부서,직책,업무,연락처 항목으로 구성</caption>
                         <thead>
                           <tr>
-                            <th scope="col">이름</th>
-                            <th scope="col">부서</th>
-                            <th scope="col">직책</th>
-                            <th scope="col">업무</th>
-                            <th scope="col">연락처</th>
+                            <th scope="col" style="width: 10%;">이름</th>
+                            <th scope="col" style="width: 10%;">부서</th>
+                            <th scope="col" style="width: 10%;">직책</th>
+                            <th scope="col" style="width: 55%;">업무</th>
+                            <th scope="col" style="width: 15%;">연락처</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -403,11 +408,11 @@ $popkeywords = $xml->Query;
                         foreach ($resultTotalSetDocument['member'] as $item) {
                         ?>
                         <tr>
-                            <td><?php $item['TITLE'] ?></td>
-                            <td><?php $item['POSTION'] ?></td>
-                            <td><?php $item['DEPTPOS'] ?></td>
-                            <td><?php $item['CONTENT'] ?></td>
-                            <td><?php $item['DEPTTEL'] ?></td>
+                            <td><?= $item['TITLE'] ?></td>
+                            <td><?= array_key_exists('POSTION', $item) ? $item['POSTION'] : "-" ?></td>
+                            <td><?= $item['DEPTPOS'] ?></td>
+                            <td><?= $item['CONTENT'] ?></td>
+                            <td><?= $item['DEPTTEL'] ?></td>
                         </tr>
                         <?php
                         }
@@ -532,8 +537,7 @@ $popkeywords = $xml->Query;
                         <h3>민원사무편람 <span>[총 <?= array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
                         <ul>
                             <?php
-                            if(array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) {
-                                foreach ($resultTotalSetDocument['minwon'] as $item) {
+                            foreach ($resultTotalSetDocument['minwon'] as $item) {
                             ?>
                             <li>
                                 <h4>
@@ -552,7 +556,6 @@ $popkeywords = $xml->Query;
                                 </ul>
                             </li>
                             <?php
-                                }
                             }
                             ?>
                         </ul>
