@@ -149,7 +149,9 @@ foreach ($currentCollectionMapping as $value) {
     $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
     $ret = $search->w3SetPageInfo($collectionName, $startCount, $viewCount);
     $ret = $search->w3SetSortField($collectionName, $sortCondition);
-    $ret = $search->w3SetDocumentField($collectionName, $documentField);
+    $settingDocumentField = str_replace('CONTENT','CONTENT/300', $documentField);
+    $ret = $search->w3SetDocumentField($collectionName, $settingDocumentField);
+    $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
 
 }
 
