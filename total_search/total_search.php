@@ -117,6 +117,9 @@ $query = $wnUtils->getCheckReq($_GET, "query", "");							        // 검색어
 $startCount	= $wnUtils->getCheckReq($_GET, "startCount", 0);						// 검색 요청할 시작 페이지인덱스
 $sortField	= $wnUtils->getCheckReq($_GET, "sortField", "RANK");					// 검색 정렬 대상 필드
 $popKeywordType	= $wnUtils->getCheckReq($_GET, "popKeywordType", "D");				// 인기검색어 선택 필드
+$exceptKeyword = $wnUtils->getCheckReq($_GET, "exceptKeyword", "");
+$mustKeyword = $wnUtils->getCheckReq($_GET, "mustKeyword", "");
+
 
 $startDate = $wnUtils->getCheckReq($_GET, "startDate", "1980-01-01");				// 날짜 선택 필드
 $startDate = str_replace("-", "/", $startDate);
@@ -128,7 +131,10 @@ $searchField = $wnUtils->getCheckReq($_GET, "searchField", "ALL");					// 검색
 
 $ret = $search->w3SetCodePage(CHARSET);
 $ret = $search->w3SetQueryLog(USE_QUERY_LOG_ON);
-$ret = $search->w3SetCommonQuery($query, COMMON_OR_WHEN_NORESULT_OFF);
+
+$realQuery = $query . (strcmp($exceptKeyword, "") == 0 ? '' : ' !' .$exceptKeyword);
+$realQuery = $query . (strcmp($mustKeyword, "") == 0 ? '' : ' "' . $mustKeyword . '" ' );
+$ret = $search->w3SetCommonQuery($realQuery, COMMON_OR_WHEN_NORESULT_OFF);
 
 $currentCollectionMapping = $collectionMappingDefine[$collection];
 
@@ -292,31 +298,31 @@ if($search->w3GetError() !=0) {
                         <input id="endDate" name="endDate" type="hidden" value="<?= $endDate ?>">
                         <input id="startCount" name="startCount" type="hidden" value="<?= $startCount ?>">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
-                        <a class="button_detail" href="#none"><span>상세검색</span></a>
+                        <a class="button_detail" id="detailSearchButton" href="#none"><span>상세검색</span></a>
                         <p>
                             <input id="rechk" type="checkbox" title="결과 내 재검색 하기" name="rechk">
                             <label for="rechk">결과 내 재검색</label>
                         </p>
                         <!--상세검색-->
-                        <div class="detail_search" style="display:none;">
+                        <div class="detail_search" style="display:none;" id="detail_search_div">
                             <div class="detail_top">
                                 <span class="dtit">상세검색</span>
                                 <span class="dm">여러개의 단어를 입력할 때는 공백으로 구분해서 입력하세요.</span>
-                                <span class="dclose"><a href="#none">닫기</a></span>
+                                <span class="dclose"><a href="#none" id="detailSearchClose">닫기</a></span>
                             </div>
                             <fieldset class="detail_search_field">
                                 <legend>상세검색</legend>
-                                <label for="correct">정확히 일치하는 단어/문장("")</label>
-                                <input id="correct" name="correct" type="text" value=''>
-                                <label for="surely">반드시 포함하는 단어(공백)</label>
-                                <input id="surely" name="surely" type="text" value=''>
-                                <label for="except">제외하는 단어(!)</label>
-                                <input id="except" name="except" type="text" value=''>
+                                <!--<label for="correct">정확히 일치하는 단어/문장("")</label>
+                                <input id="correct" name="correct" type="text" value=''>-->
+                                <label for="mustKeyword">반드시 포함하는 단어(공백)</label>
+                                <input id="mustKeyword" name="mustKeyword" type="text" value='<?= $mustKeyword ?>'>
+                                <label for="exceptKeyword">제외하는 단어(!)</label>
+                                <input id="exceptKeyword" name="exceptKeyword" type="text" value='<?= $exceptKeyword ?>'>
                             </fieldset>
                             <div class="detail_bottom">
                                 <div class="btn">
-                                    <input class="search" value="검색" onclick="doSearch();" type="submit">
-                                    <input class="cancel" value="초기화" type="reset">
+                                    <input class="search" value="검색"  id="detailSearchDo"type="submit">
+                                    <input class="cancel" value="초기화" type="reset" id="detailSearchCancel">
                                 </div>
                             </div>
                         </div>

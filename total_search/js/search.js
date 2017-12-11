@@ -368,10 +368,56 @@ $(document).ready(function() {
     });
 
     $('#dateApplyButton').click(function () {
+
         var startDate = $('#start_day').val();
         var endDate = $('#end_day').val();
         $('#startDate').val(startDate);
         $('#endDate').val(endDate);
+
+    });
+
+    $('#detailSearchClose').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        $('#detail_search_div').hide();
+
+    });
+
+    $('#detailSearchDo').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var query = $('#query').val();
+        if(query === '무엇이든 찾아보세요') {
+            $('#query').val('');
+        }
+
+        $('#searchForm').submit();
+
+    });
+
+    $('#detailSearchCancel').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        $('#correct').val('');
+        $('#surely').val('');
+        $('#except').val('');
+
+    });
+
+    $('#detailSearchButton').click(function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        if($("#detail_search_div").css("display") == "none") {
+            $('#detail_search_div').show();
+        } else {
+            $('#detail_search_div').hide();
+        }
+
     });
 
 });
