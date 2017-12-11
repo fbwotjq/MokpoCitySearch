@@ -194,9 +194,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 $output = curl_exec($ch);
 curl_close($ch);
 $xml = simplexml_load_string($output);
-echo $xml;
 $popkeywords = $xml->Query;
-
 
 ?>
 <!DOCTYPE html>
@@ -284,7 +282,8 @@ $popkeywords = $xml->Query;
                         <input id="searchField" name="searchField" type="hidden" value="<?= $searchField ?>">
                         <input id="popKeywordType" name="popKeywordType" type="hidden" value="<?= $popKeywordType ?>">
                         <input id="startDate" name="startDate" type="hidden" value="<?= $startDate ?>">
-                        <input id="$endDate" name="$endDate" type="hidden" value="<?= $endDate ?>">
+                        <input id="endDate" name="endDate" type="hidden" value="<?= $endDate ?>">
+                        <input id="startCount" name="startCount" type="hidden" value="<?= $startCount ?>">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" href="#none"><span>상세검색</span></a>
                         <p>
