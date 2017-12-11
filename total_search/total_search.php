@@ -328,47 +328,63 @@ $popkeywords = $xml->Query;
             </div>
         	<!--result s-->
             <div class="result<?php if($collection == 'ALL') {?> total_sch<?php } ?>">
-                <?php if(($collection == 'ALL' || $collection == 'menu') && $resultTotalSetDocument['menuTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('menuTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['menuTotalCount'] >  0 ) || $collection == 'menu') { ?>
                 <div class="menu_search">
-                    <h3>메뉴검색<span> [총 <?= $resultTotalSetDocument['menuTotalCount'] ?>건]</span></h3>
+                    <h3>메뉴검색<span> [총 <?= array_key_exists('menuTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['menuTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['menu'] as $item) {
                         ?>
-                    	<li><a href="<?= $item['URL']?>"><?= $item['TITLE'] ?></a></li>
-                        <?php } ?>
+                            <li><a href="<?= $item['URL'] ?>"><?= $item['TITLE'] ?></a></li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="menu">+ 메뉴 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'board') && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0 ) || $collection == 'board') { ?>
                 <div class="news_search">
-                    <h3>목포소식 <span>[총 <?= $resultTotalSetDocument['boardTotalCount'] ?>건]</span></h3>
+                    <h3>목포소식 <span>[총 <?= array_key_exists('boardTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['boardTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['board'] as $item) {
                         ?>
-                        <li>
-                            <h4>
-                                <a href="<?= $item['URL']?>">
-                                    <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
-                                    <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
-                                </a>
-                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                <a href="<?= $item['URL'] ?>" target="_blank" class="new_page">새창열기</a>
-                            </h4>
-                            <p><?= $item['CONTENT'] ?></p>
-                        </li>
+                            <li>
+                                <h4>
+                                    <a href="<?= $item['URL'] ?>">
+                                        <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
+                                        <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
+                                    </a>
+                                    <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                    <a href="<?= $item['URL'] ?>" target="_blank" class="new_page">새창열기</a>
+                                </h4>
+                                <p><?= $item['CONTENT'] ?></p>
+                            </li>
                         <?php
                         }
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="board">+ 목포소식 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'member') && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0 ) || $collection == 'member') { ?>
                 <div class="staff_table">
-                    <h3>직원검색 <span>[총 <?= $resultTotalSetDocument['memberTotalCount'] ?>건]</span></h3>
+                    <h3>직원검색 <span>[총 <?= array_key_exists('memberTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['memberTotalCount'] : "0"?>건]</span></h3>
                     <table>
                         <caption>직원업무안내표로 이름,부서,직책,업무,연락처 항목으로 구성</caption>
                         <thead>
@@ -381,25 +397,32 @@ $popkeywords = $xml->Query;
                           </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            foreach ($resultTotalSetDocument['member'] as $item) {
-                            ?>
-                            <tr>
-                                <td><?php $item['TITLE'] ?></td>
-                                <td><?php $item['POSTION'] ?></td>
-                                <td><?php $item['DEPTPOS'] ?></td>
-                                <td><?php $item['CONTENT'] ?></td>
-                                <td><?php $item['DEPTTEL'] ?></td>
-                            </tr>
-                            <?php
-                            }
-                            ?>
+                        <?php
+                        foreach ($resultTotalSetDocument['member'] as $item) {
+                        ?>
+                        <tr>
+                            <td><?php $item['TITLE'] ?></td>
+                            <td><?php $item['POSTION'] ?></td>
+                            <td><?php $item['DEPTPOS'] ?></td>
+                            <td><?php $item['CONTENT'] ?></td>
+                            <td><?php $item['DEPTTEL'] ?></td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
                         </tbody>
-                      </table>
+                    </table>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="member">+ 직원/업무 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'webpage') && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0 ) || $collection == 'webpage') { ?>
                 <div class="area_search">
                 	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
@@ -422,34 +445,51 @@ $popkeywords = $xml->Query;
                         ?>
                    	</ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="webpage">+ 분야별정보 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'multi') && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0 ) || $collection == 'multi') { ?>
                 <div class="media">
-                	<h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount']?>건]</span></h3>
+                    <h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount'] ?>건]</span></h3>
                     <ul>
                         <?php
-                        foreach ($resultTotalSetDocument['multi'] as $item) {
+                        if(array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) {
+                            foreach ($resultTotalSetDocument['multi'] as $item) {
                         ?>
-                    	<li>
-                            <a href="<?= $item['URL']?>" target="_blank">
-                                <span class="img">
-                                    <img src="/total_search/images/pho1.jpg" alt="<?= $item['TITLE'] ?>" onerror="this.src='/total_search/images/pho1.jpg'"/>
-                                    <span class="play"></span>
-                                </span>
+                        <li>
+                            <a href="<?= $item['URL'] ?>" target="_blank">
+                            <span class="img">
+                                <img src="/total_search/images/pho1.jpg" alt="<?= $item['TITLE'] ?>"
+                                     onerror="this.src='/total_search/images/pho1.jpg'"/>
+                                <span class="play"></span>
+                            </span>
                                 <span class="menuName">[준비중]</span>
                                 <span class="green"><?= $item['CONTENT'] ?></span>
                                 <span class="date"><?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                             </a>
                         </li>
                         <?php
+                            }
                         }
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="multi">+ 사진/동영상 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'infosearch') && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0 ) || $collection == 'infosearch') { ?>
                 <div class="information">
                 	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
@@ -476,51 +516,53 @@ $popkeywords = $xml->Query;
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="infosearch">+ 정보검색 더보기</a></span><?php } ?>
+                    <?php if($collection != 'ALL') { ?>
+                        <div class="paging">
+                            <div class="num">
+                                <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' || $collection == 'minwon') && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
+                <?php if(($collection == 'ALL' && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0 ) || $collection == 'minwon') { ?>
                     <div class="information">
-                        <h3>민원사무편람 <span>[총 <?= $resultTotalSetDocument['minwonTotalCount']?>건]</span></h3>
+                        <h3>민원사무편람 <span>[총 <?= array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
                         <ul>
                             <?php
-                            foreach ($resultTotalSetDocument['minwon'] as $item) {
+                            if(array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) {
+                                foreach ($resultTotalSetDocument['minwon'] as $item) {
                             ?>
                             <li>
                                 <h4>
-                                    <a href="<?= $item['URL']?>">
-                                        <span class="tit">
-                                            <span class="green"><?= $item['TITLE'] ?></span>
-                                        </span>
+                                    <a href="<?= $item['URL'] ?>">
+                                <span class="tit">
+                                    <span class="green"><?= $item['TITLE'] ?></span>
+                                </span>
                                     </a>
                                     <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                                     <a class="new_page" href="#none" target="_blank">새창열기</a>
                                 </h4>
-                                <p class="location"><a href="<?= $item['URL']?>"><?= $item['CONTENT'] ?></a></p>
+                                <p class="location"><a href="<?= $item['URL'] ?>"><?= $item['CONTENT'] ?></a>
+                                </p>
                                 <ul class="file_box">
                                     <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
                                 </ul>
                             </li>
                             <?php
+                                }
                             }
                             ?>
                         </ul>
                         <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="minwon">+ 정보검색 더보기</a></span><?php } ?>
+                        <?php if($collection != 'ALL') { ?>
+                            <div class="paging">
+                                <div class="num">
+                                    <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
-                <?php } ?>
-                <?php if($collection != 'ALL') { ?>
-                <div class="paging">
-                    <div class="num">
-                        <!--<a href="#none" class="more_prev"><span>이전 10페이지</span></a>
-                        <a href="#none" class="prev"><span>이전 페이지</span></a>
-                        <a href="#none" class="on">1</a>
-                        <a href="#none">2</a>
-                        <a href="#none">3</a>
-                        <a href="#none">4</a>
-                        <a href="#none" class="next"><span>다음 페이지</span></a>
-                        <a href="#none" class="more_next"><span>다음 10페이지</span></a>-->
-                        <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
-                    </div>
-                </div>
                 <?php } ?>
             </div>
 			<!--result e-->

@@ -95,6 +95,15 @@ function delMyKeywordEventBinding() {
     });
 }
 
+function goPage(number) {
+    $('#startCount').val(number);
+    var query = $('#query').val();
+    if(query === '무엇이든 찾아보세요') {
+        $('#query').val('');
+    }
+    $('#searchForm').submit();
+}
+
 $(document).ready(function() {
 
     $('#searchForm').submit(function(event) {

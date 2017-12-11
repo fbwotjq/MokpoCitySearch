@@ -1,0 +1,113 @@
+<?php
+	require_once "WNCollection.html"; 
+
+	/*
+	// LOCAL
+	define("SEARCH_IP", "127.0.0.1");
+	define("MANAGER_IP", "127.0.0.1");
+	// DEVELOPMENT
+	define("SEARCH_IP", "115.84.165.213");
+	define("MANAGER_IP", "115.84.165.213");
+	// OPRATOR
+	define("SEARCH_IP", "115.84.165.212");
+	define("MANAGER_IP", "115.84.165.212");
+	*/
+	
+	define("SEARCH_IP", "127.0.0.1");
+	define("MANAGER_IP", "127.0.0.1");
+	
+	//define("SEARCH_IP", "10.211.55.3");
+	//define("MANAGER_IP", "10.211.55.3");
+
+	define("SEARCH_PORT",7000);
+	define("MANAGER_PORT",7800);
+
+	define("SEARCH_TIMEOUT", 10000);
+	define("CHARSET", "UTF-8");
+	define("REALTIME_COUNT", 20);
+
+	define("CONNECTION_KEEP", 0);	// recevive mode
+	define("CONNECTION_REUSE", 2);
+	define("CONNECTION_CLOSE", 3);
+
+	define("USE_QUERY_LOG_OFF", 0); // query Log
+	define("USE_QUERY_LOG_ON", 1); 
+
+	define("USE_LA_OFF", 0);		// Language Analyzer 
+	define("USE_LA_ON", 1);
+	define("IGNORE_CASE_OFF", 0);	// 대소문자 구분여부
+	define("IGNORE_CASE_ON", 1);
+	define("USE_ORIGINAL_OFF", 0);	// 원래 토큰 포함 여부
+	define("USE_ORIGINAL_ON", 1);
+	define("USE_SYNONYM_OFF", 0);	// 동의어 확장 여부
+	define("USE_SYNONYM_ON", 1);
+
+	define("USE_HIGHLIGHT_OFF", 0); // highlighting
+	define("USE_HIGHLIGHT_ON", 1);
+	define("USE_SNIPPET_OFF", 0);	// summarizing
+	define("USE_SNIPPET_ON", 1);
+	
+	define("USE_RESULT_STRING", 0); // result data type	
+	define("USE_RESULT_XML", 1);
+	define("USE_RESULT_JSON", 2);
+	define("USE_RESULT_DUPLICATE_STRING", 3); //uid result data type	
+	define("USE_RESULT_DUPLICATE_XML", 4);
+	define("USE_RESULT_DUPLICATE_JSON", 5);
+
+	define("COMMON_OR_WHEN_NORESULT_OFF", 0);
+	define("COMMON_OR_WHEN_NORESULT_ON", 1);
+	define("SPELLER_MIN_RESULT_COUNT", 10);	//오타 교정 최소 결과 카운트
+
+	define("OP_AND_ON", 1);			// 1: AND 적용, 0: OR 적용
+	define("OP_AND_OFF", 0);
+
+	// 메뉴검색
+	$menu = new WNCollection("menu", "menu", "메뉴검색");
+	$menu->setRank("basic", "prkom", "0");
+	$menu->setField("TITLE,CONTENT,WRITER", "Date,TITLE,CONTENT/150,WRITER,URL,ALIAS");
+	
+	// 완도소식
+	$board = new WNCollection("board", "board", "완도소식");
+	$board->setRank("basic", "prkom", "0");
+	$board->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDTITLE,URL,ALIAS");
+	
+	// 직원/업무
+	$member = new WNCollection("member", "member", "직원/업무");
+	$member->setRank("basic", "prkom", "0");
+	$member->setField("TITLE,CONTENT,WRITER", "Date,TITLE,CONTENT/15,WRITER,DEPTTEL,DEPTPOS,ID,POSITION,ALIAS");
+	
+	// 분야별정보
+	$webpage = new WNCollection("webpage", "webpage", "분야별정보");
+	$webpage->setRank("basic", "prkom", "0");
+	$webpage->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,PATHSTRING,PATHURL,ALIAS");
+	
+	// 사진/동영상
+	$multi = new WNCollection("multi", "multi", "사진/동영상");
+	$multi->setRank("basic", "prkom", "0");
+	$multi->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDID,RENAME,IDX,URL,ALIAS");
+
+	// 정보검색
+	$infosearch = new WNCollection("infosearch", "infosearch", "정보검색");
+	$infosearch->setRank("basic", "prkom", "0");
+	$infosearch->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,PATHSTRING,PATHURL,ALIAS");
+	
+	// 민원사무편람
+	$minwon = new WNCollection("minwon", "minwon", "민원사무편람");
+	$minwon->setRank("basic", "prkom", "0");
+	$minwon->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDID,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,URL,ALIAS");
+	
+	$totalCollections = array($menu, $board, $member, $webpage, $multi, $infosearch, $minwon);		// 통합검색 대상 컬렉션
+	//$relationCollections = array($menu,$section,$citizen);			// 관계문서 검색 대상 컬렉션
+	//$opengovCollections = array($menu,$section,$apvl);				// 서울시청홈페이지(정보소통광장)연동용 검색 대상 컬렉션
+
+
+	// 분야별정보 시스템 정보를 DB로 SELECT
+	/*
+	function getSystemCode(){
+		$systemcode_query = "SELECT code_value, code_nm FROM tc_df_comm_code WHERE code_se_code = '0003' AND adit_iem2 = '연계대상'";
+		$systemcode = db_query($systemcode_query)->fetchAll();
+	return $systemcode;
+	
+	}
+	*/
+?>
