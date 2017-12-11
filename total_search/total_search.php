@@ -178,7 +178,7 @@ foreach ($currentCollectionMapping as $value) {
         foreach($collectionDocumentFieldArray as $collectionDocumentField) {
 
             $columnValue = $search->w3GetField($collectionName, $collectionDocumentField, $i);
-            $resultCollectionSetDocument[$collectionDocumentField] = $columnValue;
+            $resultCollectionSetDocument[$collectionDocumentField] = str_replace('false', ' - ', $columnValue);
 
         }
         array_push($resultCollectionSetDocumentArray, $resultCollectionSetDocument);
@@ -412,7 +412,7 @@ if($search->w3GetError() !=0) {
                             <td><?= array_key_exists('POSTION', $item) ? $item['POSTION'] : "-" ?></td>
                             <td><?= $item['DEPTPOS'] ?></td>
                             <td><?= $item['CONTENT'] ?></td>
-                            <td><?= $item['DEPTTEL'] ?></td>
+                            <td><?= array_key_exists('DEPTTEL', $item) ? $item['DEPTTEL'] : "-"  ?></td>
                         </tr>
                         <?php
                         }
