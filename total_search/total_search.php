@@ -35,13 +35,13 @@ $collectionMappingDefine = array(
             'collectionName' => 'minwon',
             'viewCount' => 3,
             'defaultSearchField' => 'TITLE,CONTENT,WRITER,ORIGINAL_NAME',
-            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,ALIAS'
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,ATTACH_LINK,ALIAS'
         ),
         array(
             'collectionName' => 'multi',
             'viewCount' => 6,
             'defaultSearchField' => 'TITLE,CONTENT,WRITER',
-            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,IDX,ALIAS'
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,MENU_NAME,ALIAS'
         ),
         array(
             'collectionName' => 'webpage',
@@ -87,7 +87,7 @@ $collectionMappingDefine = array(
             'collectionName' => 'minwon',
             'viewCount' => 10,
             'defaultSearchField' => 'TITLE,CONTENT,WRITER,ORIGINAL_NAME',
-            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,ALIAS'
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,URL,ORIGINAL_NAME,ATTACH_LINK,ALIAS'
         )
     ),
     'multi' => array(
@@ -95,7 +95,7 @@ $collectionMappingDefine = array(
             'collectionName' => 'multi',
             'viewCount' => 12,
             'defaultSearchField' => 'TITLE,CONTENT,WRITER',
-            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,IDX,ALIAS'
+            'documentField' => 'DOCID,Date,TITLE,CONTENT,WRITER,BOARDID,RENAME,URL,MENU_NAME,ALIAS'
         )
     ),
     'webpage' => array(
@@ -147,7 +147,7 @@ foreach ($currentCollectionMapping as $value) {
     $searchFieldCondition = $searchField == 'ALL' ? $value['defaultSearchField'] : $searchField;
     $documentField = $value['documentField'];
 
-    //echo(printf('SETTING SEARCH CONDITION => collectionName:%s, viewCount:%s, sortField:%s <br/>', $collectionName, $viewCount, $sortCondition));
+    #echo(printf('SETTING SEARCH CONDITION => collectionName:%s, viewCount:%s, sortField:%s, documentField:%s<br/>', $collectionName, $viewCount, $sortCondition, $documentField));
 
     $ret = $search->w3AddCollection($collectionName);
     $ret = $search->w3SetSearchField($collectionName, $searchFieldCondition);
@@ -156,7 +156,8 @@ foreach ($currentCollectionMapping as $value) {
     $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
     $ret = $search->w3SetPageInfo($collectionName, $startCount, $viewCount);
     $ret = $search->w3SetSortField($collectionName, $sortCondition);
-    $settingDocumentField = str_replace('CONTENT','CONTENT/300', $documentField);
+    $settingDocumentField = str_replace('CONTENT', 'multi' == $collectionName ? 'CONTENT/10' : 'CONTENT/300', $documentField);
+    #echo $collectionName . ' => ' .$settingDocumentField . ' : ' . $documentField .  '<br/>';
     $ret = $search->w3SetDocumentField($collectionName, $settingDocumentField);
     $ret = $search->w3SetHighlight($collectionName, USE_HIGHLIGHT_ON, USE_SNIPPET_ON);
 
@@ -172,6 +173,7 @@ foreach ($currentCollectionMapping as $value) {
 
     $collectionName = $value['collectionName'];
     $collectionDocumentFieldArray = explode(",", $value['documentField']);
+    //echo implode("|",$collectionDocumentFieldArray) . '<br/>';
 
     $collectionTotalCount = $search->w3GetResultTotalCount($collectionName);
     $collectionResultCount = $search->w3GetResultCount($collectionName);
@@ -180,10 +182,11 @@ foreach ($currentCollectionMapping as $value) {
     $resultTotalSetDocument[$collectionName . 'ResultCount'] = $collectionResultCount;
 
     $resultCollectionSetDocumentArray = array();
+    #echo $collectionName . ' - ' . $collectionResultCount .  ' - ' . $collectionTotalCount . '<br/>';
     for( $i = 0 ; $i < $collectionResultCount ; $i++ ) {
         $resultCollectionSetDocument = array();
         foreach($collectionDocumentFieldArray as $collectionDocumentField) {
-
+            #echo $collectionName . ' - ' . $collectionResultCount .  ' - ' . $collectionTotalCount  .  ' - ' . $collectionDocumentField . '<br/>';
             $columnValue = $search->w3GetField($collectionName, $collectionDocumentField, $i);
             $resultCollectionSetDocument[$collectionDocumentField] = str_replace('false', ' - ', $columnValue);
 
@@ -207,7 +210,7 @@ $popkeywords = $xml->Query;
 
 if($search->w3GetError() !=0) {
     $debugMsg = "ERROR : ".$search->w3GetErrorInfo()."<br/>\n";
-    echo $debugMsg;
+    echo $debugMsg . '<br/>';
 }
 
 ?>
@@ -499,7 +502,7 @@ if($search->w3GetError() !=0) {
                                      onerror="this.src='/total_search/images/pho1.jpg'"/>
                                 <span class="play"></span>
                             </span>
-                                <span class="menuName"><?= $item['BOARDID'] ?></span>
+                                <span class="menuName"><?= $item['MENU_NAME'] ?></span>
                                 <span class="green"><?= $item['CONTENT'] ?></span>
                                 <span class="date"><?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                             </a>
@@ -556,7 +559,7 @@ if($search->w3GetError() !=0) {
                 </div>
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'minwon') && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
-                    <div class="information">
+                    <div class="affairs_manual">
                         <h3>민원사무편람 <span>[총 <?= array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
                         <ul>
                             <?php
@@ -574,9 +577,9 @@ if($search->w3GetError() !=0) {
                                 </h4>
                                 <p class="location"><a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>"><?= $item['CONTENT'] ?></a>
                                 </p>
-                                <!--<ul class="file_box">
+                                <ul class="file_box">
                                     <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
-                                </ul>-->
+                                </ul>
                             </li>
                             <?php
                             }
