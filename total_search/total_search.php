@@ -368,7 +368,12 @@ if($search->w3GetError() !=0) {
                         <?php
                         foreach ($resultTotalSetDocument['menu'] as $item) {
                         ?>
-                            <li><?= $item['URL'] ?></a></li>
+                            <li>
+                                <?php
+                                $urlPrefix = explode(".", $item['WRITER']);
+                                echo str_replace('href="', 'href="/'.$urlPrefix[0], $item['URL']);
+                                ?>
+                            </li>
                         <?php
                         }
                         ?>
@@ -567,7 +572,11 @@ if($search->w3GetError() !=0) {
                             ?>
                             <li>
                                 <h4>
-                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>">
+                                    <a href="<?
+                                    $urlPrefix = explode(".", ($item['URL']));
+                                    'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL']))
+                                    ?>
+                                    ">
                                 <span class="tit">
                                     <span class="green"><?= $item['TITLE'] ?></span>
                                 </span>
