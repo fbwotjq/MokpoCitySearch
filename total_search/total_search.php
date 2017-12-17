@@ -281,7 +281,7 @@ if($search->w3GetError() !=0) {
         </div>
     </div>
     <!--container s-->
-	<div id="container" class="group">
+	<div id="container" class="group<?php if($totalSearchCount == 0) {?> noResult<?php } ?>">
     	<div id="top">
         	<div class="inner">
                 <p class="logo"><span>건강의 섬 목포</span></p>
@@ -341,7 +341,22 @@ if($search->w3GetError() !=0) {
             </div>
         	<!--result s-->
             <div class="result<?php if($collection == 'ALL') {?> total_sch<?php } ?>">
-                <?php if(($collection == 'ALL' && array_key_exists('menuTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['menuTotalCount'] >  0 ) || $collection == 'menu') { ?>
+                <?php
+                if($totalSearchCount == 0) {
+                ?>
+                <div class="result_no">
+                    <p>'dsfdsf'에 대한<span>검색결과가 없습니다</span></p>
+                    <ul>
+                        <li>- 단어의 철자가 정확한지 확인해 보세요.</li>
+                        <li>- 한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+                        <li>- 검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
+                        <li>- 두 단어 이상의 검색어인 경우, 띄어쓰기를 확인해 보세요.</li>
+                    </ul>
+                </div>
+                <?php
+                }
+                ?>
+                <?php if(($collection == 'ALL' || $collection == 'menu') && array_key_exists('menuTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['menuTotalCount'] >  0) { ?>
                 <div class="menu_search">
                     <h3>메뉴검색<span> [총 <?= array_key_exists('menuTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['menuTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
@@ -354,7 +369,7 @@ if($search->w3GetError() !=0) {
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="menu">+ 메뉴 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('menuTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['menuTotalCount'] >  0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -363,7 +378,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0 ) || $collection == 'board') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'board') && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
                 <div class="news_search">
                     <h3>목포소식 <span>[총 <?= array_key_exists('boardTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['boardTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
@@ -386,7 +401,7 @@ if($search->w3GetError() !=0) {
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="board">+ 목포소식 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -395,7 +410,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0 ) || $collection == 'member') { ?>
+                <?php if(($collection == 'ALL'  || $collection == 'member') && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
                 <div class="staff_table">
                     <h3>직원검색 <span>[총 <?= array_key_exists('memberTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['memberTotalCount'] : "0"?>건]</span></h3>
                     <table>
@@ -426,7 +441,7 @@ if($search->w3GetError() !=0) {
                         </tbody>
                     </table>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="member">+ 직원/업무 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -435,7 +450,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0 ) || $collection == 'webpage') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'webpage') && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
                 <div class="area_search">
                 	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
@@ -458,7 +473,7 @@ if($search->w3GetError() !=0) {
                         ?>
                    	</ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="webpage">+ 분야별정보 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -467,7 +482,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0 ) || $collection == 'multi') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'multi') && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
                 <div class="media">
                     <h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount'] ?>건]</span></h3>
                     <ul>
@@ -493,7 +508,7 @@ if($search->w3GetError() !=0) {
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="multi">+ 사진/동영상 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -502,7 +517,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0 ) || $collection == 'infosearch') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'infosearch') && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
                 <div class="information">
                 	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
@@ -529,7 +544,7 @@ if($search->w3GetError() !=0) {
                         ?>
                     </ul>
                     <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="infosearch">+ 정보검색 더보기</a></span><?php } ?>
-                    <?php if($collection != 'ALL') { ?>
+                    <?php if($collection != 'ALL' && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
                         <div class="paging">
                             <div class="num">
                                 <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
@@ -538,7 +553,7 @@ if($search->w3GetError() !=0) {
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <?php if(($collection == 'ALL' && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0 ) || $collection == 'minwon') { ?>
+                <?php if(($collection == 'ALL' || $collection == 'minwon') && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
                     <div class="information">
                         <h3>민원사무편람 <span>[총 <?= array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
                         <ul>
@@ -566,7 +581,7 @@ if($search->w3GetError() !=0) {
                             ?>
                         </ul>
                         <?php if($collection == 'ALL') { ?><span class="more"><a class="collectionDepts" href="minwon">+ 정보검색 더보기</a></span><?php } ?>
-                        <?php if($collection != 'ALL') { ?>
+                        <?php if($collection != 'ALL'&& array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
                             <div class="paging">
                                 <div class="num">
                                     <?php echo $wnUtils->getNewPageLinks($startCount, $totalSearchCount, $viewCount, 10); ?>
