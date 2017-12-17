@@ -114,12 +114,12 @@ $wnUtils = new WNUtils();
 
 $collection  = $wnUtils->getCheckReq($_GET, "collection", "ALL");				    // 검색 대상 (전체 ALL)
 $query = $wnUtils->getCheckReq($_GET, "query", "");							        // 검색어
+$hiddenQuery = $wnUtils->getCheckReq($_GET, "hiddenQuery", "");						// 결과내 재검색시
 $startCount	= $wnUtils->getCheckReq($_GET, "startCount", 0);						// 검색 요청할 시작 페이지인덱스
 $sortField	= $wnUtils->getCheckReq($_GET, "sortField", "RANK");					// 검색 정렬 대상 필드
 $popKeywordType	= $wnUtils->getCheckReq($_GET, "popKeywordType", "D");				// 인기검색어 선택 필드
 $exceptKeyword = $wnUtils->getCheckReq($_GET, "exceptKeyword", "");
 $mustKeyword = $wnUtils->getCheckReq($_GET, "mustKeyword", "");
-
 
 $startDate = $wnUtils->getCheckReq($_GET, "startDate", "1980-01-01");				// 날짜 선택 필드
 $startDate = str_replace("-", "/", $startDate);
@@ -132,6 +132,7 @@ $searchField = $wnUtils->getCheckReq($_GET, "searchField", "ALL");					// 검색
 $ret = $search->w3SetCodePage(CHARSET);
 $ret = $search->w3SetQueryLog(USE_QUERY_LOG_ON);
 
+$query = $query . ' ' . $hiddenQuery;
 $realQuery = $query . (strcmp($exceptKeyword, "") == 0 ? '' : ' !' .$exceptKeyword);
 $realQuery = $query . (strcmp($mustKeyword, "") == 0 ? '' : ' "' . $mustKeyword . '" ' );
 $ret = $search->w3SetCommonQuery($realQuery, COMMON_OR_WHEN_NORESULT_OFF);
@@ -297,6 +298,7 @@ if($search->w3GetError() !=0) {
                         <input id="startDate" name="startDate" type="hidden" value="<?= $startDate ?>">
                         <input id="endDate" name="endDate" type="hidden" value="<?= $endDate ?>">
                         <input id="startCount" name="startCount" type="hidden" value="<?= $startCount ?>">
+                        <input id="hiddenQuery" name="hiddenQuery" type="hidden" value="">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" id="detailSearchButton" href="#none"><span>상세검색</span></a>
                         <p>

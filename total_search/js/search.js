@@ -420,4 +420,17 @@ $(document).ready(function() {
 
     });
 
+    $('#rechk').change(function () {
+
+        if ($(this).is(":checked") == true) {
+            var query = $('#query').val();
+            $('#hiddenQuery').val(query);
+            $('#query').val('');
+        } else {
+            var hiddenQuery = $('#hiddenQuery').val();
+            $('#query').val(hiddenQuery);
+            $('#hiddenQuery').val('');
+        }
+    });
+
 });
