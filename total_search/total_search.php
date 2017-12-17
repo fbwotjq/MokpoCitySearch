@@ -132,7 +132,7 @@ $searchField = $wnUtils->getCheckReq($_GET, "searchField", "ALL");					// 검색
 $ret = $search->w3SetCodePage(CHARSET);
 $ret = $search->w3SetQueryLog(USE_QUERY_LOG_ON);
 
-$query = $query . ' ' . $hiddenQuery;
+$query = $query . ($hiddenQuery == '' ? '' : ' ' . $hiddenQuery);
 $realQuery = $query . (strcmp($exceptKeyword, "") == 0 ? '' : ' !' .$exceptKeyword);
 $realQuery = $query . (strcmp($mustKeyword, "") == 0 ? '' : ' "' . $mustKeyword . '" ' );
 $ret = $search->w3SetCommonQuery($realQuery, COMMON_OR_WHEN_NORESULT_OFF);
@@ -365,7 +365,7 @@ if($search->w3GetError() !=0) {
                         <?php
                         foreach ($resultTotalSetDocument['menu'] as $item) {
                         ?>
-                            <li><a href="<?= $item['URL'] ?>"><?= $item['TITLE'] ?></a></li>
+                            <li><?= $item['URL'] ?></a></li>
                         <?php
                         }
                         ?>
@@ -389,12 +389,12 @@ if($search->w3GetError() !=0) {
                         ?>
                             <li>
                                 <h4>
-                                    <a href="<?= $item['URL'] ?>">
+                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>">
                                         <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
                                         <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
                                     </a>
                                     <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                    <a href="<?= $item['URL'] ?>" target="_blank" class="new_page">새창열기</a>
+                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>" target="_blank" class="new_page">새창열기</a>
                                 </h4>
                                 <p><?= $item['CONTENT'] ?></p>
                             </li>
@@ -432,7 +432,7 @@ if($search->w3GetError() !=0) {
                         ?>
                         <tr>
                             <td><?= $item['TITLE'] ?></td>
-                            <td><?= array_key_exists('POSTION', $item) ? $item['POSTION'] : "-" ?></td>
+                            <td><?= array_key_exists('POSITION', $item) ? $item['POSITION'] : "-" ?></td>
                             <td><?= $item['DEPTPOS'] ?></td>
                             <td><?= $item['CONTENT'] ?></td>
                             <td><?= array_key_exists('DEPTTEL', $item) ? $item['DEPTTEL'] : "-"  ?></td>
@@ -493,13 +493,13 @@ if($search->w3GetError() !=0) {
                             foreach ($resultTotalSetDocument['multi'] as $item) {
                         ?>
                         <li>
-                            <a href="<?= $item['URL'] ?>" target="_blank">
+                            <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>" target="_blank">
                             <span class="img">
-                                <img src="/total_search/images/pho1.jpg" alt="<?= $item['TITLE'] ?>"
+                                <img src="<?= $item['RENAME'] ?>" alt="<?= $item['TITLE'] ?>"
                                      onerror="this.src='/total_search/images/pho1.jpg'"/>
                                 <span class="play"></span>
                             </span>
-                                <span class="menuName">[준비중]</span>
+                                <span class="menuName"><?= $item['BOARDID'] ?></span>
                                 <span class="green"><?= $item['CONTENT'] ?></span>
                                 <span class="date"><?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                             </a>
@@ -564,7 +564,7 @@ if($search->w3GetError() !=0) {
                             ?>
                             <li>
                                 <h4>
-                                    <a href="<?= $item['URL'] ?>">
+                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>">
                                 <span class="tit">
                                     <span class="green"><?= $item['TITLE'] ?></span>
                                 </span>
@@ -572,11 +572,11 @@ if($search->w3GetError() !=0) {
                                     <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                                     <a class="new_page" href="#none" target="_blank">새창열기</a>
                                 </h4>
-                                <p class="location"><a href="<?= $item['URL'] ?>"><?= $item['CONTENT'] ?></a>
+                                <p class="location"><a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>"><?= $item['CONTENT'] ?></a>
                                 </p>
-                                <ul class="file_box">
+                                <!--<ul class="file_box">
                                     <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
-                                </ul>
+                                </ul>-->
                             </li>
                             <?php
                             }
