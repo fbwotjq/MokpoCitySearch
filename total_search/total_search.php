@@ -397,12 +397,18 @@ if($search->w3GetError() !=0) {
                         ?>
                             <li>
                                 <h4>
-                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>">
+                                    <a href="<?php
+                                    $urlPrefix = explode(".", ($item['URL']));
+                                    echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
+                                    ?>">
                                         <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
                                         <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
                                     </a>
                                     <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                    <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>" target="_blank" class="new_page">새창열기</a>
+                                    <a href="<?php
+                                    $urlPrefix = explode(".", ($item['URL']));
+                                    echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
+                                    ?>" target="_blank" class="new_page">새창열기</a>
                                 </h4>
                                 <p><?= $item['CONTENT'] ?></p>
                             </li>
@@ -469,12 +475,18 @@ if($search->w3GetError() !=0) {
                         ?>
                         <li>
                             <h4>
-                                <a href="<?= $item['URL']?>">
+                                <a href="<?php
+                                    $urlPrefix = explode(".", ($item['PATHURL']));
+                                    echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL']))
+                                ?>">
                                     <span class="menuName">[<?= str_replace("|", " > ", $item['PATHSTRING']) ?>]</span>
                                     <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
                                 </a>
                                 <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                <a href="<?= $item['URL']?>" target="_blank" class="new_page">새창열기</a>
+                                <a href="<?php
+                                $urlPrefix = explode(".", ($item['PATHURL']));
+                                echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL']))
+                                ?>" target="_blank" class="new_page">새창열기</a>
                             </h4>
                             <p><?= $item['CONTENT'] ?></p>
                         </li>
@@ -501,11 +513,19 @@ if($search->w3GetError() !=0) {
                             foreach ($resultTotalSetDocument['multi'] as $item) {
                         ?>
                         <li>
-                            <a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>" target="_blank">
+                            <a href="<?php
+                            $urlPrefix = explode(".", ($item['URL']));
+                            echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
+                            ?>" target="_blank">
                             <span class="img">
-                                <img src="<?= $item['RENAME'] ?>" alt="<?= $item['TITLE'] ?>"
+                                <img src="<?php
+                                    $imagePath = str_replace('_data', 'ybmodule.file', $item['RENAME']);
+                                    if(strcmp($item['WRITER'], 'movie') == 0) {
+                                        $imagePath .= ".gif";
+                                    }
+                                ?>" alt="<?= $item['TITLE']?>"
                                      onerror="this.src='/total_search/images/pho1.jpg'"/>
-                                <span class="play"></span>
+                                <?php if(strcmp($item['WRITER'], 'movie') == 0) {?><span class="play"></span><?php } ?>
                             </span>
                                 <span class="menuName"><?= $item['MENU_NAME'] ?></span>
                                 <span class="green"><?= $item['CONTENT'] ?></span>
@@ -536,18 +556,25 @@ if($search->w3GetError() !=0) {
                         ?>
                     	<li>
                             <h4>
-                                <a href="<?= $item['URL']?>">
+                                <a href="<?php
+                                $urlPrefix = explode(".", ($item['PATHURL']));
+                                echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL'])) . '?mode=view&idx=' . $item['DOCID'];
+                                ?>">
                                     <span class="tit">
                                         <span class="green"><?= $item['TITLE'] ?></span>
                                     </span>
                                 </a>
                                 <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
-                                <a class="new_page" href="#none" target="_blank">새창열기</a>
+                                <a class="new_page" href="<?php
+                                $urlPrefix = explode(".", ($item['PATHURL']));
+                                echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL'])) . '?mode=view&idx=' . $item['DOCID'];
+                                ?>" target="_blank">새창열기</a>
                             </h4>
-                            <p class="location"><a href="#none"><?= str_replace("|", " > ", $item['PATHSTRING']) ?></a></p>
-                            <ul class="file_box">
+                            <p class="location"><a href="#none"><?= $item['WRITER'] . ' > ' . str_replace("|", " > ", $item['PATHSTRING']) ?></a></p>
+                            <!--ul class="file_box">
                                 <li class="hwp"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 1부.hwp</a></li>
-                            </ul>
+                            </ul>-->
+                            <p><?= $item['CONTENT'] ?></p>
                         </li>
                         <?php
                         }
@@ -572,11 +599,10 @@ if($search->w3GetError() !=0) {
                             ?>
                             <li>
                                 <h4>
-                                    <a href="<?
+                                    <a href="<?php
                                     $urlPrefix = explode(".", ($item['URL']));
-                                    'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL']))
-                                    ?>
-                                    ">
+                                    echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
+                                    ?>">
                                 <span class="tit">
                                     <span class="green"><?= $item['TITLE'] ?></span>
                                 </span>
@@ -586,9 +612,10 @@ if($search->w3GetError() !=0) {
                                 </h4>
                                 <p class="location"><a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>"><?= $item['CONTENT'] ?></a>
                                 </p>
-                                <ul class="file_box">
-                                    <li class="hwp"><a href="#"><?= $item['ORIGINAL_NAME'] ?></a></li>
-                                </ul>
+                                <!--<ul class="file_box">
+                                    <li class="hwp"><a href="<?/*= $item['ATTACH_LINK'] */?>"><?/*= $item['ORIGINAL_NAME'] */?></a></li>
+                                </ul>-->
+                                <p><?= $item['CONTENT'] ?></p>
                             </li>
                             <?php
                             }
