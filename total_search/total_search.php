@@ -610,12 +610,12 @@ if($search->w3GetError() !=0) {
                                     <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
                                     <a class="new_page" href="#none" target="_blank">새창열기</a>
                                 </h4>
-                                <p class="location"><a href="<?= 'http://' . str_replace('_80', ':80', str_replace('|', '/', $item['URL'])) ?>"><?= $item['CONTENT'] ?></a>
-                                </p>
-                                <!--<ul class="file_box">
-                                    <li class="hwp"><a href="<?/*= $item['ATTACH_LINK'] */?>"><?/*= $item['ORIGINAL_NAME'] */?></a></li>
-                                </ul>-->
                                 <p><?= $item['CONTENT'] ?></p>
+                                <?php if(array_key_exists('ATTACH_LINK', $item)) {?>
+                                <ul class="file_box">
+                                    <li class="hwp"><a href="<?= str_replace('_data', 'ybmodule.file', $item['ATTACH_LINK']) ?>"><?= $item['ORIGINAL_NAME'] ?></a></li>
+                                </ul>
+                                <?php } ?>
                             </li>
                             <?php
                             }
