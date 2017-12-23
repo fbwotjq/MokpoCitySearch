@@ -350,7 +350,7 @@ if($search->w3GetError() !=0) {
                 if($totalSearchCount == 0) {
                 ?>
                 <div class="result_no">
-                    <p>'dsfdsf'에 대한<span>검색결과가 없습니다</span></p>
+                    <p>'<?= $query ?>'에 대한<span>검색결과가 없습니다</span></p>
                     <ul>
                         <li>- 단어의 철자가 정확한지 확인해 보세요.</li>
                         <li>- 한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
@@ -611,9 +611,9 @@ if($search->w3GetError() !=0) {
                                     <a class="new_page" href="#none" target="_blank">새창열기</a>
                                 </h4>
                                 <p><?= $item['CONTENT'] ?></p>
-                                <?php if(array_key_exists('ATTACH_LINK', $item)) {?>
+                                <?php if(array_key_exists('ORIGINAL_NAME', $item) && $item['ORIGINAL_NAME']) {?>
                                 <ul class="file_box">
-                                    <li class="hwp"><a href="<?= str_replace('_data', 'ybmodule.file', $item['ATTACH_LINK']) ?>"><?= $item['ORIGINAL_NAME'] ?></a></li>
+                                    <li class="hwp"><a href="<?= str_replace('_data', 'ybmodule.file', $item['ATTACH_LINK']) ?>">"<?= $item['ORIGINAL_NAME'] ?>"</a></li>
                                 </ul>
                                 <?php } ?>
                             </li>
