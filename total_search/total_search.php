@@ -256,19 +256,19 @@ if($search->w3GetError() !=0) {
         	<h2>기간</h2>
             <div class="range" id="dataRangeButton">
                 <a id="range1" class="list1 on" title="전체" href=",">전체</a>
-                <a id="range2" class="list2" title="1주" href="<?= date('Y-m-d', strtotime("-1 week")) ?>,<?= date('Y-m-d') ?>">1주</a>
-                <a id="range3" class="list3" title="1개월" href="<?= date('Y-m-d', strtotime("-1 month")) ?>,<?= date('Y-m-d') ?>">1개월</a>
-                <a id="range4" class="list4" title="1년" href="<?= date('Y-m-d', strtotime("-1 year")) ?>,<?= date('Y-m-d') ?>">1년</a>
+                <a id="range2" class="list2" title="1주" href="<?php echo date('Y-m-d', strtotime("-1 week")) ?>,<?php echo date('Y-m-d') ?>">1주</a>
+                <a id="range3" class="list3" title="1개월" href="<?php echo date('Y-m-d', strtotime("-1 month")) ?>,<?php echo date('Y-m-d') ?>">1개월</a>
+                <a id="range4" class="list4" title="1년" href="<?php echo date('Y-m-d', strtotime("-1 year")) ?>,<?php echo date('Y-m-d') ?>">1년</a>
             </div>
             <div class="date_search">
                 <p>
                     <label class="blind" for="start_day">시작일</label>
-                    <input id="start_day" class="hasDatepicker" type="text" readonly value="<?= $startDate == '' ? '시작일' : str_replace('/', '-', $startDate) ?>">
+                    <input id="start_day" class="hasDatepicker" type="text" readonly value="<?php echo $startDate == '' ? '시작일' : str_replace('/', '-', $startDate) ?>">
                     <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;" id="start_day_img">
                 </p>
                 <p>
                     <label class="blind" for="end_day">종료일</label>
-                    <input id="end_day" class="hasDatepicker" type="text" readonly value="<?= $endDate == '' ? '종료일' : str_replace('/', '-', $endDate) ?>">
+                    <input id="end_day" class="hasDatepicker" type="text" readonly value="<?php echo $endDate == '' ? '종료일' : str_replace('/', '-', $endDate) ?>">
                     <img class="ui-datepicker-trigger" src="/total_search/images/calender.png" alt="달력" title="달력" style="width:33px; height:30px;" id="end_day_img">
                 </p>
                 <input class="date_apply" type="button" value="날짜적용" id="dateApplyButton">
@@ -289,18 +289,18 @@ if($search->w3GetError() !=0) {
     	<div id="top">
         	<div class="inner">
                 <p class="logo"><span>건강의 섬 목포</span></p>
-                <form id="searchForm" action="/total_search/total_search.php" method="get">
+                <form id="searchForm" action="/total_search/total_search.html" method="get">
                 <div class="top_search">
                     <fieldset>
                         <legend>통합검색</legend>
-                        <input id="query" type="text" name="query" value="<?= $query == '' ? '무엇이든 찾아보세요' : $query ?>" name="query" autocomplete="off">
-                        <input id="collection" name="collection" type="hidden" value="<?= $collection ?>">
-                        <input id="sortField" name="sortField" type="hidden" value="<?= $sortField ?>">
-                        <input id="searchField" name="searchField" type="hidden" value="<?= $searchField ?>">
-                        <input id="popKeywordType" name="popKeywordType" type="hidden" value="<?= $popKeywordType ?>">
-                        <input id="startDate" name="startDate" type="hidden" value="<?= $startDate ?>">
-                        <input id="endDate" name="endDate" type="hidden" value="<?= $endDate ?>">
-                        <input id="startCount" name="startCount" type="hidden" value="<?= $startCount ?>">
+                        <input id="query" type="text" name="query" value="<?php echo $query == '' ? '무엇이든 찾아보세요' : $query ?>" name="query" autocomplete="off">
+                        <input id="collection" name="collection" type="hidden" value="<?php echo $collection ?>">
+                        <input id="sortField" name="sortField" type="hidden" value="<?php echo $sortField ?>">
+                        <input id="searchField" name="searchField" type="hidden" value="<?php echo $searchField ?>">
+                        <input id="popKeywordType" name="popKeywordType" type="hidden" value="<?php echo $popKeywordType ?>">
+                        <input id="startDate" name="startDate" type="hidden" value="<?php echo $startDate ?>">
+                        <input id="endDate" name="endDate" type="hidden" value="<?php echo $endDate ?>">
+                        <input id="startCount" name="startCount" type="hidden" value="<?php echo $startCount ?>">
                         <input id="hiddenQuery" name="hiddenQuery" type="hidden" value="">
                         <label for="query"><a href="#none" id="searchButton"><img id="searchButtonImage" height="40" width="43" alt="검색" src="/total_search/images/search_icon.png"></a></label>
                         <a class="button_detail" id="detailSearchButton" href="#none"><span>상세검색</span></a>
@@ -320,9 +320,9 @@ if($search->w3GetError() !=0) {
                                 <!--<label for="correct">정확히 일치하는 단어/문장("")</label>
                                 <input id="correct" name="correct" type="text" value=''>-->
                                 <label for="mustKeyword">반드시 포함하는 단어(공백)</label>
-                                <input id="mustKeyword" name="mustKeyword" type="text" value='<?= $mustKeyword ?>'>
+                                <input id="mustKeyword" name="mustKeyword" type="text" value='<?php echo $mustKeyword ?>'>
                                 <label for="exceptKeyword">제외하는 단어(!)</label>
-                                <input id="exceptKeyword" name="exceptKeyword" type="text" value='<?= $exceptKeyword ?>'>
+                                <input id="exceptKeyword" name="exceptKeyword" type="text" value='<?php echo $exceptKeyword ?>'>
                             </fieldset>
                             <div class="detail_bottom">
                                 <div class="btn">
@@ -338,7 +338,7 @@ if($search->w3GetError() !=0) {
         </div>
         <div id="content">
         	<div class="title<?php if($collection == 'ALL') {?> total_sch<?php } ?>">
-                <p><span class="blue fw5">'<?=$query?>'</span>에 대한 전체 <span class="blue"><?=$totalSearchCount?></span>건의 결과를 찾았습니다.</p>
+                <p><span class="blue fw5">'<?php echo$query?>'</span>에 대한 전체 <span class="blue"><?php echo$totalSearchCount?></span>건의 결과를 찾았습니다.</p>
                 <div id="sortRadioDiv" class="align">
                     <a class="list1<?php if($sortField == 'RANK'){?> on<?php } ?>" href="RANK"><span>정확도순</span></a>
                     <a class="list2<?php if($sortField == 'DATE'){?> on<?php } ?>" href="DATE"><span>최신순</span></a>
@@ -350,7 +350,7 @@ if($search->w3GetError() !=0) {
                 if($totalSearchCount == 0) {
                 ?>
                 <div class="result_no">
-                    <p>'<?= $query ?>'에 대한<span>검색결과가 없습니다</span></p>
+                    <p>'<?php echo $query ?>'에 대한<span>검색결과가 없습니다</span></p>
                     <ul>
                         <li>- 단어의 철자가 정확한지 확인해 보세요.</li>
                         <li>- 한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
@@ -363,7 +363,7 @@ if($search->w3GetError() !=0) {
                 ?>
                 <?php if(($collection == 'ALL' || $collection == 'menu') && array_key_exists('menuTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['menuTotalCount'] >  0) { ?>
                 <div class="menu_search">
-                    <h3>메뉴검색<span> [총 <?= array_key_exists('menuTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['menuTotalCount'] : "0" ?>건]</span></h3>
+                    <h3>메뉴검색<span> [총 <?php echo array_key_exists('menuTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['menuTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['menu'] as $item) {
@@ -390,7 +390,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'board') && array_key_exists('boardTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['boardTotalCount'] > 0) { ?>
                 <div class="news_search">
-                    <h3>목포소식 <span>[총 <?= array_key_exists('boardTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['boardTotalCount'] : "0" ?>건]</span></h3>
+                    <h3>목포소식 <span>[총 <?php echo array_key_exists('boardTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['boardTotalCount'] : "0" ?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['board'] as $item) {
@@ -401,16 +401,16 @@ if($search->w3GetError() !=0) {
                                     $urlPrefix = explode(".", ($item['URL']));
                                     echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
                                     ?>">
-                                        <span class="menuName">[<?= $item['BOARDTITLE'] ?>]</span>
-                                        <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
+                                        <span class="menuName">[<?php echo $item['BOARDTITLE'] ?>]</span>
+                                        <span class="tit"><span class="green"><?php echo $item['TITLE'] ?></span></span>
                                     </a>
-                                    <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                    <span class="date">| <?php echo date("Y.m.d", strtotime($item['Date'])) ?></span>
                                     <a href="<?php
                                     $urlPrefix = explode(".", ($item['URL']));
                                     echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
                                     ?>" target="_blank" class="new_page">새창열기</a>
                                 </h4>
-                                <p><?= $item['CONTENT'] ?></p>
+                                <p><?php echo $item['CONTENT'] ?></p>
                             </li>
                         <?php
                         }
@@ -428,7 +428,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL'  || $collection == 'member') && array_key_exists('memberTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['memberTotalCount'] > 0) { ?>
                 <div class="staff_table">
-                    <h3>직원검색 <span>[총 <?= array_key_exists('memberTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['memberTotalCount'] : "0"?>건]</span></h3>
+                    <h3>직원검색 <span>[총 <?php echo array_key_exists('memberTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['memberTotalCount'] : "0"?>건]</span></h3>
                     <table>
                         <caption>직원업무안내표로 이름,부서,직책,업무,연락처 항목으로 구성</caption>
                         <thead>
@@ -445,11 +445,11 @@ if($search->w3GetError() !=0) {
                         foreach ($resultTotalSetDocument['member'] as $item) {
                         ?>
                         <tr>
-                            <td><?= $item['TITLE'] ?></td>
-                            <td><?= array_key_exists('POSITION', $item) ? $item['POSITION'] : "-" ?></td>
-                            <td><?= $item['DEPTPOS'] ?></td>
-                            <td><?= $item['CONTENT'] ?></td>
-                            <td><?= array_key_exists('DEPTTEL', $item) ? $item['DEPTTEL'] : "-"  ?></td>
+                            <td><?php echo $item['TITLE'] ?></td>
+                            <td><?php echo array_key_exists('POSITION', $item) ? $item['POSITION'] : "-" ?></td>
+                            <td><?php echo $item['DEPTPOS'] ?></td>
+                            <td><?php echo $item['CONTENT'] ?></td>
+                            <td><?php echo array_key_exists('DEPTTEL', $item) ? $item['DEPTTEL'] : "-"  ?></td>
                         </tr>
                         <?php
                         }
@@ -468,7 +468,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'webpage') && array_key_exists('webpageTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['webpageTotalCount'] > 0) { ?>
                 <div class="area_search">
-                	<h3>분야별정보 <span>[총 <?= $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
+                	<h3>분야별정보 <span>[총 <?php echo $resultTotalSetDocument['webpageTotalCount'] ?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['webpage'] as $item) {
@@ -479,16 +479,16 @@ if($search->w3GetError() !=0) {
                                     $urlPrefix = explode(".", ($item['PATHURL']));
                                     echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL']))
                                 ?>">
-                                    <span class="menuName">[<?= str_replace("|", " > ", $item['PATHSTRING']) ?>]</span>
-                                    <span class="tit"><span class="green"><?= $item['TITLE'] ?></span></span>
+                                    <span class="menuName">[<?php echo str_replace("|", " > ", $item['PATHSTRING']) ?>]</span>
+                                    <span class="tit"><span class="green"><?php echo $item['TITLE'] ?></span></span>
                                 </a>
-                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                <span class="date">| <?php echo date("Y.m.d", strtotime($item['Date'])) ?></span>
                                 <a href="<?php
                                 $urlPrefix = explode(".", ($item['PATHURL']));
                                 echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL']))
                                 ?>" target="_blank" class="new_page">새창열기</a>
                             </h4>
-                            <p><?= $item['CONTENT'] ?></p>
+                            <p><?php echo $item['CONTENT'] ?></p>
                         </li>
                         <?php
                         }
@@ -506,7 +506,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'multi') && array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) { ?>
                 <div class="media">
-                    <h3>사진/동영상 <span>[총 <?= $resultTotalSetDocument['multiTotalCount'] ?>건]</span></h3>
+                    <h3>사진/동영상 <span>[총 <?php echo $resultTotalSetDocument['multiTotalCount'] ?>건]</span></h3>
                     <ul>
                         <?php
                         if(array_key_exists('multiTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['multiTotalCount'] > 0) {
@@ -523,13 +523,13 @@ if($search->w3GetError() !=0) {
                                     if(strcmp($item['WRITER'], 'movie') == 0) {
                                         $imagePath .= ".gif";
                                     }
-                                ?>" alt="<?= $item['TITLE']?>"
+                                ?>" alt="<?php echo $item['TITLE']?>"
                                      onerror="this.src='/total_search/images/pho1.jpg'"/>
                                 <?php if(strcmp($item['WRITER'], 'movie') == 0) {?><span class="play"></span><?php } ?>
                             </span>
-                                <span class="menuName"><?= $item['MENU_NAME'] ?></span>
-                                <span class="green"><?= $item['CONTENT'] ?></span>
-                                <span class="date"><?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                <span class="menuName"><?php echo $item['MENU_NAME'] ?></span>
+                                <span class="green"><?php echo $item['CONTENT'] ?></span>
+                                <span class="date"><?php echo date("Y.m.d", strtotime($item['Date'])) ?></span>
                             </a>
                         </li>
                         <?php
@@ -549,7 +549,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'infosearch') && array_key_exists('infosearchTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['infosearchTotalCount'] > 0) { ?>
                 <div class="information">
-                	<h3>정보검색 <span>[총 <?= $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
+                	<h3>정보검색 <span>[총 <?php echo $resultTotalSetDocument['infosearchTotalCount']?>건]</span></h3>
                     <ul>
                         <?php
                         foreach ($resultTotalSetDocument['infosearch'] as $item) {
@@ -561,20 +561,20 @@ if($search->w3GetError() !=0) {
                                 echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL'])) . '?mode=view&idx=' . $item['DOCID'];
                                 ?>">
                                     <span class="tit">
-                                        <span class="green"><?= $item['TITLE'] ?></span>
+                                        <span class="green"><?php echo $item['TITLE'] ?></span>
                                     </span>
                                 </a>
-                                <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                <span class="date">| <?php echo date("Y.m.d", strtotime($item['Date'])) ?></span>
                                 <a class="new_page" href="<?php
                                 $urlPrefix = explode(".", ($item['PATHURL']));
                                 echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['PATHURL'])) . '?mode=view&idx=' . $item['DOCID'];
                                 ?>" target="_blank">새창열기</a>
                             </h4>
-                            <p class="location"><a href="#none"><?= $item['WRITER'] . ' > ' . str_replace("|", " > ", $item['PATHSTRING']) ?></a></p>
+                            <p class="location"><a href="#none"><?php echo $item['WRITER'] . ' > ' . str_replace("|", " > ", $item['PATHSTRING']) ?></a></p>
                             <!--ul class="file_box">
                                 <li class="hwp"><a href="#none">2017년 상반기 규제개혁위원회 회의 결과 1부.hwp</a></li>
                             </ul>-->
-                            <p><?= $item['CONTENT'] ?></p>
+                            <p><?php echo $item['CONTENT'] ?></p>
                         </li>
                         <?php
                         }
@@ -592,7 +592,7 @@ if($search->w3GetError() !=0) {
                 <?php } ?>
                 <?php if(($collection == 'ALL' || $collection == 'minwon') && array_key_exists('minwonTotalCount', $resultTotalSetDocument) && $resultTotalSetDocument['minwonTotalCount'] > 0) { ?>
                     <div class="affairs_manual">
-                        <h3>민원사무편람 <span>[총 <?= array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
+                        <h3>민원사무편람 <span>[총 <?php echo array_key_exists('minwonTotalCount', $resultTotalSetDocument) ? $resultTotalSetDocument['minwonTotalCount'] : "0" ?>건]</span></h3>
                         <ul>
                             <?php
                             foreach ($resultTotalSetDocument['minwon'] as $item) {
@@ -604,16 +604,16 @@ if($search->w3GetError() !=0) {
                                     echo 'http://' . str_replace('_80', '/' . $urlPrefix[0], str_replace('|', '/', $item['URL'])) . '?mode=view&idx=' . $item['DOCID'];
                                     ?>">
                                 <span class="tit">
-                                    <span class="green"><?= $item['TITLE'] ?></span>
+                                    <span class="green"><?php echo $item['TITLE'] ?></span>
                                 </span>
                                     </a>
-                                    <span class="date">| <?= date("Y.m.d", strtotime($item['Date'])) ?></span>
+                                    <span class="date">| <?php echo date("Y.m.d", strtotime($item['Date'])) ?></span>
                                     <a class="new_page" href="#none" target="_blank">새창열기</a>
                                 </h4>
-                                <p><?= $item['CONTENT'] ?></p>
+                                <p><?php echo $item['CONTENT'] ?></p>
                                 <?php if(array_key_exists('ORIGINAL_NAME', $item) && $item['ORIGINAL_NAME']) {?>
                                 <ul class="file_box">
-                                    <li class="hwp"><a href="<?= str_replace('_data', 'ybmodule.file', $item['ATTACH_LINK']) ?>">"<?= $item['ORIGINAL_NAME'] ?>"</a></li>
+                                    <li class="hwp"><a href="<?php echo str_replace('_data', 'ybmodule.file', $item['ATTACH_LINK']) ?>">"<?php echo $item['ORIGINAL_NAME'] ?>"</a></li>
                                 </ul>
                                 <?php } ?>
                             </li>
@@ -646,9 +646,9 @@ if($search->w3GetError() !=0) {
                         for( $i = 0 ; $i < count($popkeywords) ; $i++ ) {
                         ?>
                         <li>
-                            <a href="<?= $popkeywords[$i] ?>">
-                                <span class="num<?php if($i < 5) { ?> top<?php } ?>"><?= $i + 1 ?></span>
-                                <span class="tit"><?= $popkeywords[$i] ?></span>
+                            <a href="<?php echo $popkeywords[$i] ?>">
+                                <span class="num<?php if($i < 5) { ?> top<?php } ?>"><?php echo $i + 1 ?></span>
+                                <span class="tit"><?php echo $popkeywords[$i] ?></span>
                                 <span class="rank">
                                     <?php
                                     if($popkeywords[$i]['updown'] == 'C') {
@@ -657,11 +657,11 @@ if($search->w3GetError() !=0) {
                                     <?php
                                     } else if ($popkeywords[$i]['updown'] == 'U') {
                                     ?>
-                                        <em class="up"><?= $popkeywords[$i]['count'] ?></em>
+                                        <em class="up"><?php echo $popkeywords[$i]['count'] ?></em>
                                     <?php
                                     } else if ($popkeywords[$i]['updown'] == 'D') {
                                     ?>
-                                        <em class="dn"><?= $popkeywords[$i]['count'] ?></em>
+                                        <em class="dn"><?php echo $popkeywords[$i]['count'] ?></em>
                                     <?php
                                     } else if ($popkeywords[$i]['updown'] == 'N') {
                                     ?>

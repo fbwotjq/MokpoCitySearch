@@ -1,6 +1,4 @@
 <?php
-	require_once "WNCollection.html"; 
-
 	/*
 	// LOCAL
 	define("SEARCH_IP", "127.0.0.1");
@@ -13,7 +11,7 @@
 	define("MANAGER_IP", "115.84.165.212");
 	*/
 	
-	define("SEARCH_IP", "127.0.0.1");
+	define("SEARCH_IP", "dev.truetech.info");
 	define("MANAGER_IP", "127.0.0.1");
 	
 	//define("SEARCH_IP", "10.211.55.3");
@@ -60,54 +58,4 @@
 
 	define("OP_AND_ON", 1);			// 1: AND 적용, 0: OR 적용
 	define("OP_AND_OFF", 0);
-
-	// 메뉴검색
-	$menu = new WNCollection("menu", "menu", "메뉴검색");
-	$menu->setRank("basic", "prkom", "0");
-	$menu->setField("TITLE,CONTENT,WRITER", "Date,TITLE,CONTENT/150,WRITER,URL,ALIAS");
-	
-	// 완도소식
-	$board = new WNCollection("board", "board", "완도소식");
-	$board->setRank("basic", "prkom", "0");
-	$board->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDTITLE,URL,ALIAS");
-	
-	// 직원/업무
-	$member = new WNCollection("member", "member", "직원/업무");
-	$member->setRank("basic", "prkom", "0");
-	$member->setField("TITLE,CONTENT,WRITER", "Date,TITLE,CONTENT/15,WRITER,DEPTTEL,DEPTPOS,ID,POSITION,ALIAS");
-	
-	// 분야별정보
-	$webpage = new WNCollection("webpage", "webpage", "분야별정보");
-	$webpage->setRank("basic", "prkom", "0");
-	$webpage->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,PATHSTRING,PATHURL,ALIAS");
-	
-	// 사진/동영상
-	$multi = new WNCollection("multi", "multi", "사진/동영상");
-	$multi->setRank("basic", "prkom", "0");
-	$multi->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDID,RENAME,IDX,URL,ALIAS");
-
-	// 정보검색
-	$infosearch = new WNCollection("infosearch", "infosearch", "정보검색");
-	$infosearch->setRank("basic", "prkom", "0");
-	$infosearch->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,PATHSTRING,PATHURL,ALIAS");
-	
-	// 민원사무편람
-	$minwon = new WNCollection("minwon", "minwon", "민원사무편람");
-	$minwon->setRank("basic", "prkom", "0");
-	$minwon->setField("TITLE,CONTENT,WRITER", "DOCID,Date,TITLE,CONTENT/150,WRITER,BOARDID,ORIGINAL_NAME,RE_NAME,TABLE_IDX,IDX,URL,ALIAS");
-	
-	$totalCollections = array($menu, $board, $member, $webpage, $multi, $infosearch, $minwon);		// 통합검색 대상 컬렉션
-	//$relationCollections = array($menu,$section,$citizen);			// 관계문서 검색 대상 컬렉션
-	//$opengovCollections = array($menu,$section,$apvl);				// 서울시청홈페이지(정보소통광장)연동용 검색 대상 컬렉션
-
-
-	// 분야별정보 시스템 정보를 DB로 SELECT
-	/*
-	function getSystemCode(){
-		$systemcode_query = "SELECT code_value, code_nm FROM tc_df_comm_code WHERE code_se_code = '0003' AND adit_iem2 = '연계대상'";
-		$systemcode = db_query($systemcode_query)->fetchAll();
-	return $systemcode;
-	
-	}
-	*/
 ?>
