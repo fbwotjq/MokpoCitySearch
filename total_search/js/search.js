@@ -96,12 +96,14 @@ function delMyKeywordEventBinding() {
 }
 
 function goPage(number) {
-    $('#startCount').val(number);
-    var query = $('#query').val();
-    if(query === '무엇이든 찾아보세요') {
-        $('#query').val('');
+    if(number != -1) {
+        $('#startCount').val(number);
+        var query = $('#query').val();
+        if(query === '무엇이든 찾아보세요') {
+            $('#query').val('');
+        }
+        $('#searchForm').submit();
     }
-    $('#searchForm').submit();
 }
 
 $(document).ready(function() {
@@ -126,20 +128,25 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         var query = $('#query').val();
-        if(query === '무엇이든 찾아보세요') {
+        if(query === '무엇이든 찾아보세요' || query.replace(/^\s+|\s+$/gm, '') === '') {
             $('#query').val('');
+            alert('검색어를 입력하여 주세요.');
+        } else {
+            $('#searchForm').submit();
         }
-        $('#searchForm').submit();
+
     });
 
     $('#searchButtonImage').click(function(event) {
         event.preventDefault();
         event.stopPropagation();
         var query = $('#query').val();
-        if(query === '무엇이든 찾아보세요') {
+        if(query === '무엇이든 찾아보세요' || query.replace(/^\s+|\s+$/gm, '') === '') {
             $('#query').val('');
+            alert('검색어를 입력하여 주세요.');
+        } else {
+            $('#searchForm').submit();
         }
-        $('#searchForm').submit();
     });
     
     $('#Nav > ul > li > a').click(function (event) {
